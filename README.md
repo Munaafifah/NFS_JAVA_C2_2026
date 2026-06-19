@@ -40,6 +40,7 @@ Why does main have to be static — what does static even mean and why can't we 
 
 
 
+
 ## Day 1 Exercise 02 - Improve the Course Class
 
 Changes made to Course.java:
@@ -49,4 +50,25 @@ Changes made to Course.java:
 - Used ternary operator to print "Active" or "Inactive" instead of true/false
 
 ![alt text](image.png)
+
+
+## Day 1 Exercise 03 - Create new Course Offering Class
+
+### Why is CourseOffering more useful than using only Course?
+
+A Course is just a template — it describes what will be taught.
+A CourseOffering is one real scheduled run of that course.
+
+For example:
+- Course: Java Fundamentals
+- Offering 1: Java Fundamentals - June 2026 Intake (Physical, 25 seats)
+- Offering 2: Java Fundamentals - July 2026 Intake (Online, 30 seats)
+
+In a real web application, students don't enrol into a Course —
+they enrol into a CourseOffering because it has real dates,
+a specific instructor, a capacity limit, and a delivery mode.
+Without CourseOffering, you cannot track when a course runs,
+who teaches it, or how many students can join.
+
+![alt text](image-1.png)
 
