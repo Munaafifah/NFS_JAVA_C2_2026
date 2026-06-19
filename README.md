@@ -2,7 +2,7 @@
 
 1. What is the purpose of Course.java?
 
-It's a blueprint (class) that represents a course. It stores course details like courseId, title, durationHours, and level, and can have an Instructor assigned to it.
+   It's a blueprint (class) that represents a course. It stores course details like courseId, title, durationHours, and level, and can have an Instructor assigned to it.
 
 2. What is the purpose of Instructor.java?
 
@@ -37,6 +37,7 @@ AI explained that one class can use another class by simply declaring it as a fi
 ## One part I still needed the trainer to explain:
 
 Why does main have to be static — what does static even mean and why can't we just call it normally?
+
 
 
 ## Day 1 Exercise 02 - Improve the Course Class
