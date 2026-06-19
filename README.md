@@ -37,3 +37,15 @@ AI explained that one class can use another class by simply declaring it as a fi
 ## One part I still needed the trainer to explain:
 
 Why does main have to be static — what does static even mean and why can't we just call it normally?
+
+
+## Day 1 Exercise 02 - Improve the Course Class
+
+Changes made to Course.java:
+- Added two new fields: category (String) and active (boolean)
+- Updated constructor to accept category and active as parameters
+- Updated printSummary() to display Category and Status
+- Used ternary operator to print "Active" or "Inactive" instead of true/false
+
+![alt text](image.png)
+
