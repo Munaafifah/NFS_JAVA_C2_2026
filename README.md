@@ -30,8 +30,6 @@ It calls the assignInstructor method on the course1 object, linking an Instructo
 
 It prints the student's details to the console — like name, ID, etc.
 
-You're right, sorry about that! Since you're a fresh graduate with no TypeScript/C# background, keep it simple:
-
 ## One explanation from AI that helped:
 
 AI explained that one class can use another class by simply declaring it as a field. In Course.java, the line private Instructor instructor means Course is storing an Instructor object inside it. Java knows about Instructor because both files are in the same package so they can see each other automatically without needing to import anything.
