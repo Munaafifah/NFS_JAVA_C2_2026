@@ -27,18 +27,21 @@ public class Main {
         instructor1.getProfile();
 		System.out.println("************************");
         instructor2.getProfile();
+		System.out.println(); 
 
         System.out.println("Course Summaries:");
 		System.out.println("------------------------------");
         course1.printSummary();
 		System.out.println("************************");
         course2.printSummary();
+		System.out.println();
 
         System.out.println("Student Profiles:");
 		System.out.println("------------------------------");
         student1.printProfile();
 		System.out.println("************************");
         student2.printProfile();
+		System.out.println();
 
     }
 }
