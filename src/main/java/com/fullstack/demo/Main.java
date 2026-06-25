@@ -1,4 +1,4 @@
-package src.main.java.com.fullstack;
+package src.main.java.com.fullstack.demo;
 
 public class Main {
 	public static void main(String[] args) {
