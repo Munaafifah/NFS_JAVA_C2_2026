@@ -78,6 +78,8 @@ public class Course {
         } else {
             System.out.println("Instructor: " + instructor.getInstructorName());
         }
+
+        System.out.println("------------------------------");
     }
 
     private static String requireText(String value, String fieldName) {

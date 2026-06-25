@@ -1,15 +1,14 @@
 package com.fullstack.demo.service;
 
 import com.fullstack.demo.exception.CourseNotFoundException;
-import com.fullstack.demo.exception.DuplicateCourseException;
 import com.fullstack.demo.exception.InvalidCourseException;
 import com.fullstack.demo.model.Course;
 import com.fullstack.demo.model.Instructor;
 import com.fullstack.demo.repository.CourseRepository;
-
 import java.util.List;
 
 public class CourseService {
+
     private final CourseRepository courseRepository;
 
     public CourseService(CourseRepository courseRepository) {
@@ -18,92 +17,11 @@ public class CourseService {
 
     public Course createCourse(Course course) {
         validateCourse(course);
-
-        if (courseRepository.existsById(course.getCourseId())) {
-            throw new DuplicateCourseException(course.getCourseId());
-        }
-
         return courseRepository.save(course);
-    }
-
-    public Course getCourseById(String courseId) {
-        // public Course getCourseById(String courseId) {
-        //     Optional<Course> optionalCourse = courseRepository.findById(courseId);
-        //     if (optionalCourse.isPresent()) {
-        //         return optionalCourse.get();
-        //     } else {
-        //         throw new CourseNotFoundException(courseId);
-        //     }
-        // }
-        return courseRepository.findById(courseId)
-                .orElseThrow(() -> new CourseNotFoundException(courseId));
     }
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
-    }
-
-    public List<Course> searchByTitle(String keyword) {
-        // String safeKeyword;
-
-        // if (keyword == null) {
-        //     safeKeyword = "";
-        // } else {
-        //     safeKeyword = keyword.trim().toLowerCase();
-        // }
-        String safeKeyword = keyword == null ? "" : keyword.toLowerCase();
-
-        return courseRepository.findAll()
-                .stream()
-                .filter(course -> course.getTitle().toLowerCase().contains(safeKeyword))
-                .toList();
-    }
-
-    public List<Course> filterByLevel(String level) {
-        String safeLevel = level == null ? "" : level;
-
-        return courseRepository.findAll()
-                .stream()
-                .filter(course -> course.getLevel().equalsIgnoreCase(safeLevel))
-                .toList();
-    }
-
-    public List<Course> searchByInstructorName(String instructorName) {
-        String safeInstructorName = instructorName == null ? "" : instructorName.toLowerCase();
-
-        return courseRepository.findAll()
-                .stream()
-                .filter(course -> course.getInstructor() != null)
-                .filter(course -> course.getInstructor()
-                        .getInstructorName()
-                        .toLowerCase()
-                        .contains(safeInstructorName))
-                        .toList();
-    }
-
-    public Course assignInstructor(String courseId, Instructor instructor) {
-        Course course = getCourseById(courseId);
-        course.setInstructor(instructor);
-        return courseRepository.save(course);
-    }
-
-    public Course updateDuration(String courseId, int newDurationHours) {
-        Course course = getCourseById(courseId);
-
-        if (newDurationHours <= 0) {
-            throw new InvalidCourseException("Course duration must be greater than zero.");
-        }
-
-        course.setDurationHours(newDurationHours);
-        return courseRepository.save(course);
-    }
-
-    public void deleteCourse(String courseId) {
-        if (!courseRepository.existsById(courseId)) {
-            throw new CourseNotFoundException(courseId);
-        }
-
-        courseRepository.deleteById(courseId);
     }
 
     private void validateCourse(Course course) {
@@ -125,6 +43,58 @@ public class CourseService {
     }
 
     private boolean isBlank(String value) {
-        return value == null || value.trim().isEmpty();
+        return value == null || value.isBlank();
+    }
+
+    public List<Course> searchByTitle(String keyword) {
+        String search = keyword == null ? "" : keyword.toLowerCase();
+        return courseRepository.findAll()
+                .stream()
+                .filter(c -> c.getTitle().toLowerCase().contains(search))
+                .toList();
+    }
+
+    public List<Course> filterByLevel(String level) {
+        String search = level == null ? "" : level.toLowerCase();
+        return courseRepository.findAll()
+                .stream()
+                .filter(c -> c.getLevel().toLowerCase().contains(search))
+                .toList();
+    }
+
+    public Course assignInstructor(String courseId, Instructor instructor) {
+        Course course = getCourseById(courseId);
+        course.setInstructor(instructor);
+        return courseRepository.save(course);
+    }
+
+    public List<Course> searchByInstructorName(String instructorName) {
+        String search = instructorName == null ? "" : instructorName.toLowerCase();
+        return courseRepository.findAll()
+                .stream()
+                .filter(c -> c.getInstructor() != null)
+                .filter(c -> c.getInstructor().getInstructorName().toLowerCase().contains(search))
+                .toList();
+    }
+
+    public Course getCourseById(String courseId) {
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("Course not found: " + courseId));
+    }
+
+    public Course updateDuration(String courseId, int newDurationHours) {
+        if (newDurationHours <= 0) {
+            throw new InvalidCourseException("Course duration must be greater than zero.");
+        }
+        Course course = getCourseById(courseId);
+        course.setDurationHours(newDurationHours);
+        return courseRepository.save(course);
+    }
+
+    public void deleteCourse(String courseId) {
+        if (!courseRepository.existsById(courseId)) {
+            throw new CourseNotFoundException("Course not found: " + courseId);
+        }
+        courseRepository.deleteById(courseId);
     }
 }

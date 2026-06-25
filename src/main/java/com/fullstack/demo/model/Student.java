@@ -39,7 +39,7 @@ public class Student {
         System.out.println("Student ID: " + studentId);
         System.out.println("Name: " + studentName);
         System.out.println("Email: " + email);
-        System.out.println("----------------------------");
+        System.out.println("------------------------------");
     }
 
     private static String requireText(String value, String fieldName) {

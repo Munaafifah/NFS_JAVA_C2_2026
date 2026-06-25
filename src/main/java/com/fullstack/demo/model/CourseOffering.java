@@ -67,6 +67,7 @@ public class CourseOffering {
         System.out.println("End Date: " + endDate);
         System.out.println("Capacity: " + capacity);
         System.out.println("Delivery Mode: " + deliveryMode);
+        System.out.println("------------------------------");
     }
 
 }
