@@ -143,32 +143,30 @@ A new class like `MongoCourseRepository` that also implements `CourseRepository`
 
 ---
 
-## Day 3 Assignment 03 - Interface and Repository Storage Practice
+## Day 3 Assignment 03 - Exception Practice with CourseService
 
 ### What Was Added
 
-**RepositoryPractice.java** *(new file)*
-- Created `CourseRepository` variable pointing to `InMemoryCourseRepository` instance
-- Saved three courses (C006, C007, C008) directly through the repository
-- Printed all courses using `findAll()` in a for loop
-- Found C007 using `findById()` with `Optional<Course>`
-- Checked C008 exists using `existsById()`
+**ExceptionPractice.java** *(new file)*
+- Created `CourseRepository` and `CourseService` instances
+- Added two courses (C001, C002) via `courseService.createCourse()`
+- Retrieved and printed C001 successfully using `getCourseById()`
+- Handled missing course C999 using `try/catch` with `CourseNotFoundException`
+- Handled missing course C888 using `try/catch` with a custom friendly message
+- Program does not crash when a course is not found
 
-### README Reflection - Assignment 02
+### README Reflection
 
-**Why is InMemoryCourseRepository temporary storage?**
-Because it stores data inside a `LinkedHashMap` which lives in the program's memory. When the program stops, all data is lost. Nothing is saved to disk or a real database.
-
-**What would probably replace it later when we use MongoDB?**
-A new class like `MongoCourseRepository` that also implements `CourseRepository`. It would use MongoDB to store data permanently. Because the rest of the code only depends on the `CourseRepository` interface, nothing else needs to change.
+**Why is throwing CourseNotFoundException better than printing inside CourseService?**
+Because different callers handle errors differently. A console app prints a friendly message, a web API returns a 404 JSON response, and a frontend app may show a popup. If `CourseService` printed the error itself, it would be locked to one behaviour. By throwing the exception instead, the caller decides how to display or handle it.
 
 ### Output Screenshot
 
-![Day 3 Assignment 03 Output](screenshots/D3_Assignment02.png)
+![Day 3 Assignment 03 Output](screenshots/D3_Assignment03.png)
 
 ### GitHub Commit
 
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day2](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day2)
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
 
 ---
 
