@@ -1,74 +1,285 @@
-## Day 1 Exercise 01 - Code Explanation
-
-1. What is the purpose of Course.java?
-
-   It's a blueprint (class) that represents a course. It stores course details like courseId, title, durationHours, and level, and can have an Instructor assigned to it.
-
-2. What is the purpose of Instructor.java?
-
-   It's a blueprint for an instructor. It stores instructorId, instructorName, and expertise, and has methods to retrieve those values.
-
-3. What is the purpose of Student.java?
-
-   A blueprint for a student which likely stores student details like name, ID, and possibly which courses they're enrolled in.
-
-4. What does the constructor do?
-
-   It initializes an object when you use new. For example:
-   javanew Course("C001", "Introduction to Computer Science", 40, "Beginner");
-   This runs the constructor and fills in all the fields with those values.
-
-5. Why are the fields marked as private?
-
-   To protect the data so that 7nobody outside the class can directly change courseId or title. They must go through getters/setters. This is called encapsulation.
-
-6. What does course1.assignInstructor(instructor1) mean?
-
-   It calls the assignInstructor method on the course1 object, linking an Instructor object to that course. Similar to TypeScript: course1.assignInstructor(instructor1).
-
-7. What does student1.printProfile() do?
-
-   It prints the student's details to the console — like name, ID, etc.
-
-## One explanation from AI that helped:
-
-AI explained that one class can use another class by simply declaring it as a field. In Course.java, the line private Instructor instructor means Course is storing an Instructor object inside it. Java knows about Instructor because both files are in the same package so they can see each other automatically without needing to import anything.
-
-## One part I still needed the trainer to explain:
-
-Why does main have to be static — what does static even mean and why can't we just call it normally?
+# NFS_JAVA_C2_2026 | Full-Stack Development with Java, React & MongoDB
 
 
 
-
-## Day 1 Exercise 02 - Improve the Course Class
-
-Changes made to Course.java:
-- Added two new fields: category (String) and active (boolean)
-- Updated constructor to accept category and active as parameters
-- Updated printSummary() to display Category and Status
-- Used ternary operator to print "Active" or "Inactive" instead of true/false
-
-![alt text](image.png)
+## Programme Description
 
 
-## Day 1 Exercise 03 - Create new Course Offering Class
 
-### Why is CourseOffering more useful than using only Course?
+This 20-day programme is designed to help participants build a complete full-stack web application using Java, Spring Boot, React, and MongoDB.
 
-A Course is just a template — it describes what will be taught.
-A CourseOffering is one real scheduled run of that course.
 
-For example:
-- Course: Java Fundamentals
-- Offering 1: Java Fundamentals - June 2026 Intake (Physical, 25 seats)
-- Offering 2: Java Fundamentals - July 2026 Intake (Online, 30 seats)
 
-In a real web application, students don't enrol into a Course —
-they enrol into a CourseOffering because it has real dates,
-a specific instructor, a capacity limit, and a delivery mode.
-Without CourseOffering, you cannot track when a course runs,
-who teaches it, or how many students can join.
+The programme takes learners from programming and web fundamentals to backend API development, frontend interface design, database modelling, authentication, testing, performance improvement, and final capstone presentation.
 
-![alt text](image-1.png)
 
+
+Throughout the programme, participants will work on practical exercises and gradually build a small but production-like web application. The final outcome is a working capstone project that demonstrates the use of a React frontend, Spring Boot backend, MongoDB database, secure authentication, API documentation, testing practices, and deployment-readiness basics.
+
+
+
+AI tools such as Gemini are used as learning accelerators to help scaffold examples, suggest refactoring ideas, draft tests, generate sample data, and support MongoDB query or aggregation design. However, participants are expected to review, verify, understand, and take ownership of all generated code.
+
+
+
+---
+
+
+
+## Programme Duration
+
+
+
+* Duration: 20 training days
+
+* Daily Duration: 7 hours per day
+
+* Total Training Hours: 140 hours
+
+* Mode: Instructor-led training with guided labs, team build activities, review sessions, quizzes, and capstone development
+
+
+
+---
+
+
+
+## Programme Objectives
+
+
+
+By the end of this programme, participants will be able to:
+
+
+
+* Understand web fundamentals, HTTP, REST, and JSON.
+
+* Write basic to intermediate Java and JavaScript code.
+
+* Build REST APIs using Spring Boot.
+
+* Apply validation, authentication, authorisation, and error-handling practices.
+
+* Model data effectively using MongoDB.
+
+* Use MongoDB indexes, queries, pagination, and aggregation pipelines.
+
+* Build accessible React user interfaces with routing, forms, state, and data fetching.
+
+* Apply testing practices for backend and frontend development.
+
+* Use AI coding assistants responsibly for learning, refactoring, testing, and documentation.
+
+* Design, build, document, and present a full-stack capstone project.
+
+
+
+---
+
+
+
+
+
+---
+
+
+
+## Day 3 Assignment 01 - Build and Trace the Code Flow
+
+### What Was Added
+
+**CodeFlowPractice.java** *(new file)*
+- Created new demo class in `com.fullstack.demo` package
+- Created `InMemoryCourseRepository` and `CourseService` instances
+- Added course `C005` (Spring Boot API Development) via `courseService.createCourse()`
+- Retrieved course `C005` via `courseService.getCourseById()`
+- Printed result using `course.printSummary()`
+- Added trace comments explaining the full call flow from demo → service → repository → map → back to demo
+
+### README Reflection - Assignment 01
+
+**When getCourseById("C004") is called, which file does the request go to first, second, and third?**
+
+1. **First → `CourseService.java`** — the demo class calls `courseService.getCourseById("C004")`, so the request enters the service layer first.
+2. **Second → `CourseRepository.java`** — `CourseService` calls `courseRepository.findById("C004")` through the interface.
+3. **Third → `InMemoryCourseRepository.java`** — the actual implementation runs, looks up the `LinkedHashMap`, and returns an `Optional<Course>` back up the chain.
+
+### Output Screenshot
+
+![Day 3 Assignment 01 Output](screenshots/D3_Assignment01.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
+
+## Day 3 Assignment 02 - Interface and Repository Storage Practice
+
+### What Was Added
+
+**RepositoryPractice.java** *(new file)*
+- Created `CourseRepository` variable pointing to `InMemoryCourseRepository` instance
+- Saved three courses (C006, C007, C008) directly through the repository
+- Printed all courses using `findAll()` in a for loop
+- Found C007 using `findById()` with `Optional<Course>`
+- Checked C008 exists using `existsById()`
+
+### README Reflection - Assignment 02
+
+**Why is InMemoryCourseRepository temporary storage?**
+Because it stores data inside a `LinkedHashMap` which lives in the program's memory. When the program stops, all data is lost. Nothing is saved to disk or a real database.
+
+**What would probably replace it later when we use MongoDB?**
+A new class like `MongoCourseRepository` that also implements `CourseRepository`. It would use MongoDB to store data permanently. Because the rest of the code only depends on the `CourseRepository` interface, nothing else needs to change.
+
+### Output Screenshot
+
+![Day 3 Assignment 02 Output](screenshots/D3_Assignment02.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day2](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day2)
+
+---
+
+## Day 3 Assignment 03 - Exception Practice with CourseService
+
+### What Was Added
+
+**ExceptionPractice.java** *(new file)*
+- Created `CourseRepository` and `CourseService` instances
+- Added two courses (C001, C002) via `courseService.createCourse()`
+- Retrieved and printed C001 successfully using `getCourseById()`
+- Handled missing course C999 using `try/catch` with `CourseNotFoundException`
+- Handled missing course C888 using `try/catch` with a custom friendly message
+- Program does not crash when a course is not found
+
+### README Reflection
+
+**Why is throwing CourseNotFoundException better than printing inside CourseService?**
+Because different callers handle errors differently. A console app prints a friendly message, a web API returns a 404 JSON response, and a frontend app may show a popup. If `CourseService` printed the error itself, it would be locked to one behaviour. By throwing the exception instead, the caller decides how to display or handle it.
+
+### Output Screenshot
+
+![Day 3 Assignment 03 Output](screenshots/D3_Assignment03.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
+
+## Day 3 Assignment 04 - Object Relationships and Composition
+
+### What Was Added
+
+**Day3_Assignment04_ObjectRelationshipPractice.java** *(new file)*
+- Created two `Instructor` objects (Aina Rahman, Marcus Lee)
+- Created two `Course` objects (C001, C002)
+- Assigned instructors to courses using `course.setInstructor()`
+- Created two `CourseOffering` objects (OFF001, OFF002) using composition
+- Created a third offering (OFF003) reusing the same `javaCourse` with different dates
+- Added comments explaining composition — CourseOffering HAS a Course and HAS an Instructor
+
+### README Reflection
+
+**Why is CourseOffering a better design than putting start date, end date, and capacity directly inside Course?**
+Because the same course can run multiple times with different dates, instructors, and capacities. If we put those fields inside `Course`, we could only run it once. `CourseOffering` separates the course content from the scheduling details.
+
+### Output Screenshot
+
+![Day 3 Assignment 04 Output](screenshots/D3_Assignment04.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
+
+## Day 3 Assignment 05 - Write Search Using Loop, Then Compare with Stream
+
+### What Was Changed
+
+**CourseService.java** *(edited)*
+- Added `import java.util.ArrayList`
+- Added `searchByLevelUsingLoop()` method using `ArrayList` and `for` loop with `equalsIgnoreCase()`
+- Added `searchByLevelUsingStream()` method using `stream()`, `filter()`, and `toList()`
+
+**SearchPractice.java** *(new file)*
+- Created `CourseRepository` and `CourseService` instances
+- Added four courses (C001, C002, C003, C004)
+- Tested `searchByLevelUsingLoop("Beginner")` and printed results
+- Tested `searchByLevelUsingStream("Beginner")` and printed results
+
+### README Reflection
+
+**Which version is easier to understand: loop or stream? Why?**
+Loop is easier to understand because each step is written out clearly — create a list, check each course, add if it matches, return the list. Stream is shorter but requires understanding of `filter()` and method chaining.
+
+**What does filter() do in a stream?**
+It checks each item in the stream against a condition. Only items where the condition is true are kept and passed to the next step.
+
+### Output Screenshot
+
+![Day 3 Assignment 05 Output](screenshots/D3_Assignment05.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
+
+## Day 3 Assignment 06 - Build StudentService Using the Same Pattern as CourseService
+
+### What Was Added
+
+**StudentRepository.java** *(new file)*
+- Created interface with `save()`, `findById()`, `findAll()`, `existsById()` methods
+
+**InMemoryStudentRepository.java** *(new file)*
+- Implements `StudentRepository`
+- Stores students in `LinkedHashMap<String, Student>`
+
+**StudentNotFoundException.java** *(new file)*
+- Custom exception extending `RuntimeException`
+- Message: `Student not found with ID: {id}`
+
+**DuplicateStudentException.java** *(new file)*
+- Custom exception extending `RuntimeException`
+- Message: `Student already exists with ID: {id}`
+
+**StudentService.java** *(new file)*
+- `registerStudent()` — validates null and duplicate before saving
+- `getStudentById()` — throws `StudentNotFoundException` if not found
+- `getAllStudents()` — returns all students from repository
+- `searchByNameUsingLoop()` — searches by name using for loop
+- `searchByNameUsingStream()` — searches by name using stream and filter
+
+**StudentServicePractice.java** *(new file)*
+- Created `StudentRepository` and `StudentService` instances
+- Registered 3 students, count displayed dynamically using `getAllStudents().size()`
+- Printed all students using loop
+- Found S001 using `getStudentById()`
+- Searched by name "Lee" using both loop and stream
+- Handled missing student S999 with `StudentNotFoundException`
+- Handled duplicate S001 with `DuplicateStudentException`
+- Handled null student with `IllegalArgumentException`
+
+### README Reflection
+
+**How is StudentService similar to CourseService?**
+Both follow the same pattern — service handles validation and business rules, repository handles storage. Neither stores data directly inside the service class.
+
+**Which file stores students temporarily while the program is running?**
+`InMemoryStudentRepository` — it holds all student data in a `LinkedHashMap` that is lost when the program stops.
+
+### Output Screenshot
+
+![Day 3 Assignment 06 Output](screenshots/D3_Assignment06.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
