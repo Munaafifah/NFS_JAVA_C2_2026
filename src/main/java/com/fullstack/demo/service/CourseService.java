@@ -1,6 +1,7 @@
 package com.fullstack.demo.service;
 
 import com.fullstack.demo.exception.CourseNotFoundException;
+import com.fullstack.demo.exception.DuplicateCourseException;
 import com.fullstack.demo.exception.InvalidCourseException;
 import com.fullstack.demo.model.Course;
 import com.fullstack.demo.model.Instructor;
@@ -17,6 +18,11 @@ public class CourseService {
 
     public Course createCourse(Course course) {
         validateCourse(course);
+
+        if (courseRepository.existsById(course.getCourseId())) {
+            throw new DuplicateCourseException(course.getCourseId());
+        }
+
         return courseRepository.save(course);
     }
 
