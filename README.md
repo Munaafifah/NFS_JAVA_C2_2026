@@ -229,3 +229,57 @@ It checks each item in the stream against a condition. Only items where the cond
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
 
 ---
+
+## Day 3 Assignment 06 - Build StudentService Using the Same Pattern as CourseService
+
+### What Was Added
+
+**StudentRepository.java** *(new file)*
+- Created interface with `save()`, `findById()`, `findAll()`, `existsById()` methods
+
+**InMemoryStudentRepository.java** *(new file)*
+- Implements `StudentRepository`
+- Stores students in `LinkedHashMap<String, Student>`
+
+**StudentNotFoundException.java** *(new file)*
+- Custom exception extending `RuntimeException`
+- Message: `Student not found with ID: {id}`
+
+**DuplicateStudentException.java** *(new file)*
+- Custom exception extending `RuntimeException`
+- Message: `Student already exists with ID: {id}`
+
+**StudentService.java** *(new file)*
+- `registerStudent()` — validates null and duplicate before saving
+- `getStudentById()` — throws `StudentNotFoundException` if not found
+- `getAllStudents()` — returns all students from repository
+- `searchByNameUsingLoop()` — searches by name using for loop
+- `searchByNameUsingStream()` — searches by name using stream and filter
+
+**StudentServicePractice.java** *(new file)*
+- Created `StudentRepository` and `StudentService` instances
+- Registered 3 students, count displayed dynamically using `getAllStudents().size()`
+- Printed all students using loop
+- Found S001 using `getStudentById()`
+- Searched by name "Lee" using both loop and stream
+- Handled missing student S999 with `StudentNotFoundException`
+- Handled duplicate S001 with `DuplicateStudentException`
+- Handled null student with `IllegalArgumentException`
+
+### README Reflection
+
+**How is StudentService similar to CourseService?**
+Both follow the same pattern — service handles validation and business rules, repository handles storage. Neither stores data directly inside the service class.
+
+**Which file stores students temporarily while the program is running?**
+`InMemoryStudentRepository` — it holds all student data in a `LinkedHashMap` that is lost when the program stops.
+
+### Output Screenshot
+
+![Day 3 Assignment 06 Output](screenshots/D3_Assignment06.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
