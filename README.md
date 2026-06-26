@@ -170,3 +170,30 @@ Because different callers handle errors differently. A console app prints a frie
 
 ---
 
+## Day 3 Assignment 04 - Object Relationships and Composition
+
+### What Was Added
+
+**Day3_Assignment04_ObjectRelationshipPractice.java** *(new file)*
+- Created two `Instructor` objects (Aina Rahman, Marcus Lee)
+- Created two `Course` objects (C001, C002)
+- Assigned instructors to courses using `course.setInstructor()`
+- Created two `CourseOffering` objects (OFF001, OFF002) using composition
+- Created a third offering (OFF003) reusing the same `javaCourse` with different dates
+- Added comments explaining composition — CourseOffering HAS a Course and HAS an Instructor
+
+### README Reflection
+
+**Why is CourseOffering a better design than putting start date, end date, and capacity directly inside Course?**
+Because the same course can run multiple times with different dates, instructors, and capacities. If we put those fields inside `Course`, we could only run it once. `CourseOffering` separates the course content from the scheduling details.
+
+### Output Screenshot
+
+![Day 3 Assignment 04 Output](screenshots/D3_Assignment04.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
+

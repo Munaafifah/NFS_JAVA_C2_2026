@@ -59,8 +59,7 @@ public class CourseOffering {
     }
 
     public void printSummary() {
-        System.out.println("Offering ID: " + offeringId);
-        System.out.println("Name: " + offeringName);
+        System.out.println(offeringId + " - " + offeringName);
         System.out.println("Course: " + course.getTitle());
         System.out.println("Instructor: " + instructor.getInstructorName());
         System.out.println("Start Date: " + startDate);
