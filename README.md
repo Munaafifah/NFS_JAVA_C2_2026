@@ -197,3 +197,35 @@ Because the same course can run multiple times with different dates, instructors
 
 ---
 
+## Day 3 Assignment 05 - Write Search Using Loop, Then Compare with Stream
+
+### What Was Changed
+
+**CourseService.java** *(edited)*
+- Added `import java.util.ArrayList`
+- Added `searchByLevelUsingLoop()` method using `ArrayList` and `for` loop with `equalsIgnoreCase()`
+- Added `searchByLevelUsingStream()` method using `stream()`, `filter()`, and `toList()`
+
+**SearchPractice.java** *(new file)*
+- Created `CourseRepository` and `CourseService` instances
+- Added four courses (C001, C002, C003, C004)
+- Tested `searchByLevelUsingLoop("Beginner")` and printed results
+- Tested `searchByLevelUsingStream("Beginner")` and printed results
+
+### README Reflection
+
+**Which version is easier to understand: loop or stream? Why?**
+Loop is easier to understand because each step is written out clearly — create a list, check each course, add if it matches, return the list. Stream is shorter but requires understanding of `filter()` and method chaining.
+
+**What does filter() do in a stream?**
+It checks each item in the stream against a condition. Only items where the condition is true are kept and passed to the next step.
+
+### Output Screenshot
+
+![Day 3 Assignment 05 Output](screenshots/D3_Assignment05.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+
+---
