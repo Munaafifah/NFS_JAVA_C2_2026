@@ -83,203 +83,29 @@ By the end of this programme, participants will be able to:
 ---
 
 
-
-## Day 3 Assignment 01 - Build and Trace the Code Flow
-
-### What Was Added
-
-**CodeFlowPractice.java** *(new file)*
-- Created new demo class in `com.fullstack.demo` package
-- Created `InMemoryCourseRepository` and `CourseService` instances
-- Added course `C005` (Spring Boot API Development) via `courseService.createCourse()`
-- Retrieved course `C005` via `courseService.getCourseById()`
-- Printed result using `course.printSummary()`
-- Added trace comments explaining the full call flow from demo → service → repository → map → back to demo
-
-### README Reflection - Assignment 01
-
-**When getCourseById("C004") is called, which file does the request go to first, second, and third?**
-
-1. **First → `CourseService.java`** — the demo class calls `courseService.getCourseById("C004")`, so the request enters the service layer first.
-2. **Second → `CourseRepository.java`** — `CourseService` calls `courseRepository.findById("C004")` through the interface.
-3. **Third → `InMemoryCourseRepository.java`** — the actual implementation runs, looks up the `LinkedHashMap`, and returns an `Optional<Course>` back up the chain.
-
-### Output Screenshot
-
-![Day 3 Assignment 01 Output](screenshots/D3_Assignment01.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
-
----
-
-## Day 3 Assignment 02 - Interface and Repository Storage Practice
+## Day 4 Exercise 01 - Create a JavaScript Student Object
 
 ### What Was Added
 
-**RepositoryPractice.java** *(new file)*
-- Created `CourseRepository` variable pointing to `InMemoryCourseRepository` instance
-- Saved three courses (C006, C007, C008) directly through the repository
-- Printed all courses using `findAll()` in a for loop
-- Found C007 using `findById()` with `Optional<Course>`
-- Checked C008 exists using `existsById()`
+**student-object.js** *(new file)*
+- Created a JavaScript object literal `student` with four properties: `studentId`, `studentName`, `email`, and `status`
+- Printed the whole object using `console.log()`
+- Printed each property individually using dot notation and bracket notation
+- Used dot notation to access `studentId` and `studentName`
+- Used bracket notation to access `email`
 
-### README Reflection - Assignment 02
+### README Reflection - Exercise 01
 
-**Why is InMemoryCourseRepository temporary storage?**
-Because it stores data inside a `LinkedHashMap` which lives in the program's memory. When the program stops, all data is lost. Nothing is saved to disk or a real database.
+**What is one difference between a Java object and a JavaScript object?**
 
-**What would probably replace it later when we use MongoDB?**
-A new class like `MongoCourseRepository` that also implements `CourseRepository`. It would use MongoDB to store data permanently. Because the rest of the code only depends on the `CourseRepository` interface, nothing else needs to change.
+In Java, you must define a class first (e.g. `Student.java`) with typed fields and a constructor before you can create an object. In JavaScript, you can create an object directly using `{}` (object literal) without any class definition — the properties are untyped and can be added on the fly.
 
 ### Output Screenshot
 
-![Day 3 Assignment 02 Output](screenshots/D3_Assignment02.png)
+![Day 4 Exercise 01 Output](screenshots/D4_Exercise01.png)
 
 ### GitHub Commit
 
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day2](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day2)
-
----
-
-## Day 3 Assignment 03 - Exception Practice with CourseService
-
-### What Was Added
-
-**ExceptionPractice.java** *(new file)*
-- Created `CourseRepository` and `CourseService` instances
-- Added two courses (C001, C002) via `courseService.createCourse()`
-- Retrieved and printed C001 successfully using `getCourseById()`
-- Handled missing course C999 using `try/catch` with `CourseNotFoundException`
-- Handled missing course C888 using `try/catch` with a custom friendly message
-- Program does not crash when a course is not found
-
-### README Reflection
-
-**Why is throwing CourseNotFoundException better than printing inside CourseService?**
-Because different callers handle errors differently. A console app prints a friendly message, a web API returns a 404 JSON response, and a frontend app may show a popup. If `CourseService` printed the error itself, it would be locked to one behaviour. By throwing the exception instead, the caller decides how to display or handle it.
-
-### Output Screenshot
-
-![Day 3 Assignment 03 Output](screenshots/D3_Assignment03.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
-
----
-
-## Day 3 Assignment 04 - Object Relationships and Composition
-
-### What Was Added
-
-**Day3_Assignment04_ObjectRelationshipPractice.java** *(new file)*
-- Created two `Instructor` objects (Aina Rahman, Marcus Lee)
-- Created two `Course` objects (C001, C002)
-- Assigned instructors to courses using `course.setInstructor()`
-- Created two `CourseOffering` objects (OFF001, OFF002) using composition
-- Created a third offering (OFF003) reusing the same `javaCourse` with different dates
-- Added comments explaining composition — CourseOffering HAS a Course and HAS an Instructor
-
-### README Reflection
-
-**Why is CourseOffering a better design than putting start date, end date, and capacity directly inside Course?**
-Because the same course can run multiple times with different dates, instructors, and capacities. If we put those fields inside `Course`, we could only run it once. `CourseOffering` separates the course content from the scheduling details.
-
-### Output Screenshot
-
-![Day 3 Assignment 04 Output](screenshots/D3_Assignment04.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
-
----
-
-## Day 3 Assignment 05 - Write Search Using Loop, Then Compare with Stream
-
-### What Was Changed
-
-**CourseService.java** *(edited)*
-- Added `import java.util.ArrayList`
-- Added `searchByLevelUsingLoop()` method using `ArrayList` and `for` loop with `equalsIgnoreCase()`
-- Added `searchByLevelUsingStream()` method using `stream()`, `filter()`, and `toList()`
-
-**SearchPractice.java** *(new file)*
-- Created `CourseRepository` and `CourseService` instances
-- Added four courses (C001, C002, C003, C004)
-- Tested `searchByLevelUsingLoop("Beginner")` and printed results
-- Tested `searchByLevelUsingStream("Beginner")` and printed results
-
-### README Reflection
-
-**Which version is easier to understand: loop or stream? Why?**
-Loop is easier to understand because each step is written out clearly — create a list, check each course, add if it matches, return the list. Stream is shorter but requires understanding of `filter()` and method chaining.
-
-**What does filter() do in a stream?**
-It checks each item in the stream against a condition. Only items where the condition is true are kept and passed to the next step.
-
-### Output Screenshot
-
-![Day 3 Assignment 05 Output](screenshots/D3_Assignment05.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
-
----
-
-## Day 3 Assignment 06 - Build StudentService Using the Same Pattern as CourseService
-
-### What Was Added
-
-**StudentRepository.java** *(new file)*
-- Created interface with `save()`, `findById()`, `findAll()`, `existsById()` methods
-
-**InMemoryStudentRepository.java** *(new file)*
-- Implements `StudentRepository`
-- Stores students in `LinkedHashMap<String, Student>`
-
-**StudentNotFoundException.java** *(new file)*
-- Custom exception extending `RuntimeException`
-- Message: `Student not found with ID: {id}`
-
-**DuplicateStudentException.java** *(new file)*
-- Custom exception extending `RuntimeException`
-- Message: `Student already exists with ID: {id}`
-
-**StudentService.java** *(new file)*
-- `registerStudent()` — validates null and duplicate before saving
-- `getStudentById()` — throws `StudentNotFoundException` if not found
-- `getAllStudents()` — returns all students from repository
-- `searchByNameUsingLoop()` — searches by name using for loop
-- `searchByNameUsingStream()` — searches by name using stream and filter
-
-**StudentServicePractice.java** *(new file)*
-- Created `StudentRepository` and `StudentService` instances
-- Registered 3 students, count displayed dynamically using `getAllStudents().size()`
-- Printed all students using loop
-- Found S001 using `getStudentById()`
-- Searched by name "Lee" using both loop and stream
-- Handled missing student S999 with `StudentNotFoundException`
-- Handled duplicate S001 with `DuplicateStudentException`
-- Handled null student with `IllegalArgumentException`
-
-### README Reflection
-
-**How is StudentService similar to CourseService?**
-Both follow the same pattern — service handles validation and business rules, repository handles storage. Neither stores data directly inside the service class.
-
-**Which file stores students temporarily while the program is running?**
-`InMemoryStudentRepository` — it holds all student data in a `LinkedHashMap` that is lost when the program stops.
-
-### Output Screenshot
-
-![Day 3 Assignment 06 Output](screenshots/D3_Assignment06.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day3)
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
 
 ---
