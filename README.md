@@ -102,7 +102,7 @@ In Java, you must define a class first (e.g. `Student.java`) with typed fields a
 
 ### Output Screenshot
 
-![Day 4 Exercise 01 Output](screenshots/D4_Exercise01.png)
+![Day 4 Exercise 01 Output](screenshots/Day4/D4_Exercise01.png)
 
 ### GitHub Commit
 
@@ -128,7 +128,7 @@ Both JavaScript arrays and Java `ArrayList` are dynamic — they can grow in siz
 
 ### Output Screenshot
 
-![Day 4 Exercise 02 Output](screenshots/D4_Exercise02.png)
+![Day 4 Exercise 02 Output](screenshots/Day4/D4_Exercise02.png)
 
 ### GitHub Commit
 
@@ -155,7 +155,55 @@ Arrow functions are used everywhere in React — in event handlers, array method
 
 ### Output Screenshot
 
-![Day 4 Exercise 03 Output](screenshots/D4_Exercise03.png)
+![Day 4 Exercise 03 Output](screenshots/Day4/D4_Exercise03.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
+
+---
+
+## Day 4 Exercise 04 - Practise JavaScript Array Methods
+
+### What Was Added
+
+**student-array-methods.js** *(new file)*
+- Created a `students` array containing 3 student objects with `studentId`, `studentName`, `email`, and `status`
+- Used `forEach` to loop through and print all student names
+- Used `filter` to create `activeStudents` array containing only Active students
+- Used `find` to locate student `S002` and store in `foundStudent`
+- Used `map` to extract all emails into `studentEmails` array
+- Used `push` to add Danish Nawaz to the end — stored new length in `newLengthAfterPush`
+- Used `pop` to remove the last student — stored in `removedLastStudent`
+- Used `unshift` to add S000 to the beginning — stored new length in `newLengthAfterUnshift`
+- Used `shift` to remove the first student — stored in `removedFirstStudent`
+- Printed the final array after all modifications
+
+### README Reflection - Exercise 04
+
+**1. What is the difference between filter, find, and map?**
+- `filter` keeps items matching a condition and returns a **new array**
+- `find` returns only the **first single object** that matches, not an array
+- `map` transforms every item and returns a **new array** with the transformed results
+
+**2. Which four array methods change the original array?**
+`push`, `pop`, `shift`, and `unshift` all modify the original array directly.
+
+**3. What does push return?**
+`push` returns the **new length** of the array after the item is added.
+
+**4. What does pop return?**
+`pop` returns the **removed item** (the last element that was taken out).
+
+**5. What is the difference between shift and unshift?**
+`shift` removes the **first** item from the array. `unshift` adds a new item to the **beginning** of the array.
+
+### Output Screenshot
+
+![Day 4 Exercise 04 Output A](screenshots/Day4/D4_Exercise04a.png)
+![Day 4 Exercise 04 Output B](screenshots/Day4/D4_Exercise04b.png)
+![Day 4 Exercise 04 Output C](screenshots/Day4/D4_Exercise04c.png)
+![Day 4 Exercise 04 Output D](screenshots/Day4/D4_Exercise04d.png)
 
 ### GitHub Commit
 
