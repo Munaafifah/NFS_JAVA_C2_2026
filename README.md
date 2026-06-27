@@ -135,3 +135,30 @@ Both JavaScript arrays and Java `ArrayList` are dynamic — they can grow in siz
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
 
 ---
+
+## Day 4 Exercise 03 - Write Functions and Arrow Functions for Student Data
+
+### What Was Added
+
+**student-functions.js** *(new file)*
+- Created a `student` object with `studentId`, `studentName`, `email`, and `status` properties
+- Wrote a normal function `formatStudent(student)` returning a formatted string e.g. `S001 - Aina Rahman (Active)`
+- Wrote an arrow function `getStudentEmail(student)` returning the student's email
+- Wrote a short arrow function `getStudentStatus(student)` returning the student's status in one line
+- Printed all three outputs using `console.log()`
+
+### README Reflection - Exercise 03
+
+**Why are arrow functions important before learning React?**
+
+Arrow functions are used everywhere in React — in event handlers, array methods like `map()` and `filter()`, and component callbacks. Learning them now means React syntax will feel familiar instead of confusing. They are shorter, cleaner, and avoid common issues with the `this` keyword compared to normal functions.
+
+### Output Screenshot
+
+![Day 4 Exercise 03 Output](screenshots/D4_Exercise03.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
+
+---
