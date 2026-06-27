@@ -109,3 +109,29 @@ In Java, you must define a class first (e.g. `Student.java`) with typed fields a
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
 
 ---
+
+## Day 4 Exercise 02 - Store Instructors in an Array and Loop Through Them
+
+### What Was Added
+
+**instructor-array.js** *(new file)*
+- Created a `const instructors = []` array containing 4 instructor objects
+- Each object has `instructorId`, `instructorName`, and `expertise` properties
+- Used a `for...of` loop to iterate and print each instructor in readable format
+- Printed total count using `.length`
+
+### README Reflection - Exercise 02
+
+**How is a JavaScript array similar to Java ArrayList?**
+
+Both JavaScript arrays and Java `ArrayList` are dynamic — they can grow in size and hold multiple items. You can add elements and access them by index. The key difference is that Java `ArrayList` requires a declared type (e.g. `ArrayList<Instructor>`) while a JavaScript array can hold any mix of types without type declaration.
+
+### Output Screenshot
+
+![Day 4 Exercise 02 Output](screenshots/D4_Exercise02.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
+
+---
