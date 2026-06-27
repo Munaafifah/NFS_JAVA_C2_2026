@@ -210,3 +210,37 @@ Arrow functions are used everywhere in React — in event handlers, array method
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
 
 ---
+
+## Day 4 Exercise 05 - Render Student Cards in HTML
+
+### What Was Added
+
+**student-dom-rendering/index.html** *(new file)*
+- Created HTML page with `<title>Student List</title>`
+- Added `<h1>Student List</h1>` as the page heading
+- Added `<div id="student-list"></div>` as the container for student cards
+- Linked `script.js` at the bottom of the body
+
+**student-dom-rendering/script.js** *(new file)*
+- Created a `students` array containing 4 student objects with `studentId`, `studentName`, `email`, and `status`
+- Used `document.getElementById("student-list")` to select the container div
+- Used `forEach` to loop through every student
+- Used `document.createElement("div")` to create a new card for each student
+- Used `innerHTML` to fill each card with student details
+- Used `appendChild` to add each card into the container on the page
+
+### README Reflection - Exercise 05
+
+**What does the DOM allow JavaScript to do?**
+
+The DOM (Document Object Model) allows JavaScript to access and manipulate HTML elements on a page. Without the DOM, JavaScript can only run logic but cannot interact with what the user sees. With the DOM, JavaScript can find elements, create new ones, fill them with content, and add them to the page dynamically — which is exactly how React works under the hood.
+
+### Output Screenshot
+
+![Day 4 Exercise 05 Output](screenshots/Day4/D4_Exercise05.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
+
+---
