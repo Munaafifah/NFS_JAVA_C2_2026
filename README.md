@@ -244,3 +244,41 @@ The DOM (Document Object Model) allows JavaScript to access and manipulate HTML 
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
 
 ---
+
+## Day 4 Exercise 06 - Add Search to the Student List
+
+### What Was Added
+
+**student-search-ui/index.html** *(new file)*
+- Created HTML page with `<title>Student Search</title>`
+- Added `<h1>Student List</h1>` as the page heading
+- Added `<input id="search-input">` for the user to type a search keyword
+- Added `<button id="search-button">` to trigger the search
+- Added `<button id="reset-button">` to clear search and show all students
+- Added `<div id="student-list"></div>` as the container for student cards
+- Linked `script.js` at the bottom of the body
+
+**student-search-ui/script.js** *(new file)*
+- Created a `students` array containing 4 student objects with `studentId`, `studentName`, `email`, and `status`
+- Selected all DOM elements at the top using `document.getElementById`
+- Created `renderStudents(studentArray)` function that clears the container, shows "No students found" if empty, otherwise renders a card for each student
+- Used `searchButton.addEventListener` to read the keyword, filter students by name using `.toLowerCase().includes()`, and render filtered results
+- Used `resetButton.addEventListener` to clear the input and render all students again
+- Called `renderStudents(students)` on page load to show all students by default
+
+### README Reflection - Exercise 06
+
+**How is JavaScript filter used in a search feature?**
+
+`filter` loops through every student and keeps only the ones whose name includes the search keyword. By converting both the student name and the keyword to lowercase using `.toLowerCase()`, the search becomes case-insensitive — so typing `chong` will match `Chong Mei` regardless of capitalisation.
+
+### Output Screenshot
+
+![Day 4 Exercise 06 Output A](screenshots/Day4/D4_Exercise06a.png)
+![Day 4 Exercise 06 Output B](screenshots/Day4/D4_Exercise06b.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
+
+---
