@@ -282,3 +282,57 @@ The DOM (Document Object Model) allows JavaScript to access and manipulate HTML 
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
 
 ---
+
+## Day 4 Exercise 07 - Load Students from a JSON File Using Fetch
+
+### What Was Added
+
+**student-fetch-json/students.json** *(new file)*
+- Created a JSON file containing 4 student records
+- Each record has `studentId`, `studentName`, `email`, and `status`
+- Used correct JSON format with double quotes and no trailing commas
+
+**student-fetch-json/index.html** *(new file)*
+- Created HTML page with `<title>Fetch Student Data</title>`
+- Added `<h1>Fetch Student Data</h1>` as the page heading
+- Added `<p id="status-message">` to show loading or error messages
+- Added `<div id="student-list"></div>` as the container for student cards
+- Linked `script.js` at the bottom of the body
+
+**student-fetch-json/script.js** *(new file)*
+- Selected `status-message` and `student-list` elements using `document.getElementById`
+- Created `renderStudents(students)` function to clear the container and render a card for each student
+- Created `async function loadStudents()` using `try/catch` to handle errors
+- Used `fetch("students.json")` to request the JSON file
+- Used `await response.json()` to convert JSON into JavaScript objects
+- Checked `response.ok` and threw an error if the file failed to load
+- Cleared the loading message and called `renderStudents(students)` after successful load
+- Called `loadStudents()` at the bottom to trigger the fetch on page load
+
+### README Reflection - Exercise 07
+
+**1. What does async mean?**
+`async` marks a function that contains code which may take time to finish. It allows the function to use `await` inside it.
+
+**2. What does await do?**
+`await` pauses the function at that line and waits for the task to finish before moving to the next line — for example, waiting for `fetch` to return a response.
+
+**3. What does fetch do?**
+`fetch` sends a request to load data from a file or API and returns a response object containing the data.
+
+**4. Why do we use fetch before connecting to a real backend API?**
+Because the concept is the same — `fetch("students.json")` today becomes `fetch("http://localhost:8080/api/students")` when we connect to Spring Boot. Learning fetch now prepares us for real API calls later.
+
+**5. Why should this exercise be run using Live Server?**
+Because browsers block direct file access for security reasons. Live Server runs a local web server so `fetch("students.json")` works correctly. Double-clicking the HTML file directly would cause the fetch to fail.
+
+### Output Screenshot
+
+![Day 4 Exercise 07 Output](screenshots/Day4/D4_Exercise07.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
+
+---
+
