@@ -1,0 +1,43 @@
+### 1. Health check
+
+GET http://localhost:8081/api/health
+
+
+### 2. Get all course offerings 
+
+GET http://localhost:8081/api/course-offerings
+
+
+### 3. Get a specific couse offerings
+
+GET http://localhost:8081/api/course-offerings/CO001
+
+
+### 4. Get a course that doesnt exist
+
+GET http://localhost:8081/api/course-offerings/CO999
+
+
+### 5. Create a new course offerings
+
+POST http://localhost:8081/api/course-offerings
+Content-Type: application/json
+
+{
+  "courseTitle": "Mongo DB",
+  "instructorName": "Mr Lays",
+  "startDate": "2026-09-15",
+  "capacity": 20 
+}
+
+### 6. Create invalid course offerings
+
+POST http://localhost:8081/api/course-offerings
+Content-Type: application/json
+
+{
+  "courseTitle": "",
+  "instructorName": "",
+  "startDate": "",
+  "capacity": 0 
+}

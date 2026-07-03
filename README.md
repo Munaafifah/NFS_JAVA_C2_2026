@@ -78,261 +78,67 @@ By the end of this programme, participants will be able to:
 
 
 
-
-
 ---
 
-
-## Day 4 Exercise 01 - Create a JavaScript Student Object
+## Day 5 Exercise 01 - HTTP Investigation
 
 ### What Was Added
 
-**student-object.js** *(new file)*
-- Created a JavaScript object literal `student` with four properties: `studentId`, `studentName`, `email`, and `status`
-- Printed the whole object using `console.log()`
-- Printed each property individually using dot notation and bracket notation
-- Used dot notation to access `studentId` and `studentName`
-- Used bracket notation to access `email`
+**rest-basics/mock-api.js** *(trainer-provided)*
+- Node.js mock API server using the built-in `http` module, running on port 8081
+- Serves `/api/course-offerings` and `/api/instructors` with GET (list/single) and POST (create with validation)
+- Returns appropriate status codes: 200 for success, 201 for created, 404 for not found, 400 for validation errors
+
+**rest-basics/requests.http** *(new file)*
+- Six REST Client requests testing the mock course-offerings API:
+  1. Health check — `GET /api/health`
+  2. Get all course offerings — `GET /api/course-offerings`
+  3. Get a specific course offering — `GET /api/course-offerings/CO001`
+  4. Get a course that doesn't exist — `GET /api/course-offerings/CO999`
+  5. Create a new course offering (valid payload) — `POST /api/course-offerings`
+  6. Create an invalid course offering (empty fields) — `POST /api/course-offerings`
+- Investigation table and reflection answers documenting the HTTP behaviour observed for each request
+
+### Investigation Table
+
+| Method | URL | Status Code | Response Type | What Happened? |
+|---|---|---:|---|---|
+| GET | `/api/health` | 200 | Single object | Server responded with a health status object confirming the API is running. |
+| GET | `/api/course-offerings` | 200 | List | Returned an array of 2 course offering objects (CO001, CO002) seeded in the mock API. |
+| GET | `/api/course-offerings/CO001` | 200 | Single object | Returned the specific course offering matching that ID (Java Fundamentals). |
+| GET | `/api/course-offerings/CO999` | 404 | Error object | ID CO999 doesn't exist in the data, so the server returned an error object with a "not found" message instead of course data. |
+| POST | `/api/course-offerings` (valid body) | 201 | Single object | A new course offering was created successfully. Server generated a new ID (CO003), added `"status": "OPEN"` automatically, and returned the full created object. |
+| POST | `/api/course-offerings` (empty fields) | 400 | Error object | All four required fields failed validation (empty strings, capacity 0). Server rejected the request and returned an `errors` array listing each failed field with its reason. |
 
 ### README Reflection - Exercise 01
 
-**What is one difference between a Java object and a JavaScript object?**
+**1. Which request returned a successful list response?**
+`GET /api/course-offerings` returned status 200 with an array of course offering objects.
 
-In Java, you must define a class first (e.g. `Student.java`) with typed fields and a constructor before you can create an object. In JavaScript, you can create an object directly using `{}` (object literal) without any class definition — the properties are untyped and can be added on the fly.
+**2. Which request returned a not-found response?**
+`GET /api/course-offerings/CO999` returned status 404 because that ID doesn't exist in the mock data.
 
-### Output Screenshot
+**3. Which request returned a validation error?**
+The `POST /api/course-offerings` request with empty fields returned status 400 with an `errors` array naming each invalid field.
 
-![Day 4 Exercise 01 Output](screenshots/Day4/D4_Exercise01.png)
+**4. What is the difference between a successful response and an error response?**
+A successful response returns the requested or created data (a single object or a list) with a 2xx status code. An error response returns a status code in the 4xx or 5xx range along with a `message` (and sometimes an `errors` array) explaining what went wrong instead of returning usable data.
 
-### GitHub Commit
+**5. Why is the status code important for frontend developers?**
+The status code tells the frontend how to handle the response before even looking at the body. A 200/201 means it's safe to use the returned data; a 404 means the frontend should show a "not found" message; a 400 means the frontend should show validation errors to the user. Without checking the status code, a frontend app might try to render an error object as if it were real data.
 
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
-
----
-
-## Day 4 Exercise 02 - Store Instructors in an Array and Loop Through Them
-
-### What Was Added
-
-**instructor-array.js** *(new file)*
-- Created a `const instructors = []` array containing 4 instructor objects
-- Each object has `instructorId`, `instructorName`, and `expertise` properties
-- Used a `for...of` loop to iterate and print each instructor in readable format
-- Printed total count using `.length`
-
-### README Reflection - Exercise 02
-
-**How is a JavaScript array similar to Java ArrayList?**
-
-Both JavaScript arrays and Java `ArrayList` are dynamic — they can grow in size and hold multiple items. You can add elements and access them by index. The key difference is that Java `ArrayList` requires a declared type (e.g. `ArrayList<Instructor>`) while a JavaScript array can hold any mix of types without type declaration.
+**Reflection: What is one thing you understand better about REST after this exercise?**
+The status code and the response body work together as a pair — the body alone doesn't tell you whether something succeeded, and the status code alone doesn't tell you why. You need both to properly handle a response on the frontend.
 
 ### Output Screenshot
 
-![Day 4 Exercise 02 Output](screenshots/Day4/D4_Exercise02.png)
+![Day 5 Exercise 01 Output A](screenshots/Day5/D5_Exercise01a.png)
+![Day 5 Exercise 01 Output B](screenshots/Day5/D5_Exercise01b.png)
+![Day 5 Exercise 01 Output C](screenshots/Day5/D5_Exercise01c.png)
+![Day 5 Exercise 01 Output D](screenshots/Day5/D5_Exercise01d.png)
+![Day 5 Exercise 01 Output E](screenshots/Day5/D5_Exercise01e.png)
+![Day 5 Exercise 01 Output F](screenshots/Day5/D5_Exercise01f.png)
 
 ### GitHub Commit
 
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
-
----
-
-## Day 4 Exercise 03 - Write Functions and Arrow Functions for Student Data
-
-### What Was Added
-
-**student-functions.js** *(new file)*
-- Created a `student` object with `studentId`, `studentName`, `email`, and `status` properties
-- Wrote a normal function `formatStudent(student)` returning a formatted string e.g. `S001 - Aina Rahman (Active)`
-- Wrote an arrow function `getStudentEmail(student)` returning the student's email
-- Wrote a short arrow function `getStudentStatus(student)` returning the student's status in one line
-- Printed all three outputs using `console.log()`
-
-### README Reflection - Exercise 03
-
-**Why are arrow functions important before learning React?**
-
-Arrow functions are used everywhere in React — in event handlers, array methods like `map()` and `filter()`, and component callbacks. Learning them now means React syntax will feel familiar instead of confusing. They are shorter, cleaner, and avoid common issues with the `this` keyword compared to normal functions.
-
-### Output Screenshot
-
-![Day 4 Exercise 03 Output](screenshots/Day4/D4_Exercise03.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
-
----
-
-## Day 4 Exercise 04 - Practise JavaScript Array Methods
-
-### What Was Added
-
-**student-array-methods.js** *(new file)*
-- Created a `students` array containing 3 student objects with `studentId`, `studentName`, `email`, and `status`
-- Used `forEach` to loop through and print all student names
-- Used `filter` to create `activeStudents` array containing only Active students
-- Used `find` to locate student `S002` and store in `foundStudent`
-- Used `map` to extract all emails into `studentEmails` array
-- Used `push` to add Danish Nawaz to the end — stored new length in `newLengthAfterPush`
-- Used `pop` to remove the last student — stored in `removedLastStudent`
-- Used `unshift` to add S000 to the beginning — stored new length in `newLengthAfterUnshift`
-- Used `shift` to remove the first student — stored in `removedFirstStudent`
-- Printed the final array after all modifications
-
-### README Reflection - Exercise 04
-
-**1. What is the difference between filter, find, and map?**
-- `filter` keeps items matching a condition and returns a **new array**
-- `find` returns only the **first single object** that matches, not an array
-- `map` transforms every item and returns a **new array** with the transformed results
-
-**2. Which four array methods change the original array?**
-`push`, `pop`, `shift`, and `unshift` all modify the original array directly.
-
-**3. What does push return?**
-`push` returns the **new length** of the array after the item is added.
-
-**4. What does pop return?**
-`pop` returns the **removed item** (the last element that was taken out).
-
-**5. What is the difference between shift and unshift?**
-`shift` removes the **first** item from the array. `unshift` adds a new item to the **beginning** of the array.
-
-### Output Screenshot
-
-![Day 4 Exercise 04 Output A](screenshots/Day4/D4_Exercise04a.png)
-![Day 4 Exercise 04 Output B](screenshots/Day4/D4_Exercise04b.png)
-![Day 4 Exercise 04 Output C](screenshots/Day4/D4_Exercise04c.png)
-![Day 4 Exercise 04 Output D](screenshots/Day4/D4_Exercise04d.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
-
----
-
-## Day 4 Exercise 05 - Render Student Cards in HTML
-
-### What Was Added
-
-**student-dom-rendering/index.html** *(new file)*
-- Created HTML page with `<title>Student List</title>`
-- Added `<h1>Student List</h1>` as the page heading
-- Added `<div id="student-list"></div>` as the container for student cards
-- Linked `script.js` at the bottom of the body
-
-**student-dom-rendering/script.js** *(new file)*
-- Created a `students` array containing 4 student objects with `studentId`, `studentName`, `email`, and `status`
-- Used `document.getElementById("student-list")` to select the container div
-- Used `forEach` to loop through every student
-- Used `document.createElement("div")` to create a new card for each student
-- Used `innerHTML` to fill each card with student details
-- Used `appendChild` to add each card into the container on the page
-
-### README Reflection - Exercise 05
-
-**What does the DOM allow JavaScript to do?**
-
-The DOM (Document Object Model) allows JavaScript to access and manipulate HTML elements on a page. Without the DOM, JavaScript can only run logic but cannot interact with what the user sees. With the DOM, JavaScript can find elements, create new ones, fill them with content, and add them to the page dynamically — which is exactly how React works under the hood.
-
-### Output Screenshot
-
-![Day 4 Exercise 05 Output](screenshots/Day4/D4_Exercise05.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
-
----
-
-## Day 4 Exercise 06 - Add Search to the Student List
-
-### What Was Added
-
-**student-search-ui/index.html** *(new file)*
-- Created HTML page with `<title>Student Search</title>`
-- Added `<h1>Student List</h1>` as the page heading
-- Added `<input id="search-input">` for the user to type a search keyword
-- Added `<button id="search-button">` to trigger the search
-- Added `<button id="reset-button">` to clear search and show all students
-- Added `<div id="student-list"></div>` as the container for student cards
-- Linked `script.js` at the bottom of the body
-
-**student-search-ui/script.js** *(new file)*
-- Created a `students` array containing 4 student objects with `studentId`, `studentName`, `email`, and `status`
-- Selected all DOM elements at the top using `document.getElementById`
-- Created `renderStudents(studentArray)` function that clears the container, shows "No students found" if empty, otherwise renders a card for each student
-- Used `searchButton.addEventListener` to read the keyword, filter students by name using `.toLowerCase().includes()`, and render filtered results
-- Used `resetButton.addEventListener` to clear the input and render all students again
-- Called `renderStudents(students)` on page load to show all students by default
-
-### README Reflection - Exercise 06
-
-**How is JavaScript filter used in a search feature?**
-
-`filter` loops through every student and keeps only the ones whose name includes the search keyword. By converting both the student name and the keyword to lowercase using `.toLowerCase()`, the search becomes case-insensitive — so typing `chong` will match `Chong Mei` regardless of capitalisation.
-
-### Output Screenshot
-
-![Day 4 Exercise 06 Output A](screenshots/Day4/D4_Exercise06a.png)
-![Day 4 Exercise 06 Output B](screenshots/Day4/D4_Exercise06b.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
-
----
-
-## Day 4 Exercise 07 - Load Students from a JSON File Using Fetch
-
-### What Was Added
-
-**student-fetch-json/students.json** *(new file)*
-- Created a JSON file containing 4 student records
-- Each record has `studentId`, `studentName`, `email`, and `status`
-- Used correct JSON format with double quotes and no trailing commas
-
-**student-fetch-json/index.html** *(new file)*
-- Created HTML page with `<title>Fetch Student Data</title>`
-- Added `<h1>Fetch Student Data</h1>` as the page heading
-- Added `<p id="status-message">` to show loading or error messages
-- Added `<div id="student-list"></div>` as the container for student cards
-- Linked `script.js` at the bottom of the body
-
-**student-fetch-json/script.js** *(new file)*
-- Selected `status-message` and `student-list` elements using `document.getElementById`
-- Created `renderStudents(students)` function to clear the container and render a card for each student
-- Created `async function loadStudents()` using `try/catch` to handle errors
-- Used `fetch("students.json")` to request the JSON file
-- Used `await response.json()` to convert JSON into JavaScript objects
-- Checked `response.ok` and threw an error if the file failed to load
-- Cleared the loading message and called `renderStudents(students)` after successful load
-- Called `loadStudents()` at the bottom to trigger the fetch on page load
-
-### README Reflection - Exercise 07
-
-**1. What does async mean?**
-`async` marks a function that contains code which may take time to finish. It allows the function to use `await` inside it.
-
-**2. What does await do?**
-`await` pauses the function at that line and waits for the task to finish before moving to the next line — for example, waiting for `fetch` to return a response.
-
-**3. What does fetch do?**
-`fetch` sends a request to load data from a file or API and returns a response object containing the data.
-
-**4. Why do we use fetch before connecting to a real backend API?**
-Because the concept is the same — `fetch("students.json")` today becomes `fetch("http://localhost:8080/api/students")` when we connect to Spring Boot. Learning fetch now prepares us for real API calls later.
-
-**5. Why should this exercise be run using Live Server?**
-Because browsers block direct file access for security reasons. Live Server runs a local web server so `fetch("students.json")` works correctly. Double-clicking the HTML file directly would cause the fetch to fail.
-
-### Output Screenshot
-
-![Day 4 Exercise 07 Output](screenshots/Day4/D4_Exercise07.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day4)
-
----
-
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
