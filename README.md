@@ -218,3 +218,39 @@ Every endpoint URL names a resource (`events`, `bookings`) rather than an action
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
 
 ---
+
+## Day 5 Exercise 04 - Build an Event API Client
+
+### What Was Added
+
+**exercises/day5/exercise-04-sample-code/index.html** *(starter file, unchanged)*
+- Provided page with `loadButton`, `statusText`, and `eventList` elements, linked to `app.js`
+
+**exercises/day5/exercise-04-sample-code/app.js**
+- Selected `statusText`, `eventList`, and `loadButton` elements using `document.querySelector`
+- Created `renderEvents(events)` function to clear the list and render an `<li>` for each event, showing title, date, venue, and available seats
+- Created `async function loadEvents()` using `try/catch` to send a `GET` request to `/api/events`
+- Showed a loading message before the request, a success message with the event count after loading, and an error message if the request failed
+- Connected `loadButton` to `loadEvents` using `addEventListener`
+- **Challenge task:** dynamically created a search input and search button using `document.createElement` (since `index.html` was not to be edited), allowing the user to search for one event by ID via `GET /api/events/{id}`
+- Displayed the found event using the same `renderEvents` function, or a "not found" message if the ID does not exist
+
+### mock-api.js Update
+
+The trainer-provided `mock-api.js` was updated to include:
+- `GET /api/events` — returns the full list of events
+- `GET /api/events/{id}` — returns a single event, or a 404 error object if the ID does not exist
+
+No changes were made to `mock-api.js` on my end, per the exercise restrictions.
+
+### Output Screenshot
+
+![Day 5 Exercise 04 Output](screenshots/Day5/D5_Exercise04a.png)
+![Day 5 Exercise 04 Output](screenshots/Day5/D5_Exercise04b.png)
+![Day 5 Exercise 04 Output](screenshots/Day5/D5_Exercise04c.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
+
+---
