@@ -1,0 +1,70 @@
+### 1. Get all bookings
+
+GET http://localhost:8081/api/bookings
+
+
+### 2. Create a valid booking
+
+POST http://localhost:8081/api/bookings
+Content-Type: application/json
+
+{
+  "eventId": "EV001",
+  "participantName": "Rahim Gonzalez",
+  "participantEmail": "rahim@example.com",
+  "seats": 2
+}
+
+
+### 3. Get one booking (replace BK001 with the id returned from request 2)
+
+GET http://localhost:8081/api/bookings/BK001
+
+
+### 4. Create a booking with missing fields
+
+POST http://localhost:8081/api/bookings
+Content-Type: application/json
+
+{
+  "eventId": "",
+  "participantName": "",
+  "participantEmail": "",
+  "seats": 0
+}
+
+
+### 5. Create a booking with an invalid event ID
+
+POST http://localhost:8081/api/bookings
+Content-Type: application/json
+
+{
+  "eventId": "EV999",
+  "participantName": "Rahim Gonzalez",
+  "participantEmail": "rahim@example.com",
+  "seats": 2
+}
+
+
+### 6. Create a booking with too many seats
+
+POST http://localhost:8081/api/bookings
+Content-Type: application/json
+
+{
+  "eventId": "EV002",
+  "participantName": "Rahim Gonzalez",
+  "participantEmail": "rahim@example.com",
+  "seats": 100
+}
+
+
+### 7. Confirm seats were reduced after booking 2
+
+GET http://localhost:8081/api/events
+
+
+### 8. Challenge: cancel a booking (replace BK001 with a real booking id)
+
+DELETE http://localhost:8081/api/bookings/BK001

@@ -254,3 +254,69 @@ No changes were made to `mock-api.js` on my end, per the exercise restrictions.
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
 
 ---
+
+## Day 5 Final Exercise - Add Booking Endpoints to the Mock API
+
+### What Was Added
+
+**rest-basics/mock-api.js** *(updated)*
+- Added a new `bookings` array to store bookings in memory
+- Added `validateBooking()` to check for missing `eventId`, `participantName`, `participantEmail`, and invalid `seats`
+- Added `GET /api/bookings` to return all bookings
+- Added `GET /api/bookings/{id}` to return one booking, or a 404 error if it does not exist
+- Added `POST /api/bookings` to create a new booking, which:
+  - Validates the request body (400 if invalid)
+  - Checks that the `eventId` matches an existing event (404 if not found)
+  - Checks that enough seats are available on the event (400 if not enough)
+  - Reduces the event's `availableSeats` by the booked amount
+  - Returns the created booking with status `"CONFIRMED"` (201)
+- Added `DELETE /api/bookings/{id}` (Challenge Task) to cancel a booking, which:
+  - Sets the booking's status to `"CANCELLED"`
+  - Adds the seats back to the related event's `availableSeats`
+  - Returns the updated booking (does not remove it from the array)
+- Updated `corsHeaders()` to allow the `DELETE` method
+
+**rest-basics/requests2.http** *(new file)*
+- Eight REST Client requests testing all booking endpoints and the challenge task
+
+### Test Results
+
+| # | Request | Status Code | What Happened? |
+|---|---|---:|---|
+| 1 | `GET /api/bookings` | 200 | Returned an empty array `[]` since no bookings existed yet. |
+| 2 | `POST /api/bookings` (valid: EV001, 2 seats) | 201 | Created booking `BK001` with status `"CONFIRMED"`. |
+| 3 | `GET /api/bookings/BK001` | 200 | Returned the booking created in request 2. |
+| 4 | `POST /api/bookings` (missing fields) | 400 | Returned a `"Validation failed"` message with an `errors` array listing all four missing/invalid fields (eventId, participantName, participantEmail, seats). |
+| 5 | `POST /api/bookings` (invalid eventId: EV999) | 404 | Returned `"Event EV999 was not found"` since the event does not exist. |
+| 6 | `POST /api/bookings` (100 seats for EV002, which only had 35) | 400 | Returned `"Not enough seats available"` since the requested seats exceeded the event's capacity. |
+| 7 | `GET /api/events` | 200 | Confirmed EV001's `availableSeats` dropped from 120 to 118 after the successful booking in request 2. |
+| 8 | `DELETE /api/bookings/BK001` (Challenge Task) | 200 | Booking status changed to `"CANCELLED"`. The booking was kept in the array (not deleted), and its seats were added back to the related event. |
+
+### Completed Endpoints
+
+- ✅ `GET /api/bookings`
+- ✅ `GET /api/bookings/{id}`
+- ✅ `POST /api/bookings` (with validation, event existence check, and seat availability check)
+- ✅ `DELETE /api/bookings/{id}`
+- ✅ Invalid booking data returns `400`
+- ✅ Unknown event ID returns `404`
+- ✅ Successful booking returns `201`
+- ✅ Available seats reduce after a successful booking
+- ✅ Challenge Task: `DELETE /api/bookings/{id}` cancels a booking and restores seats
+
+### Output Screenshots
+
+![Day 5 Final Exercise Output A - Get all bookings (empty array)](screenshots/Day5/D5_Exercise05a.png)
+![Day 5 Final Exercise Output B - Create a valid booking (201 Created)](screenshots/Day5/D5_Exercise05b.png)
+![Day 5 Final Exercise Output C - Get one booking by ID](screenshots/Day5/D5_Exercise05c.png)
+![Day 5 Final Exercise Output D - Create a booking with missing fields (400 validation errors)](screenshots/Day5/D5_Exercise05d.png)
+![Day 5 Final Exercise Output E - Create a booking with an invalid event ID (404)](screenshots/Day5/D5_Exercise05e.png)
+![Day 5 Final Exercise Output F - Create a booking with too many seats (400)](screenshots/Day5/D5_Exercise05f.png)
+![Day 5 Final Exercise Output G - Confirm seats reduced on the event after booking](screenshots/Day5/D5_Exercise05g.png)
+![Day 5 Final Exercise Output H - Challenge Task: cancel a booking (200, status CANCELLED)](screenshots/Day5/D5_Exercise05h.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
+
+---
