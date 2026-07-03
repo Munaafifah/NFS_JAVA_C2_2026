@@ -192,3 +192,29 @@ Every endpoint URL names a resource (`events`, `bookings`) rather than an action
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
 
 ---
+
+## Day 5 Exercise 03 - Display Event JSON on a Webpage
+
+### What Was Added
+
+**exercises/day5/index.html** *(starter file, unchanged)*
+- Provided page with `statusText` and `eventList` elements, linked to `app.js`
+
+**exercises/day5/app.js**
+- Selected `eventList` and `statusText` elements using `document.querySelector`
+- Used `forEach` to loop through the `events` array
+- Created a new `<li>` for each event using `document.createElement`
+- Built each list item's text using a template literal showing title, date, venue, and available seats
+- Added a challenge condition: if `availableSeats` is fewer than 50, appended `" - Limited seats"` to the text
+- Appended each list item to `eventList` using `appendChild`
+- Updated `statusText` after the loop to show `"3 event(s) displayed."`
+
+### Output Screenshot
+
+![Day 5 Exercise 03 Output](screenshots/Day5/D5_Exercise03.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
+
+---
