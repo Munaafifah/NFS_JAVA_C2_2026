@@ -142,3 +142,53 @@ The status code and the response body work together as a pair — the body alone
 ### GitHub Commit
 
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
+
+---
+
+## Day 5 Exercise 02 - REST API Design
+
+### What Was Added
+
+- API specification table designing a REST API for an event booking system (events + bookings resources)
+- Request body planning table describing what data each write endpoint should contain
+- Error planning table identifying possible error cases with suitable status codes
+- Explanation of how the design follows REST principles
+
+### API Specification Table
+
+| Resource | Method | Endpoint | Purpose | Request Body Needed? | Success Status | Possible Error Status |
+|---|---|---|---|---|---:|---:|
+| Events | GET | `/events` | View all available events | No | 200 | 500 |
+| Events | GET | `/events/{eventId}` | View details of one event | No | 200 | 404 |
+| Bookings | POST | `/bookings` | Create a new booking | Yes | 201 | 400, 404 |
+| Bookings | GET | `/bookings` | View all bookings | No | 200 | 500 |
+| Bookings | GET | `/bookings/{bookingId}` | View one booking | No | 200 | 404 |
+| Bookings | PATCH | `/bookings/{bookingId}/cancellation` | Cancel a booking | No | 200 | 404, 409 |
+
+### Request Body Planning
+
+| Endpoint | Request Body Description |
+|---|---|
+| `POST /bookings` | Should contain the event being booked, the user making the booking, and the number of seats/tickets requested (e.g. `eventId`, `userId`, `quantity`). |
+| `PATCH /bookings/{bookingId}/cancellation` | Should contain the new status value only, e.g. `{ "status": "CANCELLED" }`. |
+
+### Error Planning
+
+| Error Case | Related Endpoint | Suitable Status Code | Explanation |
+|---|---|---:|---|
+| Required field missing (e.g. `eventId` not provided) | `POST /bookings` | 400 | The server cannot process the request because mandatory data is missing — this is a client-side input problem, not a server failure. |
+| Booking does not exist | `GET /bookings/{bookingId}` | 404 | The requested resource cannot be found, so there's nothing to return. |
+| Event is fully booked | `POST /bookings` | 409 | The request is valid in structure, but conflicts with the current state of the event (no capacity left) — a conflict, not a validation failure. |
+| Booking is already cancelled | `PATCH /bookings/{bookingId}/cancellation` | 409 | Attempting to cancel an already-cancelled booking conflicts with its current state; it's not a "not found" or "bad input" issue. |
+
+### README Reflection - Exercise 02
+
+**Why do your endpoint names follow REST principles?**
+
+Every endpoint URL names a resource (`events`, `bookings`) rather than an action. The HTTP method itself communicates the action — `GET` for reading, `POST` for creating, `PATCH` for partially updating. So instead of `/getAllBookings` or `/cancelBooking`, the resource stays the same (`/bookings`) and the method plus path structure (with or without an ID) tells you what's happening. This keeps the API predictable: once you know the resource name, you can guess most of its endpoints just by knowing REST conventions.
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day5)
+
+---
