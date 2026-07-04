@@ -100,3 +100,35 @@ By the end of this programme, participants will be able to:
 
 ---
 
+## Day 6 Exercise 2 - Build the Ticket Read API
+
+### What Was Added
+
+**src/main/java/com/example/assetTracker/dto/TicketResponse.java** *(student-created)*
+- Response DTO representing a support ticket
+- Fields: `id`, `title`, `description`, `category`, `priority`, `status`, `createdBy`, `createdAt`
+- Constructor + getters only, following the same pattern as `AssetResponse.java`
+
+**src/main/java/com/example/assetTracker/service/TicketService.java** *(student-created)*
+- `@Service` class storing a hardcoded list of 3 tickets in an `ArrayList<TicketResponse>`
+- `getAllTickets()` method returns the full ticket list
+- Ticket data is stored here, not inside the controller, per the exercise restriction
+
+**src/main/java/com/example/assetTracker/controller/TicketController.java** *(student-created)*
+- `@RestController` with `@RequestMapping("/api/tickets")`
+- Constructor-injects `TicketService`
+- `GET /api/tickets` — calls `ticketService.getAllTickets()` and returns the list as JSON
+
+**requests/assets.http** *(updated)*
+- Added `GET http://localhost:8080/api/tickets` request
+
+### Output Screenshot
+
+![Day 6 Exercise 02 Output](screenshots/Day6/D6_Exercise02.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
+
+---
+

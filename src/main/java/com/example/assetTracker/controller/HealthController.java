@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
+@RestController // Tells Spring this class is a Controller, Handles HTTP requests
 public class HealthController {
-
-    @GetMapping("/api/health")
+    @GetMapping("/api/health")  // maps a GET request to a Java method
     public Map<String, String> health() {
         return Map.of(
             "status", "UP",
@@ -17,12 +16,13 @@ public class HealthController {
         );
     }
 
+
     @GetMapping("/api/about")
     public Map<String, String> about() {
         return Map.of(
-            "appName", "Support Desk API",
+            "name", "Asset Tracker API",
             "version", "1.0.0",
-            "description", "API for managing IT support tickets"
+            "description", "API for tracking assets"
         );
     }
 }
