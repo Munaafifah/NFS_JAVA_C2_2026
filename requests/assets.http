@@ -15,3 +15,9 @@ GET http://localhost:8080/api/assets/23232
 
 ### Get All Tickets
 GET http://localhost:8080/api/tickets
+
+### Get one ticket
+GET http://localhost:8080/api/tickets/T001
+
+### Get one ticket that doesn't exist
+GET http://localhost:8080/api/tickets/T999

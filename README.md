@@ -132,3 +132,36 @@ By the end of this programme, participants will be able to:
 
 ---
 
+## Day 6 Exercise 3 - Ticket by ID and 404 Handling
+
+### What Was Added
+
+**src/main/java/com/example/assetTracker/service/TicketService.java** *(updated)*
+- Added `getTicketById(String id)` method
+- Searches the existing ticket list using a stream `filter` + `findFirst`
+- Throws `ResourceNotFoundException` with a clear message if no match is found
+
+**src/main/java/com/example/assetTracker/controller/TicketController.java** *(updated)*
+- Added `GET /api/tickets/{id}` endpoint using `@PathVariable`
+- Delegates the lookup entirely to `ticketService.getTicketById(id)` — no search logic in the controller
+
+**src/main/java/com/example/assetTracker/exception/GlobalExceptionHandler.java** *(existing, reused)*
+- `@RestControllerAdvice` already handled `ResourceNotFoundException` app-wide
+- Converts the exception into a `404 Not Found` response with a JSON `message` field, using the existing `ApiErrorResponse` DTO
+
+**requests/assets.http** *(updated)*
+- Added two new requests:
+  1. Get existing ticket — `GET http://localhost:8080/api/tickets/T001`
+  2. Get missing ticket — `GET http://localhost:8080/api/tickets/T999`
+
+### Output Screenshot
+
+![Day 6 Exercise 03 Output A](screenshots/Day6/D6_Exercise03b.png)
+![Day 6 Exercise 03 Output B](screenshots/Day6/D6_Exercise03a.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
+
+---
+
