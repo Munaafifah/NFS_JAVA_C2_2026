@@ -165,3 +165,43 @@ By the end of this programme, participants will be able to:
 
 ---
 
+## Day 6 Exercise 4 - Create Ticket with Validation
+
+### What Was Added
+
+**src/main/java/com/example/assetTracker/dto/CreateTicketRequest.java** *(student-created)*
+- Request DTO for incoming ticket creation JSON
+- Fields: `title`, `description`, `category`, `priority`, `createdBy`
+- Each field annotated with `@NotBlank` and a custom validation message
+- Includes setters (unlike `TicketResponse`) so Spring can populate it from the request body
+
+**src/main/java/com/example/assetTracker/service/TicketService.java** *(updated)*
+- Added `createTicket(CreateTicketRequest request)` method
+- Generates a new ID via `createNextId()`, sets `status` to `"OPEN"`, and sets `createdAt` to the current date using `LocalDate.now()`
+- Adds the new ticket to the in-memory list and returns it
+
+**src/main/java/com/example/assetTracker/controller/TicketController.java** *(updated)*
+- Added `POST /api/tickets` endpoint
+- Uses `@Valid @RequestBody CreateTicketRequest` to trigger validation on the incoming JSON
+- Returns `ResponseEntity` with status `201 Created` and the newly created ticket
+
+**src/main/java/com/example/assetTracker/exception/GlobalExceptionHandler.java** *(existing, reused)*
+- Existing `handleValidationError` method already handles `MethodArgumentNotValidException`
+- Returns `400 Bad Request` with a field-by-field `errors` array and a top-level `message`
+
+**requests/assets.http** *(updated)*
+- Added two new requests:
+  1. Create valid ticket — `POST http://localhost:8080/api/tickets` (full body)
+  2. Create invalid ticket — `POST http://localhost:8080/api/tickets` (all fields blank)
+
+### Output Screenshot
+
+![Day 6 Exercise 04 Output A](screenshots/Day6/D6_Exercise04a.png)
+![Day 6 Exercise 04 Output B](screenshots/Day6/D6_Exercise04b.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
+
+---
+
