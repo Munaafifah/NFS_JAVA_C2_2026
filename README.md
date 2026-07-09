@@ -205,3 +205,38 @@ By the end of this programme, participants will be able to:
 
 ---
 
+## Day 6 Exercise 5 - Create an HTTP Test File
+
+### What Was Added
+
+**requests/day06-tickets.http** *(new file)*
+- Consolidated all 7 Day 6 endpoint tests into one dedicated file, separate from `assets.http`
+- Requests included:
+  1. Health check — `GET /api/health`
+  2. About info — `GET /api/about`
+  3. Get all tickets — `GET /api/tickets`
+  4. Get one existing ticket — `GET /api/tickets/T001`
+  5. Get one missing ticket — `GET /api/tickets/T999`
+  6. Create a valid ticket — `POST /api/tickets` (full body)
+  7. Create an invalid ticket — `POST /api/tickets` (all fields blank)
+
+### Submission Note
+
+All 7 endpoints tested successfully in `requests/day06-tickets.http`. Health, About, Get All Tickets, Get One Ticket, and Create Valid Ticket all returned their expected 2xx status codes. Get Missing Ticket correctly returned 404 with a clear message. Create Invalid Ticket correctly returned 400 with a field-by-field validation error list.
+
+### Output Screenshot
+
+![Day 6 Exercise 05 Output A](screenshots/Day6/D6_Exercise01a.png)
+![Day 6 Exercise 05 Output B](screenshots/Day6/D6_Exercise01b.png)
+![Day 6 Exercise 05 Output C](screenshots/Day6/D6_Exercise02.png)
+![Day 6 Exercise 05 Output D](screenshots/Day6/D6_Exercise03b.png)
+![Day 6 Exercise 05 Output E](screenshots/Day6/D6_Exercise03a.png)
+![Day 6 Exercise 05 Output F](screenshots/Day6/D6_Exercise04a.png)
+![Day 6 Exercise 05 Output G](screenshots/Day6/D6_Exercise04b.png)
+
+### GitHub Commit
+
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
+
+---
+
