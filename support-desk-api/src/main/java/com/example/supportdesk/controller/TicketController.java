@@ -1,4 +1,4 @@
-package com.example.assetTracker.controller;
+package com.example.supportdesk.controller;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.assetTracker.dto.CreateTicketRequest;
-import com.example.assetTracker.dto.TicketResponse;
-import com.example.assetTracker.service.TicketService;
+import com.example.supportdesk.dto.CreateTicketRequest;
+import com.example.supportdesk.dto.TicketResponse;
+import com.example.supportdesk.service.TicketService;
 
 import jakarta.validation.Valid;
 
@@ -39,7 +39,7 @@ public class TicketController {
 
     @PostMapping
     public ResponseEntity<TicketResponse> createTicket(@Valid @RequestBody CreateTicketRequest request) {
-        TicketResponse createdTicket = ticketService.createTicket(request);
-        return new ResponseEntity<>(createdTicket, HttpStatus.CREATED);
+        TicketResponse created = ticketService.createTicket(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 }

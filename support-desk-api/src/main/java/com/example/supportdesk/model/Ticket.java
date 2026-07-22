@@ -1,4 +1,4 @@
-package com.example.assetTracker.model;
+package com.example.supportdesk.model;
 
 import java.time.LocalDate;
 

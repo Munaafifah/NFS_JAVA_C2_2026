@@ -1,4 +1,4 @@
-package com.example.assetTracker.dto;
+package com.example.supportdesk.dto;
 
 public class TicketResponse {
 

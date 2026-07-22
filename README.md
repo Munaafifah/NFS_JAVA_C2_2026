@@ -166,3 +166,39 @@ spring.data.mongodb.password=pwd12345
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7)
 
 ---
+
+## Day 7 Exercise 3 - Convert Ticket Read API to MongoDB
+
+### What Was Added
+**TicketService.java** *(updated)*
+- Now depends on `TicketRepository` instead of an in-memory list
+- `getAllTickets()` — retrieves all `Ticket` documents from MongoDB via `findAll()`, converts each to a `TicketResponse` DTO
+- `getTicketById()` — retrieves a `Ticket` by MongoDB `_id` via `findById()`, throws `ResourceNotFoundException` (404) if not found
+- `createTicket()` — saves a new `Ticket` document via `save()`, returns the saved ticket as a DTO
+- Added a private `toResponse()` helper to map `Ticket` → `TicketResponse`
+
+**MongoConfig.java** *(new file, `config` package)*
+- Explicitly configures the `MongoClient` and `MongoTemplate` beans with connection credentials
+- Added after troubleshooting an issue where Spring Boot's standard `application-local.properties` binding was not applying the MongoDB username/password (connection succeeded, but authentication was not applied — confirmed via `credential=null` in the driver logs)
+
+**day07-tickets.http** *(new file, in `support-desk-api/requests/`)*
+- `GET /api/tickets` — retrieves all tickets from MongoDB
+- `GET /api/tickets/{id}` — retrieves one ticket by real MongoDB `_id`
+- `GET /api/tickets/000000000000000000000000` — valid ObjectId format but non-existent, confirms `404 Not Found`
+- `POST /api/tickets` — creates a new ticket and confirms it persists to MongoDB
+
+**Controller unchanged**
+- `TicketController` was not modified — it still calls `TicketService` the same way as before; only the service's internal data source changed
+
+---
+### How I Confirmed the Data Came From MongoDB
+Before this change, tickets used hardcoded IDs like `T001`, `T002`, `T003` from an in-memory list. After connecting `TicketService` to `TicketRepository`, `GET /api/tickets` returned tickets with real MongoDB ObjectId-style `_id` values (e.g. `6a60af167d65ebee03480703`) instead. I cross-checked these exact IDs against MongoDB Compass under `support_desk_db` → `tickets` and confirmed every document matched, including a new ticket created via `POST /api/tickets` during testing, which also appeared in Compass immediately after the request — confirming the API is reading and writing directly to MongoDB rather than any in-memory data.
+
+---
+### Output Screenshot
+![Day 7 Exercise 3 Output](screenshots/Day7/D7_Exercise03.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7)
+
+---
