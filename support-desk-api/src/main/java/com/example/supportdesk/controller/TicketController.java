@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.supportdesk.dto.CreateTicketRequest;
@@ -28,8 +29,11 @@ public class TicketController {
     }
 
     @GetMapping
-    public List<TicketResponse> getAllTickets() {
-        return ticketService.getAllTickets();
+    public List<TicketResponse> getAllTickets(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority,
+            @RequestParam(required = false) String category) {
+        return ticketService.getAllTickets(status, priority, category);
     }
 
     @GetMapping("/{id}")

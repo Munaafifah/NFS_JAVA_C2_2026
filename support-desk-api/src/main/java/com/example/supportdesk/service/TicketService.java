@@ -20,9 +20,20 @@ public class TicketService {
         this.ticketRepository = ticketRepository;
     }
 
-    public List<TicketResponse> getAllTickets() {
-        return ticketRepository.findAll()
-                .stream()
+    public List<TicketResponse> getAllTickets(String status, String priority, String category) {
+        List<Ticket> tickets;
+
+        if (status != null) {
+            tickets = ticketRepository.findByStatus(status);
+        } else if (priority != null) {
+            tickets = ticketRepository.findByPriority(priority);
+        } else if (category != null) {
+            tickets = ticketRepository.findByCategory(category);
+        } else {
+            tickets = ticketRepository.findAll();
+        }
+
+        return tickets.stream()
                 .map(this::toResponse)
                 .toList();
     }

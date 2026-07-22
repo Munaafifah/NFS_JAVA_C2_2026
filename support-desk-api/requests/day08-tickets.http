@@ -1,0 +1,11 @@
+### Filter tickets by status
+GET http://localhost:8081/api/tickets?status=OPEN
+
+### Filter tickets by priority
+GET http://localhost:8081/api/tickets?priority=HIGH
+
+### Filter tickets by category
+GET http://localhost:8081/api/tickets?category=Email
+
+### Get all tickets (no filter)
+GET http://localhost:8081/api/tickets
