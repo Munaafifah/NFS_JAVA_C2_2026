@@ -42,8 +42,8 @@ POST http://localhost:8081/api/tickets
 Content-Type: application/json
 
 {
-  "title": "Monitor flickering",
-  "description": "Second monitor flickers intermittently on Level 2.",
+  "title": "Monitors flickering",
+  "description": "First monitor flickers intermittently on Level 6.",
   "category": "Hardware",
   "priority": "LOW",
   "createdBy": "wei@example.com"

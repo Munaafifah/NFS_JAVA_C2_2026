@@ -3,6 +3,8 @@ package com.example.supportdesk.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,8 @@ import com.example.supportdesk.repository.TicketRepository;
 @Service
 public class TicketService {
 
+    private static final Logger log = LoggerFactory.getLogger(TicketService.class);
+
     private final TicketRepository ticketRepository;
 
     public TicketService(TicketRepository ticketRepository) {
@@ -25,6 +29,8 @@ public class TicketService {
     }
 
     public List<TicketResponse> getAllTickets(String status, String priority, String category) {
+        log.info("Fetching tickets with filters - status={}, priority={}, category={}", status, priority, category);
+
         List<Ticket> tickets;
 
         if (status != null) {
@@ -40,6 +46,20 @@ public class TicketService {
         return tickets.stream()
                 .map(this::toResponse)
                 .toList();
+    }
+
+    public Page<TicketResponse> getPagedTickets(int page, int size, String sortBy, String direction) {
+        log.info("Fetching paginated tickets - page={}, size={}, sortBy={}, direction={}", page, size, sortBy, direction);
+
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc")
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
+
+        return ticketPage.map(this::toResponse);
     }
 
     public TicketResponse getTicketById(String id) {
@@ -60,6 +80,7 @@ public class TicketService {
         );
 
         Ticket saved = ticketRepository.save(newTicket);
+        log.info("Created new ticket with id={}", saved.getId());
         return toResponse(saved);
     }
 
@@ -74,17 +95,5 @@ public class TicketService {
                 ticket.getCreatedBy(),
                 ticket.getCreatedAt().toString()
         );
-    }
-
-    public Page<TicketResponse> getPagedTickets(int page, int size, String sortBy, String direction) {
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc")
-                ? Sort.Direction.ASC
-                : Sort.Direction.DESC;
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
-
-        Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
-
-        return ticketPage.map(this::toResponse);
     }
 }
