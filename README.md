@@ -74,169 +74,59 @@ By the end of this programme, participants will be able to:
 
 ---
 
-## Day 6 Exercise 1 - Health and About Endpoint
+## Day 7 Exercise 1 - Install and Secure MongoDB
 
 ### What Was Added
+**MongoDB Community Server, Compass, and mongosh installed**
+- Verified `mongod` v8.3.4 and `mongosh` v2.9.2 via command line
+- Added MongoDB `bin` folder and `mongosh` install folder to Windows PATH
 
-**src/main/java/com/example/assetTracker/controller/HealthController.java** *(student-created)*
-- `@RestController` class exposing two GET endpoints for the Asset Tracker API
-- `GET /api/health` — returns a JSON object with `status` and `service` fields to confirm the API is running
-- `GET /api/about` — returns a JSON object with `appName`, `version`, and `description` fields describing the application
-- Both methods return `Map<String, String>`, letting Spring Boot automatically serialize the response to JSON without manual JSON construction
+**Root administrator account created**
+- Switched to `admin` database in `mongosh`
+- Created root user with `db.createUser()`
+- Verified creation by authenticating with `db.auth("root", "root")`
 
-**requests/assets.http** *(new file)*
-- Two REST Client requests testing the new endpoints:
-  1. Health check — `GET http://localhost:8080/api/health`
-  2. About info — `GET http://localhost:8080/api/about`
+**Authentication enabled**
+- Edited `mongod.cfg` to uncomment `security:` and add `authorization: enabled`
+- Restarted the MongoDB Windows service
+- Confirmed anonymous connections are rejected (`Unauthorized` error on `listDatabases` without login)
+- Confirmed login succeeds using the root administrator account
 
-### Output Screenshot
+**Application database and user created**
+- Created `support_desk_db` database
+- Created `support_app_user` with `readWrite` role scoped only to `support_desk_db`
+- Verified the application user can log in and only sees `support_desk_db`
 
-![Day 6 Exercise 01 Output A](screenshots/Day6/D6_Exercise01a.png)
-![Day 6 Exercise 01 Output B](screenshots/Day6/D6_Exercise01b.png)
+**Sample data created**
+- Created `tickets` collection inside `support_desk_db`
+- Inserted one ticket document with `title`, `description`, `category`, `priority`, `status`, `createdBy`, and `createdAt` fields
+- Verified the document with `db.tickets.find()`
 
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
+**Verified using MongoDB Compass**
+- Connected Compass using both the root account and `support_app_user`
+- Confirmed `support_desk_db` and `tickets` collection are visible with the sample document
 
 ---
+### README Reflection
 
-## Day 6 Exercise 2 - Build the Ticket Read API
+**What is the purpose of the `admin` database?**
+The `admin` database stores administrative and authentication data for the whole MongoDB server, such as user accounts, roles, and privileges. It's the database you need to authenticate against to perform server-wide actions.
 
-### What Was Added
+**Why should an application use its own database user instead of the root administrator?**
+A dedicated application user limits access to only what the app needs (in this case, `readWrite` on `support_desk_db` only). If the app's credentials are ever leaked, the damage is contained to one database instead of exposing full control over the entire server.
 
-**src/main/java/com/example/assetTracker/dto/TicketResponse.java** *(student-created)*
-- Response DTO representing a support ticket
-- Fields: `id`, `title`, `description`, `category`, `priority`, `status`, `createdBy`, `createdAt`
-- Constructor + getters only, following the same pattern as `AssetResponse.java`
+**What is the difference between authentication and authorisation?**
+Authentication is proving who you are (logging in with a username and password). Authorisation is what you're allowed to do once logged in (e.g. read-only vs read/write, which databases you can access).
 
-**src/main/java/com/example/assetTracker/service/TicketService.java** *(student-created)*
-- `@Service` class storing a hardcoded list of 3 tickets in an `ArrayList<TicketResponse>`
-- `getAllTickets()` method returns the full ticket list
-- Ticket data is stored here, not inside the controller, per the exercise restriction
-
-**src/main/java/com/example/assetTracker/controller/TicketController.java** *(student-created)*
-- `@RestController` with `@RequestMapping("/api/tickets")`
-- Constructor-injects `TicketService`
-- `GET /api/tickets` — calls `ticketService.getAllTickets()` and returns the list as JSON
-
-**requests/assets.http** *(updated)*
-- Added `GET http://localhost:8080/api/tickets` request
-
-### Output Screenshot
-
-![Day 6 Exercise 02 Output](screenshots/Day6/D6_Exercise02.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
+**What would happen if authentication was disabled on a production database?**
+Anyone who could reach the server over the network could connect without credentials and read, modify, or delete any data — as shown earlier when `listDatabases` succeeded with no login before `authorization: enabled` was set.
 
 ---
-
-## Day 6 Exercise 3 - Ticket by ID and 404 Handling
-
-### What Was Added
-
-**src/main/java/com/example/assetTracker/service/TicketService.java** *(updated)*
-- Added `getTicketById(String id)` method
-- Searches the existing ticket list using a stream `filter` + `findFirst`
-- Throws `ResourceNotFoundException` with a clear message if no match is found
-
-**src/main/java/com/example/assetTracker/controller/TicketController.java** *(updated)*
-- Added `GET /api/tickets/{id}` endpoint using `@PathVariable`
-- Delegates the lookup entirely to `ticketService.getTicketById(id)` — no search logic in the controller
-
-**src/main/java/com/example/assetTracker/exception/GlobalExceptionHandler.java** *(existing, reused)*
-- `@RestControllerAdvice` already handled `ResourceNotFoundException` app-wide
-- Converts the exception into a `404 Not Found` response with a JSON `message` field, using the existing `ApiErrorResponse` DTO
-
-**requests/assets.http** *(updated)*
-- Added two new requests:
-  1. Get existing ticket — `GET http://localhost:8080/api/tickets/T001`
-  2. Get missing ticket — `GET http://localhost:8080/api/tickets/T999`
-
 ### Output Screenshot
-
-![Day 6 Exercise 03 Output A](screenshots/Day6/D6_Exercise03b.png)
-![Day 6 Exercise 03 Output B](screenshots/Day6/D6_Exercise03a.png)
+![Day 7 Exercise 1 Output](screenshots/Day7/D7_Exercise01a.png)
 
 ### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
-
----
-
-## Day 6 Exercise 4 - Create Ticket with Validation
-
-### What Was Added
-
-**src/main/java/com/example/assetTracker/dto/CreateTicketRequest.java** *(student-created)*
-- Request DTO for incoming ticket creation JSON
-- Fields: `title`, `description`, `category`, `priority`, `createdBy`
-- Each field annotated with `@NotBlank` and a custom validation message
-- Includes setters (unlike `TicketResponse`) so Spring can populate it from the request body
-
-**src/main/java/com/example/assetTracker/service/TicketService.java** *(updated)*
-- Added `createTicket(CreateTicketRequest request)` method
-- Generates a new ID via `createNextId()`, sets `status` to `"OPEN"`, and sets `createdAt` to the current date using `LocalDate.now()`
-- Adds the new ticket to the in-memory list and returns it
-
-**src/main/java/com/example/assetTracker/controller/TicketController.java** *(updated)*
-- Added `POST /api/tickets` endpoint
-- Uses `@Valid @RequestBody CreateTicketRequest` to trigger validation on the incoming JSON
-- Returns `ResponseEntity` with status `201 Created` and the newly created ticket
-
-**src/main/java/com/example/assetTracker/exception/GlobalExceptionHandler.java** *(existing, reused)*
-- Existing `handleValidationError` method already handles `MethodArgumentNotValidException`
-- Returns `400 Bad Request` with a field-by-field `errors` array and a top-level `message`
-
-**requests/assets.http** *(updated)*
-- Added two new requests:
-  1. Create valid ticket — `POST http://localhost:8080/api/tickets` (full body)
-  2. Create invalid ticket — `POST http://localhost:8080/api/tickets` (all fields blank)
-
-### Output Screenshot
-
-![Day 6 Exercise 04 Output A](screenshots/Day6/D6_Exercise04a.png)
-![Day 6 Exercise 04 Output B](screenshots/Day6/D6_Exercise04b.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
-
----
-
-## Day 6 Exercise 5 - Create an HTTP Test File
-
-### What Was Added
-
-**requests/day06-tickets.http** *(new file)*
-- Consolidated all 7 Day 6 endpoint tests into one dedicated file, separate from `assets.http`
-- Requests included:
-  1. Health check — `GET /api/health`
-  2. About info — `GET /api/about`
-  3. Get all tickets — `GET /api/tickets`
-  4. Get one existing ticket — `GET /api/tickets/T001`
-  5. Get one missing ticket — `GET /api/tickets/T999`
-  6. Create a valid ticket — `POST /api/tickets` (full body)
-  7. Create an invalid ticket — `POST /api/tickets` (all fields blank)
-
-### Submission Note
-
-All 7 endpoints tested successfully in `requests/day06-tickets.http`. Health, About, Get All Tickets, Get One Ticket, and Create Valid Ticket all returned their expected 2xx status codes. Get Missing Ticket correctly returned 404 with a clear message. Create Invalid Ticket correctly returned 400 with a field-by-field validation error list.
-
-### Output Screenshot
-
-![Day 6 Exercise 05 Output A](screenshots/Day6/D6_Exercise01a.png)
-![Day 6 Exercise 05 Output B](screenshots/Day6/D6_Exercise01b.png)
-![Day 6 Exercise 05 Output C](screenshots/Day6/D6_Exercise02.png)
-![Day 6 Exercise 05 Output D](screenshots/Day6/D6_Exercise03b.png)
-![Day 6 Exercise 05 Output E](screenshots/Day6/D6_Exercise03a.png)
-![Day 6 Exercise 05 Output F](screenshots/Day6/D6_Exercise04a.png)
-![Day 6 Exercise 05 Output G](screenshots/Day6/D6_Exercise04b.png)
-
-### GitHub Commit
-
-[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day6)
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7)
 
 ---
 
