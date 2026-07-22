@@ -24,3 +24,15 @@ Content-Type: application/json
   "priority": "MEDIUM",
   "createdBy": "farah@example.com"
 }
+
+### Create invalid ticket (empty fields, expect 400)
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "",
+  "category": "",
+  "priority": "",
+  "createdBy": ""
+}

@@ -194,9 +194,40 @@ spring.data.mongodb.password=pwd12345
 ### How I Confirmed the Data Came From MongoDB
 Before this change, tickets used hardcoded IDs like `T001`, `T002`, `T003` from an in-memory list. After connecting `TicketService` to `TicketRepository`, `GET /api/tickets` returned tickets with real MongoDB ObjectId-style `_id` values (e.g. `6a60af167d65ebee03480703`) instead. I cross-checked these exact IDs against MongoDB Compass under `support_desk_db` → `tickets` and confirmed every document matched, including a new ticket created via `POST /api/tickets` during testing, which also appeared in Compass immediately after the request — confirming the API is reading and writing directly to MongoDB rather than any in-memory data.
 
----
+
 ### Output Screenshot
 ![Day 7 Exercise 3 Output](screenshots/Day7/D7_Exercise03.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7)
+
+---
+
+
+## Day 7 Exercise 4 - Save New Tickets to MongoDB
+
+### What Was Added
+**TicketService.java** *(no changes needed — already completed in Exercise 3)*
+- `createTicket()` builds a `Ticket` from `CreateTicketRequest`, defaults `status` to `"OPEN"`, sets `createdAt` via `LocalDate.now()`
+- Saves the ticket using `ticketRepository.save()`
+- Returns a `TicketResponse` DTO (not the raw `Ticket` model)
+
+**TicketController.java** *(no changes needed — already completed in Exercise 3)*
+- `POST /api/tickets` uses `@Valid @RequestBody CreateTicketRequest`
+- Returns `201 Created` on success via `ResponseEntity.status(HttpStatus.CREATED)`
+
+**day07-tickets.http** *(updated)*
+- Added an invalid-ticket test case (all fields empty) to confirm `400 Bad Request` with field-level validation errors
+
+---
+### Testing Results
+**Valid request** — `POST /api/tickets` with a complete ticket body returned `201 Created`, and the ticket was saved to MongoDB with a real ObjectId (confirmed in MongoDB Compass under `support_desk_db.tickets`).
+
+**Invalid request** — `POST /api/tickets` with all fields empty returned `400 Bad Request`, with a `fieldErrors` array listing each missing field (`title`, `description`, `category`, `priority`, `createdBy`) and its corresponding "is required" message.
+
+---
+### Output Screenshot
+![Day 7 Exercise 4 Output](screenshots/Day7/D7_Exercise04.png)
 
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7)
