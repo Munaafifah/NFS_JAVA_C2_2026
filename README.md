@@ -121,7 +121,6 @@ Authentication is proving who you are (logging in with a username and password).
 **What would happen if authentication was disabled on a production database?**
 Anyone who could reach the server over the network could connect without credentials and read, modify, or delete any data — as shown earlier when `listDatabases` succeeded with no login before `authorization: enabled` was set.
 
----
 ### Output Screenshot
 ![Day 7 Exercise 1 Output](screenshots/Day7/D7_Exercise01a.png)
 
@@ -130,3 +129,40 @@ Anyone who could reach the server over the network could connect without credent
 
 ---
 
+## Day 7 Exercise 2 - Create Ticket Model and Repository
+
+### What Was Added
+**Ticket.java** *(new file, `model` package)*
+- Mapped to MongoDB collection `tickets` using `@Document(collection = "tickets")`
+- Fields: `id` (`@Id`), `title`, `description`, `category`, `priority`, `status`, `createdBy`, `createdAt`
+- No-args constructor plus a full-args constructor (excluding `id`, which MongoDB generates)
+- Standard getters and setters for all fields
+
+**TicketRepository.java** *(new file, `repository` package)*
+- Interface extending `MongoRepository<Ticket, String>`
+- Follows the same pattern as the existing `AssetRepository`
+- Provides built-in MongoDB CRUD operations for `Ticket` documents
+
+**MongoDB connection**
+- Already configured in `application-local.properties` from Exercise 1
+- Application connects to MongoDB running locally on the default port (`27017`) using database `asset_tracker_db`
+
+```properties
+spring.data.mongodb.host=localhost
+spring.data.mongodb.port=27017
+spring.data.mongodb.database=asset_tracker_db
+spring.data.mongodb.authentication-database=asset_tracker_db
+spring.data.mongodb.username=app_user
+spring.data.mongodb.password=pwd12345
+```
+
+**Verification**
+- Started the application with the `local` profile (`.\mvnw clean spring-boot:run "-Dspring-boot.run.profiles=local"`)
+- Application started successfully with no errors, confirming the MongoDB configuration, `Ticket` model, and `TicketRepository` are correctly set up
+- `TicketService` was **not** modified — it still uses the in-memory repository, as instructed
+
+---
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day7)
+
+---
