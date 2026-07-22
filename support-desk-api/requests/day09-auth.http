@@ -1,0 +1,37 @@
+### TEST 1: Register new user
+POST http://localhost:8081/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Muna Afifah",
+  "email": "muna@example.com",
+  "password": "password123"
+}
+
+### TEST 2: Login with correct credentials
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "muna@example.com",
+  "password": "password123"
+}
+
+### TEST 3: Register with duplicate email
+POST http://localhost:8081/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Duplicate User",
+  "email": "muna@example.com",
+  "password": "password123"
+}
+
+### TEST 4: Login with wrong password
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "muna@example.com",
+  "password": "wrongpassword"
+}
