@@ -9,3 +9,15 @@ GET http://localhost:8081/api/tickets?category=Email
 
 ### Get all tickets (no filter)
 GET http://localhost:8081/api/tickets
+
+### Paged tickets - default (page 0, size 5, sortBy createdAt, desc)
+GET http://localhost:8081/api/tickets/paged
+
+### Paged tickets - page 0, size 2
+GET http://localhost:8081/api/tickets/paged?page=0&size=2
+
+### Paged tickets - page 1, size 2
+GET http://localhost:8081/api/tickets/paged?page=1&size=2
+
+### Paged tickets - sorted by title ascending
+GET http://localhost:8081/api/tickets/paged?page=0&size=5&sortBy=title&direction=asc

@@ -3,6 +3,10 @@ package com.example.supportdesk.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.supportdesk.dto.CreateTicketRequest;
@@ -70,5 +74,17 @@ public class TicketService {
                 ticket.getCreatedBy(),
                 ticket.getCreatedAt().toString()
         );
+    }
+
+    public Page<TicketResponse> getPagedTickets(int page, int size, String sortBy, String direction) {
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc")
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
+
+        return ticketPage.map(this::toResponse);
     }
 }
