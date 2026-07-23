@@ -25,3 +25,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwic
 ### TEST 6: Ticket report by priority (with token)
 GET http://localhost:8081/api/v1/reports/tickets-by-priority
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJzdXBwb3J0LWRlc2stYXBpIiwibmFtZSI6Ik11bmEgQWZpZmFoIiwiZXhwIjoxNzg0ODI0NTkxLCJpYXQiOjE3ODQ4MjA5OTEsInVzZXJJZCI6IjZhNjBjZGIwZjdkNGQ5OGM1MTMzZGRiNyJ9.yEF17DHweR93VXnYTq4lMpsxEwbpTQhwP9WHSrqhadM
+
+### TEST 7: API documentation endpoint (public, no token needed)
+GET http://localhost:8081/api/docs

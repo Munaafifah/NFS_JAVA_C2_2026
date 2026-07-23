@@ -138,6 +138,43 @@ If the report shows a high number of HIGH priority tickets compared to LOW, the 
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
 
+---
+
+
+## Day 10 Exercise 4 - Create a Simple API Documentation Endpoint
+
+### What Was Added
+**ApiDocumentationResponse.java** *(new file, `dto` package)*
+- Holds the overall documentation shape: `application`, `version`, `baseUrl`, and a list of `endpoints`
+
+**ApiEndpointResponse.java** *(new file, `dto` package)*
+- Represents a single documented endpoint: `method`, `path`, `access`, and `description`
+
+**ApiDocsController.java** *(new file, `controller` package)*
+- `GET /api/docs` — returns a static JSON list documenting every major endpoint in the Support Desk API, including auth, tickets, versioned tickets, and reports
+
+**SecurityConfig.java** *(updated)*
+- Added `/api/docs/**` as `permitAll`, matching the exercise's requirement that documentation should be publicly accessible without authentication
+
+**day10-tickets.http** *(updated)*
+- Added a test confirming `/api/docs` works without a token
+
+
+### Test Results
+`GET /api/docs` (no token required) returned `200 OK` with the full documentation payload, listing `application: "Support Desk Ticket API"`, `version: "v1"`, `baseUrl: "/api/v1"`, and every documented endpoint with its method, path, access level, and description.
+
+
+### Reflection Question
+
+**Why is API documentation useful before frontend integration?**
+It gives frontend developers a clear reference of exactly what endpoints exist, what data each expects, and what access level is required, so they can start building against the API without needing to ask the backend team constant questions or guess the correct request shape.
+
+
+### Output Screenshot
+![Day 10 Exercise 4 Output](screenshots/Day10/D10_Exercise04Test7.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
 
 ---
 
