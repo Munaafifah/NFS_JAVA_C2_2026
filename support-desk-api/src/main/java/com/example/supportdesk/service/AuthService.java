@@ -1,7 +1,11 @@
 package com.example.supportdesk.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -14,50 +18,74 @@ import com.example.supportdesk.repository.AppUserRepository;
 @Service
 public class AuthService {
 
-    private final AppUserRepository appUserRepository;
-    private final JwtService jwtService;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
-    public AuthService(AppUserRepository appUserRepository, JwtService jwtService) {
+    private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+
+    public AuthService(
+            AppUserRepository appUserRepository,
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager,
+            JwtService jwtService) {
         this.appUserRepository = appUserRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
     }
 
     public AuthResponse register(RegisterRequest request) {
-        String normalizedEmail = request.getEmail().trim().toLowerCase();
+        String email = normalizeEmail(request.getEmail());
 
-        if (appUserRepository.existsByEmailIgnoreCase(normalizedEmail)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
+        if (appUserRepository.existsByEmailIgnoreCase(email)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists: " + email);
         }
 
-        String hashedPassword = passwordEncoder.encode(request.getPassword());
-
-        AppUser newUser = new AppUser(
-                request.getName(),
-                normalizedEmail,
-                hashedPassword,
+        AppUser user = new AppUser(
+                request.getName().trim(),
+                email,
+                passwordEncoder.encode(request.getPassword()),
                 "USER"
         );
 
-        AppUser saved = appUserRepository.save(newUser);
+        AppUser savedUser = appUserRepository.save(user);
+        logger.info("Registered new user email={} role={}", savedUser.getEmail(), savedUser.getRole());
 
-        String token = jwtService.generateToken(saved.getEmail(), saved.getRole());
-
-        return new AuthResponse(token, saved.getEmail(), saved.getRole());
+        return buildAuthResponse(savedUser);
     }
 
     public AuthResponse login(LoginRequest request) {
-        String normalizedEmail = request.getEmail().trim().toLowerCase();
+        String email = normalizeEmail(request.getEmail());
 
-        AppUser user = appUserRepository.findByEmailIgnoreCase(normalizedEmail)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password"));
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, request.getPassword())
+        );
 
-        if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
-        }
+        AppUser user = appUserRepository.findByEmailIgnoreCase(email)
+                .orElseThrow();
 
-        String token = jwtService.generateToken(user.getEmail(), user.getRole());
+        logger.info("User logged in email={} role={}", user.getEmail(), user.getRole());
 
-        return new AuthResponse(token, user.getEmail(), user.getRole());
+        return buildAuthResponse(user);
+    }
+
+    private AuthResponse buildAuthResponse(AppUser user) {
+        String token = jwtService.generateToken(user);
+
+        return new AuthResponse(
+                token,
+                "Bearer",
+                jwtService.getExpirationMinutes(),
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+
+    private String normalizeEmail(String email) {
+        return email.trim().toLowerCase();
     }
 }

@@ -57,3 +57,54 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9)
 
 ---
+
+
+## Day 9 Exercise 3 - Protect Ticket Endpoints
+
+### What Was Added
+**pom.xml** *(updated)*
+- Added `spring-boot-starter-security` and `spring-boot-starter-oauth2-resource-server`
+- Removed the earlier `jjwt-*` dependencies, replaced with Spring Security's built-in JWT support
+
+**security/SecurityConfig.java** *(new file, moved from `config` to match trainer's structure)*
+- Configures Spring Security as a stateless OAuth2 Resource Server
+- Public: `/api/health`, `/api/auth/**`
+- Protected: `GET /api/tickets/**` requires `USER` or `ADMIN` role; `POST /api/tickets` requires `ADMIN` role only
+- Defines beans for `PasswordEncoder` (BCrypt), `AuthenticationManager`, `JwtEncoder`, `JwtDecoder`, and a `JwtAuthenticationConverter` that reads the `role` claim from the token and maps it to a Spring Security authority
+
+**security/AppUserDetailsService.java** *(new file)*
+- Implements `UserDetailsService`, loading an `AppUser` from `AppUserRepository` by email
+- Converts the stored user into Spring Security's `UserDetails`, used during login to verify credentials
+
+**application-local.properties** *(updated)*
+- Replaced earlier JWT properties with `app.jwt.secret` and `app.jwt.expiration-minutes`, matching the new security configuration
+
+
+### Test Results
+**TEST 5: Get tickets without token** — returned `401 Unauthorized`, with a proper `WWW-Authenticate` header pointing to the OAuth2 protected resource metadata.
+
+**TEST 6: Login as USER to get a token** — returned `200 OK` with a JWT token, token type, expiry, user ID, name, email, and role `USER`.
+
+**TEST 7: Get tickets with USER token** — returned `200 OK` with the full ticket list, confirming USER role can view tickets.
+
+**TEST 8: Create ticket with USER token** — returned `403 Forbidden` with `error="insufficient_scope"`, confirming USER role is correctly blocked from creating tickets.
+
+This matches the exercise's expected behaviour:
+| Scenario | Expected | Actual |
+|---|---|---|
+| GET /api/tickets without token | 401 | 401 |
+| GET /api/tickets with USER token | 200 | 200 |
+| POST /api/tickets with USER token | 403 | 403 |
+| POST /api/tickets with ADMIN token | 201 | Requires an admin account (Exercise 4) |
+
+### Output Screenshots
+![Test 5 - No token](screenshots/Day9/D9_Exercise03Test5.png)
+![Test 6 - Login success](screenshots/Day9/D9_Exercise03Test6.png)
+![Test 7 - GET with USER token](screenshots/Day9/D9_Exercise03Test7.png)
+![Test 8 - POST with USER token blocked](screenshots/Day9/D9_Exercise03Test8.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9)
+
+---
+

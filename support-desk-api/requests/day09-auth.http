@@ -35,3 +35,31 @@ Content-Type: application/json
   "email": "muna@example.com",
   "password": "wrongpassword"
 }
+
+### TEST 5: Get tickets without token (expect 401)
+GET http://localhost:8081/api/tickets
+
+### TEST 6: Login as USER to get a token
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "muna@example.com",
+  "password": "password123"
+}
+
+### TEST 7: Get tickets with USER token (expect 200) - paste token from TEST 6
+GET http://localhost:8081/api/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJzdXBwb3J0LWRlc2stYXBpIiwibmFtZSI6Ik11bmEgQWZpZmFoIiwiZXhwIjoxNzg0ODIyMjQ1LCJpYXQiOjE3ODQ4MTg2NDUsInVzZXJJZCI6IjZhNjBjZGIwZjdkNGQ5OGM1MTMzZGRiNyJ9.oqVvpH_JPkceAcPsqod6aWDt6f1qYwdORngt8PoLyvY
+
+### TEST 8: Create ticket with USER token (expect 403) - paste token from TEST 6
+POST http://localhost:8081/api/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJzdXBwb3J0LWRlc2stYXBpIiwibmFtZSI6Ik11bmEgQWZpZmFoIiwiZXhwIjoxNzg0ODIyMjQ1LCJpYXQiOjE3ODQ4MTg2NDUsInVzZXJJZCI6IjZhNjBjZGIwZjdkNGQ5OGM1MTMzZGRiNyJ9.oqVvpH_JPkceAcPsqod6aWDt6f1qYwdORngt8PoLyvY
+
+{
+  "title": "Test ticket",
+  "description": "Testing role restriction",
+  "category": "Other",
+  "priority": "LOW",
+  "createdBy": "muna@example.com"
+}
