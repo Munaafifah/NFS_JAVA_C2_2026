@@ -176,5 +176,57 @@ It gives frontend developers a clear reference of exactly what endpoints exist, 
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
 
+
+---
+
+
+## Day 10 Exercise 5 - Backend Milestone Review
+
+### Checklist
+```text
+[✔] Project runs successfully
+[✔] MongoDB connection works
+[✔] Ticket model uses @Document and @Id
+[✔] TicketRepository extends MongoRepository
+[✔] Basic CRUD endpoints work
+[✔] Filtering works
+[✔] Pagination works
+[✔] Sorting works
+[✔] Duplicate or validation errors return clear responses
+[✔] Register endpoint works
+[✔] Login endpoint returns JWT
+[✔] Protected endpoints reject missing token
+[✔] Protected endpoints accept valid token
+[✔] Versioned /api/v1 routes exist
+[✔] Report endpoint works
+[✔] API documentation endpoint exists
+[✔] .http file contains test evidence
+```
+
+
+### Reflection Question
+
+**What is one thing you would improve before connecting this backend to React?**
+I would rewrite the filtering logic in `TicketService` so status, priority, and category can be combined in a single request instead of only applying one filter at a time. Right now, combining filters silently drops all but the first one, which would confuse a frontend developer trying to build a filter UI that expects multiple filters to work together.
+
+
+### Output Screenshots
+
+**Successful login response**
+![Login success](screenshots/Day10/D10_Exercise01Test2.png)
+
+**Protected endpoint working with token**
+![Protected endpoint with token](screenshots/Day10/D10_Exercise01Test3.png)
+
+**Report endpoint response**
+![Report endpoint](screenshots/Day10/D10_Exercise02Test5.png)
+
+**API documentation endpoint**
+![API docs endpoint](screenshots/Day10/D10_Exercise04Test7.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
+
+
 ---
 
