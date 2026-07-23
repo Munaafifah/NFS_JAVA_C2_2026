@@ -1,11 +1,11 @@
-package com.example.assettracker.config;
+package com.example.assetTracker.config;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.example.assettracker.model.Asset;
-import com.example.assettracker.repository.AssetRepository;
+import com.example.assetTracker.model.Asset;
+import com.example.assetTracker.repository.AssetRepository;
 
 @Configuration
 public class AssetDataSeeder {

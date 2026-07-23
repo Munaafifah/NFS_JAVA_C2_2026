@@ -1,8 +1,8 @@
-package com.example.assettracker.repository;
+package com.example.assetTracker.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.example.assettracker.model.Asset;
+import com.example.assetTracker.model.Asset;
 
 public interface AssetRepository extends MongoRepository<Asset, String> {
     // Custom query methods can be defined here if needed

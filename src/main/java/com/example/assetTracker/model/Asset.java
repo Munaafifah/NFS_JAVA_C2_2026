@@ -1,4 +1,4 @@
-package com.example.assettracker.model;
+package com.example.assetTracker.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
