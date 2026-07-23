@@ -1,0 +1,19 @@
+### TEST 1 (v1): Get v1 tickets without token (expect 401)
+GET http://localhost:8081/api/v1/tickets
+
+### TEST 2 (v1): Login as USER to get a token
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "muna@example.com",
+  "password": "password123"
+}
+
+### TEST 3 (v1): Get v1 tickets with USER token (expect 200) - paste token from TEST 2
+GET http://localhost:8081/api/v1/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJzdXBwb3J0LWRlc2stYXBpIiwibmFtZSI6Ik11bmEgQWZpZmFoIiwiZXhwIjoxNzg0ODI0NTkxLCJpYXQiOjE3ODQ4MjA5OTEsInVzZXJJZCI6IjZhNjBjZGIwZjdkNGQ5OGM1MTMzZGRiNyJ9.yEF17DHweR93VXnYTq4lMpsxEwbpTQhwP9WHSrqhadM
+
+### TEST 4: Confirm old /api/tickets endpoint still works
+GET http://localhost:8081/api/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJzdXBwb3J0LWRlc2stYXBpIiwibmFtZSI6Ik11bmEgQWZpZmFoIiwiZXhwIjoxNzg0ODI0NTkxLCJpYXQiOjE3ODQ4MjA5OTEsInVzZXJJZCI6IjZhNjBjZGIwZjdkNGQ5OGM1MTMzZGRiNyJ9.yEF17DHweR93VXnYTq4lMpsxEwbpTQhwP9WHSrqhadM
