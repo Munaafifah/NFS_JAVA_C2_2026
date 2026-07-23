@@ -64,6 +64,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwic
   "createdBy": "muna@example.com"
 }
 
+### EXERCISE 5 COVERS ONLY UNTIL TEST 8. THE FOLLOWING TESTS ARE OPTIONAL AND FOR EXTRA PRACTICE.
+
 ### TEST 9: Login as ADMIN
 POST http://localhost:8081/api/auth/login
 Content-Type: application/json

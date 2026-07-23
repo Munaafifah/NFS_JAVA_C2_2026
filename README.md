@@ -140,5 +140,36 @@ This completes the full role-based access matrix:
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9)
 
+
 ---
+
+
+## Day 9 Exercise 5 - Authentication Test Evidence
+
+### What Was Added
+**day09-auth.http** *(new file, in `support-desk-api/requests/`)*
+- 8 sequential tests covering the full authentication and authorization flow:
+  1. Health endpoint is public
+  2. Ticket endpoint without token returns 401
+  3. Register user returns token
+  4. Login user returns token
+  5. Ticket endpoint with token returns 200
+  6. Create ticket with normal USER token returns 403
+  7. Login admin returns token
+  8. Create ticket with ADMIN token returns 201
+
+
+### Verification
+Confirmed in MongoDB Compass that `support_desk_db` now contains two collections: `tickets` and `users`. The `users` collection shows both the registered USER account (`muna@example.com`) and the seeded ADMIN account (`admin@example.com`), each with a hashed `passwordHash` value and correct `role`.
+
+
+### Output Screenshot
+![Day 9 Exercise 5 Output](screenshots/Day9/D9_Exercise05.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9)
+
+
+---
+
 
