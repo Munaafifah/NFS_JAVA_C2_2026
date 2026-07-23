@@ -108,3 +108,37 @@ This matches the exercise's expected behaviour:
 
 ---
 
+
+## Day 9 Exercise 4 - Seed an Admin User
+
+### What Was Added
+**UserDataSeeder.java** *(new file, `config` package)*
+- Seeds one admin user on startup: `Admin User` / `admin@example.com` / role `ADMIN`
+- Password (`Admin@12345`) is hashed using the existing `PasswordEncoder` (BCrypt) bean before saving
+- Uses `existsByEmailIgnoreCase(...)` to check for an existing admin account, preventing duplicate seeding on every app restart
+- Follows the same `@Configuration` + `@Bean CommandLineRunner` pattern as `AssetDataSeeder` and `TicketDataSeeder`
+
+
+### Test Results
+**TEST 9: Login as ADMIN** — returned `200 OK` with a JWT token, confirming the seeded admin account can log in successfully with the hashed password.
+
+**TEST 10: Create ticket with ADMIN token** — returned `201 Created`, confirming the ADMIN role has permission to create tickets, closing out the final case from Exercise 3's expected behaviour table.
+
+This completes the full role-based access matrix:
+| Scenario | Expected | Actual |
+|---|---|---|
+| GET /api/tickets without token | 401 | 401 |
+| GET /api/tickets with USER token | 200 | 200 |
+| POST /api/tickets with USER token | 403 | 403 |
+| POST /api/tickets with ADMIN token | 201 | 201 |
+
+
+### Output Screenshot
+![Test 9 - Admin login success](screenshots/Day9/D9_Exercise04Test9.png)
+![Test 10 - Admin create ticket](screenshots/Day9/D9_Exercise04Test10.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day9)
+
+---
+

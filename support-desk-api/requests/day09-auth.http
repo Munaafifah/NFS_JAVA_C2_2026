@@ -63,3 +63,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtdW5hQGV4YW1wbGUuY29tIiwic
   "priority": "LOW",
   "createdBy": "muna@example.com"
 }
+
+### TEST 9: Login as ADMIN
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+### TEST 10: Create ticket with ADMIN token (expect 201) - paste token from TEST 9
+POST http://localhost:8081/api/tickets
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6InN1cHBvcnQtZGVzay1hcGkiLCJuYW1lIjoiQWRtaW4gVXNlciIsImV4cCI6MTc4NDgyMjg1MywiaWF0IjoxNzg0ODE5MjUzLCJ1c2VySWQiOiI2YTYyMmUxZTJiYTFkYjcxN2QyMWUwYTIifQ.FxTDGoSp4w_QenLR0mQ5LYtIpCwuNMDXo_wQ2vHjbsc
+Content-Type: application/json
+
+{
+  "title": "Server room AC not working",
+  "description": "Server room temperature rising, AC unit not responding.",
+  "category": "Facilities",
+  "priority": "HIGH",
+  "createdBy": "admin@example.com"
+}
