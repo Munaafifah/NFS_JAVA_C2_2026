@@ -88,5 +88,56 @@ Downloading every ticket just to count them wastes bandwidth and processing powe
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
 
+
+---
+
+
+## Day 10 Exercise 3 - Create a Ticket Report by Priority
+
+### What Was Added
+**TicketReportService.java** *(updated)*
+- Added `countTicketsByPriority()`, reusing the existing `countTicketsByField()` helper to group tickets by the `priority` field
+
+**ReportController.java** *(updated)*
+- Added `GET /api/v1/reports/tickets-by-priority` — returns the grouped ticket count by priority
+
+**day10-tickets.http** *(updated)*
+- Added a test for the new report endpoint using a valid token
+
+
+### Test Results
+`GET /api/v1/reports/tickets-by-priority` with a valid token returned `200 OK`:
+```json
+[
+  {
+    "label": "HIGH",
+    "count": 3
+  },
+  {
+    "label": "LOW",
+    "count": 3
+  },
+  {
+    "label": "MEDIUM",
+    "count": 2
+  }
+]
+```
+The aggregation correctly grouped all 8 tickets by their `priority` value, confirming the same aggregation pattern used for the status report works correctly for a different field.
+
+
+### Reflection Question
+
+**How could this report help a support manager decide where to assign staff?**
+If the report shows a high number of HIGH priority tickets compared to LOW, the manager can see at a glance that urgent issues are piling up and quickly assign more staff to handle them first, rather than manually scrolling through every ticket to figure out the priority breakdown.
+
+
+### Output Screenshot
+![Day 10 Exercise 3 Output](screenshots/Day10/D10_Exercise03Test6.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
+
+
 ---
 

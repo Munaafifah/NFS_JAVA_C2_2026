@@ -23,4 +23,9 @@ public class ReportController {
     public List<ReportCountResponse> getTicketsByStatus() {
         return ticketReportService.countTicketsByStatus();
     }
+
+    @GetMapping("/tickets-by-priority")
+    public List<ReportCountResponse> getTicketsByPriority() {
+        return ticketReportService.countTicketsByPriority();
+    }
 }
