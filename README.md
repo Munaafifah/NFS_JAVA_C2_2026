@@ -42,3 +42,51 @@ To avoid breaking existing clients that are still using the old unversioned rout
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
 
 ---
+
+
+## Day 10 Exercise 2 - Create a Ticket Report by Status
+
+### What Was Added
+**ReportCountResponse.java** *(new file, `dto` package)*
+- Simple DTO with `label` and `count` fields, used to represent grouped aggregation results
+
+**TicketReportService.java** *(new file, `service` package)*
+- Uses `MongoTemplate` to run a MongoDB aggregation pipeline that groups tickets by a given field, counts each group, and sorts by label
+- `countTicketsByStatus()` groups tickets by the `status` field
+
+**ReportController.java** *(new file, `controller` package)*
+- `GET /api/v1/reports/tickets-by-status` — returns the grouped ticket count by status
+
+**SecurityConfig.java** *(updated)*
+- Added `/api/v1/reports/**` requiring authentication (any logged-in user, no specific role needed), matching the exercise's security rule
+
+**day10-tickets.http** *(updated)*
+- Added a test for the new report endpoint using a valid token
+
+### Test Results
+`GET /api/v1/reports/tickets-by-status` with a valid token returned `200 OK`:
+```json
+[
+  {
+    "label": "OPEN",
+    "count": 8
+  }
+]
+```
+Since all current tickets have status `OPEN`, the aggregation correctly grouped them into a single entry with an accurate count, confirming the aggregation pipeline works as expected.
+
+
+### Reflection Question
+
+**Why is a grouped report endpoint better than asking the frontend to download all tickets and count them manually?**
+Downloading every ticket just to count them wastes bandwidth and processing power, especially as the dataset grows. MongoDB's aggregation pipeline does the grouping and counting directly in the database, which is far more efficient, and the frontend only receives the small summarized result it actually needs instead of the entire raw dataset.
+
+
+### Output Screenshot
+![Day 10 Exercise 2 Output](screenshots/Day10/D10_Exercise02Test5.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day10)
+
+---
+
