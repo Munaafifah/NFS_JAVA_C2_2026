@@ -39,7 +39,7 @@ App
 ```
 
 ### Output Screenshot
-![Layout Components](screenshots/Day11/D11_Exercise02a.png)
+![Layout Components](screenshots/Day11/D11_Exercise02.png)
 
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
