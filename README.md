@@ -23,7 +23,6 @@ export default function App() {
 
 ---
 
-
 ## Day 11 Exercise 02 - Build Layout Components
 
 ### What Was Added
@@ -40,6 +39,23 @@ App
 
 ### Output Screenshot
 ![Layout Components](screenshots/Day11/D11_Exercise02.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
+
+---
+
+## Day 11 Exercise 03 - Ticket Sample Data, List and Detail
+
+### What Was Added
+- Created `src/data/sampleTickets.js` with 5 sample tickets (id, title, category, priority, status, createdBy, createdAt)
+- Created `src/components/PriorityBadge.jsx` and `src/components/StatusBadge.jsx` to render priority/status as badges
+- Created `src/components/TicketList.jsx` to display all tickets and handle selection via click
+- Created `src/components/TicketDetail.jsx` to show the currently selected ticket's details, with a fallback message when nothing is selected
+- Updated `App.jsx` to hold `selectedId` state with `useState`, find the matching ticket, and pass data/handlers down to `TicketList` and `TicketDetail`
+
+### Output Screenshot
+![Ticket List and Detail](screenshots/Day11/D11_Exercise03.png)
 
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
