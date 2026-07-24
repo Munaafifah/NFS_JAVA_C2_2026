@@ -1,10 +1,11 @@
 import { useState } from "react";
+import "./App.css";
 import Layout from "./components/Layout";
 import TicketList from "./components/TicketList";
 import TicketDetail from "./components/TicketDetail";
 import TicketFilterPanel from "./components/TicketFilterPanel";
+import ApiInfoCard from "./components/ApiInfoCard";
 import { sampleTickets } from "./data/sampleTickets";
-import "./App.css";
 
 export default function App() {
   const [selectedId, setSelectedId] = useState(null);
@@ -25,6 +26,7 @@ export default function App() {
 
   return (
     <Layout>
+      <ApiInfoCard />
       <TicketFilterPanel
         searchText={searchText}
         onSearchChange={setSearchText}

@@ -78,3 +78,23 @@ App
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
 
 ---
+
+## Day 11 Exercise 05 - useEffect, Loading and Error UI
+
+### What Was Added
+- Updated `vite.config.js` to proxy `/api` requests to the backend at `http://localhost:8081`
+- Created `src/services/api.js` with a `fetchApiInfo()` function that calls `/api/v1/info` and throws on a failed response
+- Created `src/components/ApiInfoCard.jsx` using `useEffect` and `useState` to manage loading, error, and success states when fetching backend data
+- Added `.message`, `.loading-message`, and `.error-message` styles to `App.css` for the connection status states
+- Updated `App.jsx` to render `ApiInfoCard` above the ticket filter panel
+- On the backend, added missing `app.jwt.secret` and `app.jwt.expiration-minutes` properties to `application.properties`, and permitted `/api/v1/info` in `SecurityConfig`
+- Created `InfoController.java` on the backend to serve API name/version at `GET /api/v1/info`, resolving a 401 caused by the endpoint not existing yet
+
+### Output Screenshot
+![API Success State](screenshots/Day11/D11_Exercise05a.png)
+![API Error State](screenshots/Day11/D11_Exercise05b.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
+
+---

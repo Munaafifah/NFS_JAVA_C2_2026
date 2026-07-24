@@ -222,6 +222,22 @@ dd {
   color: #667085;
 }
 
+.message {
+  margin: 0;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.loading-message {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
 @media (max-width: 860px) {
   .app-header,
   .workspace-grid,
