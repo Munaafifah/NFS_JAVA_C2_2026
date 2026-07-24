@@ -1,3 +1,7 @@
 export default function StatusBadge({ status }) {
-  return <span className={`badge status-${status.toLowerCase()}`}>{status}</span>;
+  return (
+    <span className={`status-badge status-${status.toLowerCase()}`}>
+      {status.replace("_", " ")}
+    </span>
+  );
 }

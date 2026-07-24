@@ -61,3 +61,20 @@ App
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
 
 ---
+
+## Day 11 Exercise 04 - State, Search and Filter
+
+### What Was Added
+- Created `src/components/TicketFilterPanel.jsx` with a search input and dropdowns for status and priority, all as controlled inputs
+- Updated `App.jsx` to hold `searchText`, `statusFilter`, and `priorityFilter` state with `useState`
+- Added filtering logic that derives `filteredTickets` from `sampleTickets` on every render, matching search text against title/category and applying status/priority filters
+- Updated `TicketList` and `TicketDetail` to use the filtered results instead of the full ticket list
+- Fixed a styling conflict in `index.css` where leftover Vite default root styles (`color-scheme: light dark`, root text/background colors) were overriding `App.css` and causing washed-out text on dropdowns and ticket titles
+
+### Output Screenshot
+![Search and Filter](screenshots/Day11/D11_Exercise04.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
+
+---
