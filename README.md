@@ -35,3 +35,22 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
 
 ---
+
+## Day 12 Exercise 03 - Login Page and Auth Context
+
+### What Was Added
+- Created `src/context/AuthContext.jsx` using the Context API to store `user`, `token`, and an `isAuthenticated` flag, with `login()` and `logout()` functions
+- `login()` calls the backend's `POST /api/auth/login` endpoint with email/password and stores the returned token plus user profile (userId, name, email, role) on success
+- Updated `src/pages/LoginPage.jsx` with a controlled email/password form, loading and error states, and a redirect to `/app/dashboard` on successful login
+- Wrapped the app with `AuthProvider` in `main.jsx`
+- Added submit button styling to `App.css`
+- Verified login against the backend's seeded account, confirming the token is stored and the user is redirected into the protected app area
+
+### Output Screenshot
+![Login Submitting](screenshots/Day12/D12_Exercise03a.png)
+![Redirected to Dashboard After Login](screenshots/Day12/D12_Exercise03b.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
+
+---
