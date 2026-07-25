@@ -1,48 +1,18 @@
-import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/Layout";
-import TicketList from "./components/TicketList";
-import TicketDetail from "./components/TicketDetail";
-import TicketFilterPanel from "./components/TicketFilterPanel";
-import ApiInfoCard from "./components/ApiInfoCard";
-import { sampleTickets } from "./data/sampleTickets";
+import LoginPage from "./pages/LoginPage";
+import DashboardPage from "./pages/DashboardPage";
+import TicketsPage from "./pages/TicketsPage";
 
 export default function App() {
-  const [selectedId, setSelectedId] = useState(null);
-  const [searchText, setSearchText] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL");
-  const [priorityFilter, setPriorityFilter] = useState("ALL");
-
-  const filteredTickets = sampleTickets.filter((ticket) => {
-    const matchesSearch =
-      ticket.title.toLowerCase().includes(searchText.toLowerCase()) ||
-      ticket.category.toLowerCase().includes(searchText.toLowerCase());
-    const matchesStatus = statusFilter === "ALL" || ticket.status === statusFilter;
-    const matchesPriority = priorityFilter === "ALL" || ticket.priority === priorityFilter;
-    return matchesSearch && matchesStatus && matchesPriority;
-  });
-
-  const selectedTicket = filteredTickets.find((t) => t.id === selectedId);
-
   return (
     <Layout>
-      <ApiInfoCard />
-      <TicketFilterPanel
-        searchText={searchText}
-        onSearchChange={setSearchText}
-        statusFilter={statusFilter}
-        onStatusChange={setStatusFilter}
-        priorityFilter={priorityFilter}
-        onPriorityChange={setPriorityFilter}
-      />
-      <div className="workspace-grid">
-        <TicketList
-          tickets={filteredTickets}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-        />
-        <TicketDetail ticket={selectedTicket} />
-      </div>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/app/dashboard" element={<DashboardPage />} />
+        <Route path="/app/tickets" element={<TicketsPage />} />
+      </Routes>
     </Layout>
   );
 }
