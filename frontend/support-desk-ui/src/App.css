@@ -238,6 +238,32 @@ dd {
   color: #991b1b;
 }
 
+.app-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.nav-link {
+  padding: 10px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #344054;
+  font-weight: 700;
+  background: white;
+  border: 1px solid #d9e2ef;
+}
+
+.nav-link:hover {
+  border-color: #3b82f6;
+}
+
+.nav-link.active {
+  background: #172033;
+  color: white;
+  border-color: #172033;
+}
+
 @media (max-width: 860px) {
   .app-header,
   .workspace-grid,
