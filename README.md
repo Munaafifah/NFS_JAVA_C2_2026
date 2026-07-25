@@ -54,3 +54,18 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
 
 ---
+
+## Day 12 Exercise 04 - Protect Ticket Pages
+
+### What Was Added
+- Created `src/components/ProtectedRoute.jsx` that checks `isAuthenticated` from `AuthContext` and redirects to `/login` via `Navigate` if no token is present, otherwise renders the nested routes through `Outlet`
+- Updated `App.jsx` to wrap the `/app` route (and its nested `dashboard`, `tickets`, `reports` routes) with `ProtectedRoute`
+- Verified that visiting `/app/tickets` directly while logged out redirects to `/login`, and works normally after logging in
+
+### Output Screenshot
+![Redirected to Login When Logged Out](screenshots/Day12/D12_Exercise04.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
+
+---
