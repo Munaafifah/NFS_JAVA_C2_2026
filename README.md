@@ -98,3 +98,51 @@ App
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
 
 ---
+
+
+## Day 11 Exercise 06 - Component Tree and Reflection
+
+### What Was Added
+- Documented the final Support Desk UI component tree based on components built across Exercises 01-05
+- Answered reflection questions on state ownership, props, `useEffect` usage, and loading/error handling
+
+**Component tree:**
+```text
+App
+├── Layout
+│   └── AppHeader
+├── ApiInfoCard
+├── TicketFilterPanel
+└── (workspace grid)
+    ├── TicketList
+    │   ├── PriorityBadge
+    │   └── StatusBadge
+    └── TicketDetail
+        ├── PriorityBadge
+        └── StatusBadge
+```
+
+### README Reflection
+
+1. **Which component owns the selected ticket state?**
+   `App` — it holds `selectedId` via `useState` and passes `selectedId`/`onSelect` down to `TicketList`, and the derived `selectedTicket` down to `TicketDetail`.
+
+2. **Which components receive props?**
+   `Layout` (`children`), `TicketFilterPanel` (search/filter values and change handlers), `TicketList` (`tickets`, `selectedId`, `onSelect`), `TicketDetail` (`ticket`), and `PriorityBadge`/`StatusBadge` (`priority`/`status`).
+
+3. **What does `useEffect` do in your app?**
+   In `ApiInfoCard`, `useEffect` runs once on mount to call `fetchApiInfo()` and update state (`apiInfo`, `loading`, `error`) based on the result, connecting the component to the backend outside of the render cycle.
+
+4. **What loading state did you create?**
+   A `loading` boolean in `ApiInfoCard`, shown as a blue "Loading API info..." message while the fetch is in progress.
+
+5. **What error state did you create?**
+   An `error` string in `ApiInfoCard`, shown as a red "Could not connect to backend" message when the fetch fails (e.g., backend stopped or unauthorized).
+
+6. **What would change when you connect this UI to the protected backend API later?**
+   Ticket data would come from `TicketV1Controller` endpoints instead of `sampleTickets.js`, requests would need an `Authorization` header with a JWT (since routes like `/api/v1/tickets/**` require `USER`/`ADMIN` roles), and the UI would need a login flow plus loading/error handling around each ticket-related fetch, not just the info endpoint.
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day11)
+
+---
