@@ -86,3 +86,42 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
 
 ---
+
+## Day 12 Exercise 06 - Protected Route Reflection
+
+### What Was Added
+- Answered reflection questions on `BrowserRouter`, `Routes`/`Route`, `Outlet`, `Navigate`, and the difference between frontend and backend route protection
+- Captured a routing flow sequence showing an unauthenticated attempt to access `/app/tickets` redirecting to `/login`, and a successful login redirecting back to `/app/tickets`
+
+### README Reflection
+
+1. What is the role of BrowserRouter?
+BrowserRouter wraps the whole app and connects React Router to the browser's URL, so navigation updates the address bar and back/forward buttons work properly.
+
+2. What is the difference between Routes and Route?
+Routes is the container that looks at the current URL and picks which Route inside it matches; each Route defines one path and the component to render for it.
+
+3. Why do we use Outlet?
+Outlet is used inside a parent route to mark where its matched child route should render, so shared layout like the nav bar stays on screen while the inner content changes.
+
+4. What does Navigate do?
+Navigate redirects the user to a different route programmatically, without them clicking a link, used here to send unauthenticated users to /login.
+
+5. Why is frontend route protection not enough by itself?
+Frontend route protection only hides pages in the UI; someone could still call the backend API directly and bypass the React app entirely, so the real security has to be enforced on the server.
+
+6. Which backend endpoints still need to enforce security?
+Any endpoint returning or modifying real data needs backend security, like /api/v1/tickets/** and /api/v1/reports/**, which are already set to require authentication/roles in SecurityConfig.
+
+### Output Screenshot
+
+Redirected to Login When Accessing Protected Route
+![Redirected to Login](screenshots/Day12/D12_Exercise04.png)
+
+Redirected Back to Tickets After Login
+![Redirected Back to Tickets](screenshots/Day12/D12_Exercise05.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
+
+---
