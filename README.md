@@ -69,3 +69,20 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
 
 ---
+
+## Day 12 Exercise 05 - Redirect After Login
+
+### What Was Added
+- Updated `ProtectedRoute.jsx` to use `useLocation()` and pass the current location as `state` when redirecting unauthenticated users to `/login`
+- Updated `LoginPage.jsx` to read `location.state.from.pathname`, falling back to `/app/dashboard` if no redirect state exists, and navigate there after a successful login
+- Added a Logout button to `AppShell.jsx` so the full logout/redirect/login flow could be tested
+- Fixed a file mix-up where `AppShell.jsx` had accidentally been overwritten with `LoginPage`'s content, which was causing every `/app/*` route to render the login form instead of the nav and page content
+- Verified the full flow: visiting `/app/tickets` while logged out redirects to `/login`, and logging in successfully returns the user to `/app/tickets` instead of the default dashboard
+
+### Output Screenshot
+![Redirected Back to Tickets After Login](screenshots/Day12/D12_Exercise05.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day12)
+
+---

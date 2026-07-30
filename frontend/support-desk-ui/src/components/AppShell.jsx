@@ -1,6 +1,15 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function AppShell() {
+  const { logout, user } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/login", { replace: true });
+  }
+
   return (
     <div>
       <nav className="app-nav">
@@ -22,6 +31,13 @@ export default function AppShell() {
         >
           Reports
         </NavLink>
+
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "12px" }}>
+          {user && <span style={{ color: "#667085", fontSize: "0.9rem" }}>{user.email}</span>}
+          <button type="button" className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </nav>
 
       <Outlet />

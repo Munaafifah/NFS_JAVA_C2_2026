@@ -240,6 +240,7 @@ dd {
 
 .app-nav {
   display: flex;
+  align-items: center;
   gap: 8px;
   margin-bottom: 20px;
 }
@@ -280,6 +281,20 @@ button[type="submit"]:hover {
 button[type="submit"]:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.logout-button {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #d9e2ef;
+  background: white;
+  color: #991b1b;
+  font-weight: 700;
+}
+
+.logout-button:hover {
+  border-color: #991b1b;
+  background: #fef2f2;
 }
 
 @media (max-width: 860px) {
