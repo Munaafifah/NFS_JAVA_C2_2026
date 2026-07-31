@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.supportdesk.dto.CreateTicketRequest;
 import com.example.supportdesk.dto.TicketResponse;
 import com.example.supportdesk.service.TicketService;
+import org.springframework.web.bind.annotation.PutMapping;
+import com.example.supportdesk.dto.UpdateTicketRequest;
 
 import jakarta.validation.Valid;
 
@@ -55,5 +57,10 @@ public class TicketController {
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String direction) {
         return ticketService.getPagedTickets(page, size, sortBy, direction);
+    }
+
+    @PutMapping("/{id}")
+    public TicketResponse updateTicket(@PathVariable String id, @Valid @RequestBody UpdateTicketRequest request) {
+        return ticketService.updateTicket(id, request);
     }
 }

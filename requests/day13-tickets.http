@@ -1,0 +1,90 @@
+### Day 13: Ticket Update Endpoint
+### Run Spring Boot first: .\mvnw spring-boot:run
+
+### Login (adjust email/password to your seeded support-desk user)
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+
+### Copy token from login response
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6InN1cHBvcnQtZGVzay1hcGkiLCJuYW1lIjoiQWRtaW4gVXNlciIsImV4cCI6MTc4NTQ2OTc3MywiaWF0IjoxNzg1NDY2MTczLCJ1c2VySWQiOiI2YTYyMmUxZTJiYTFkYjcxN2QyMWUwYTIifQ.1K6QWChg-50jXjfakAYJXbkdy0FNF1fryzv33bd-gt0
+
+
+### Get all tickets and copy one id for update
+GET http://localhost:8081/api/tickets
+Authorization: Bearer {{token}}
+
+
+### Valid update - should return 200 with updated ticket
+PUT http://localhost:8081/api/tickets/6a622e512ba1db717d21e0a3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Printer not connecting to network",
+  "description": "Office printer on 3rd floor drops wifi connection every few minutes",
+  "category": "Hardware",
+  "priority": "HIGH",
+  "status": "IN_PROGRESS"
+}
+
+
+### Invalid priority - should return 400
+PUT http://localhost:8081/api/tickets/6a622e512ba1db717d21e0a3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Printer not connecting to network",
+  "description": "Office printer on 3rd floor drops wifi connection every few minutes",
+  "category": "Hardware",
+  "priority": "URGENT",
+  "status": "IN_PROGRESS"
+}
+
+
+### Invalid status - should return 400
+PUT http://localhost:8081/api/tickets/6a622e512ba1db717d21e0a3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Printer not connecting to network",
+  "description": "Office printer on 3rd floor drops wifi connection every few minutes",
+  "category": "Hardware",
+  "priority": "HIGH",
+  "status": "RESOLVED"
+}
+
+
+### Missing required field (title) - should return 400
+PUT http://localhost:8081/api/tickets/6a622e512ba1db717d21e0a3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "",
+  "description": "Office printer on 3rd floor drops wifi connection every few minutes",
+  "category": "Hardware",
+  "priority": "HIGH",
+  "status": "IN_PROGRESS"
+}
+
+
+### Non-existent ticket id - should return 404
+PUT http://localhost:8081/api/tickets/000000000000000000000000
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Printer not connecting to network",
+  "description": "Office printer on 3rd floor drops wifi connection every few minutes",
+  "category": "Hardware",
+  "priority": "HIGH",
+  "status": "IN_PROGRESS"
+}

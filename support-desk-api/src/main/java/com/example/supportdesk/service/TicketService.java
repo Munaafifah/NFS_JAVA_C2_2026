@@ -16,6 +16,7 @@ import com.example.supportdesk.dto.TicketResponse;
 import com.example.supportdesk.exception.ResourceNotFoundException;
 import com.example.supportdesk.model.Ticket;
 import com.example.supportdesk.repository.TicketRepository;
+import com.example.supportdesk.dto.UpdateTicketRequest;
 
 @Service
 public class TicketService {
@@ -95,5 +96,20 @@ public class TicketService {
                 ticket.getCreatedBy(),
                 ticket.getCreatedAt().toString()
         );
+    }
+
+    public TicketResponse updateTicket(String id, UpdateTicketRequest request) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket " + id + " was not found"));
+
+        ticket.setTitle(request.getTitle());
+        ticket.setDescription(request.getDescription());
+        ticket.setCategory(request.getCategory());
+        ticket.setPriority(request.getPriority());
+        ticket.setStatus(request.getStatus());
+
+        Ticket updated = ticketRepository.save(ticket);
+        log.info("Updated ticket with id={}", updated.getId());
+        return toResponse(updated);
     }
 }
