@@ -71,3 +71,21 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
 
 ---
+
+## Day 13 Exercise 05 - Add Edit Ticket Flow
+
+### What Was Added
+- This exercise's requirements were satisfied as part of building Exercise 4 (Submit Ticket To Backend), since both needed the same edit flow
+- Route `/app/tickets/:ticketId/edit` added in `App.jsx`, rendering `TicketFormPage.jsx` in edit mode
+- On load, `TicketFormPage.jsx` fetches the selected ticket via `fetchTicketById(ticketId, token)` and pre-fills the form with its current values
+- Changes are submitted via `PUT /api/tickets/{id}` through `updateTicket(ticketId, token, payload)`
+- The entry point into this flow is the "Edit Selected" button on `TicketsPage.jsx`, enabled only when a ticket is selected in the list
+- Verified end-to-end: selected an existing ticket, opened the edit page with all fields correctly pre-filled, changed values, submitted, and confirmed the update persisted in MongoDB and reflected in the ticket list
+
+### Output Screenshot
+![Add Edit Ticket Flow](screenshots/Day13/D13_Exercise05.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
+
+---
