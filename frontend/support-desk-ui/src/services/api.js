@@ -7,3 +7,64 @@ export async function fetchApiInfo() {
 
   return response.json();
 }
+
+export async function createTicket(token, ticketData) {
+  const response = await fetch('/api/tickets', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(ticketData)
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => null);
+    throw new Error(errorBody?.message || 'Failed to create ticket');
+  }
+
+  return response.json();
+}
+
+export async function fetchTickets(token) {
+  const response = await fetch('/api/tickets', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to load tickets');
+  }
+
+  return response.json();
+}
+
+export async function fetchApiDocs() {
+  const response = await fetch('/api/docs');
+
+  if (!response.ok) {
+    throw new Error('Failed to load API docs');
+  }
+
+  return response.json();
+}
+
+export async function fetchTicketReports(token) {
+  const [byStatus, byPriority] = await Promise.all([
+    fetch('/api/v1/reports/tickets-by-status', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then((res) => {
+      if (!res.ok) throw new Error('Failed to load status report');
+      return res.json();
+    }),
+    fetch('/api/v1/reports/tickets-by-priority', {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then((res) => {
+      if (!res.ok) throw new Error('Failed to load priority report');
+      return res.json();
+    })
+  ]);
+
+  return { byStatus, byPriority };
+}

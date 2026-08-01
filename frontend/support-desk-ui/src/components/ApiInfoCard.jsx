@@ -1,60 +1,34 @@
-import { useEffect, useState } from "react";
-import { fetchApiInfo } from "../services/api";
+import LoadingMessage from './LoadingMessage.jsx';
+import ErrorMessage from './ErrorMessage.jsx';
 
-export default function ApiInfoCard() {
-  const [apiInfo, setApiInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    fetchApiInfo()
-      .then((data) => {
-        if (isMounted) {
-          setApiInfo(data);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        if (isMounted) {
-          setError(err.message);
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
+export default function ApiInfoCard({ loading, error, apiInfo, apiDocs }) {
   return (
-    <div className="card">
-      <h2>Backend Connection</h2>
-      <p className="header-subtitle" style={{ color: "#667085", marginBottom: "12px" }}>
-        Fetched using useEffect from the public backend endpoint.
-      </p>
+    <section className="card api-card">
+      <div className="section-heading">
+        <h2>Backend Connection</h2>
+        <p>Fetched using useEffect from the public Day 10 backend endpoints.</p>
+      </div>
 
-      {loading && <p className="message loading-message">Loading API info...</p>}
-
-      {!loading && error && (
-        <p className="message error-message">
-          Could not connect to backend. Start Spring Boot on port 8081 and try again.
-        </p>
-      )}
+      {loading && <LoadingMessage message="Loading API information..." />}
+      {error && <ErrorMessage message={error} />}
 
       {!loading && !error && apiInfo && (
-        <div className="detail-list">
-          <div>
-            <dt>API Name</dt>
-            <dd>{apiInfo.name}</dd>
-          </div>
-          <div>
-            <dt>Version</dt>
-            <dd>{apiInfo.version}</dd>
-          </div>
+        <div className="api-info-grid">
+          <InfoItem label="Application" value={apiInfo.application} />
+          <InfoItem label="Version" value={apiInfo.version} />
+          <InfoItem label="Status" value={apiInfo.status} />
+          <InfoItem label="Documented Endpoints" value={apiDocs?.endpoints?.length ?? 0} />
         </div>
       )}
+    </section>
+  );
+}
+
+function InfoItem({ label, value }) {
+  return (
+    <div className="info-item">
+      <span>{label}</span>
+      <strong>{value}</strong>
     </div>
   );
 }

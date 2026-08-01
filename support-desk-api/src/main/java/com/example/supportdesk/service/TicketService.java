@@ -13,10 +13,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.supportdesk.dto.CreateTicketRequest;
 import com.example.supportdesk.dto.TicketResponse;
+import com.example.supportdesk.dto.UpdateTicketRequest;
+import com.example.supportdesk.exception.DuplicateResourceException;
 import com.example.supportdesk.exception.ResourceNotFoundException;
 import com.example.supportdesk.model.Ticket;
 import com.example.supportdesk.repository.TicketRepository;
-import com.example.supportdesk.dto.UpdateTicketRequest;
 
 @Service
 public class TicketService {
@@ -70,6 +71,11 @@ public class TicketService {
     }
 
     public TicketResponse createTicket(CreateTicketRequest request) {
+        if (ticketRepository.existsByTitleIgnoreCase(request.getTitle())) {
+            throw new DuplicateResourceException(
+                    "A ticket with the title '" + request.getTitle() + "' already exists");
+        }
+
         Ticket newTicket = new Ticket(
                 request.getTitle(),
                 request.getDescription(),

@@ -1,4 +1,5 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import AppHeader from "./AppHeader";
 import { useAuth } from "../context/AuthContext";
 
 export default function AppShell() {
@@ -11,7 +12,9 @@ export default function AppShell() {
   }
 
   return (
-    <div>
+    <div className="app-shell">
+      <AppHeader />
+
       <nav className="app-nav">
         <NavLink
           to="/app/dashboard"
@@ -30,6 +33,12 @@ export default function AppShell() {
           className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
         >
           Reports
+        </NavLink>
+        <NavLink
+          to="/docs"
+          className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}
+        >
+          API Docs
         </NavLink>
 
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "12px" }}>

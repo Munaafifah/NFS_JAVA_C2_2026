@@ -30,36 +30,48 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="card">
-      <h2>Login</h2>
+    <div className="app-shell login-page">
+      <div className="card login-card">
+        <p className="eyebrow">Day 13</p>
+        <h2>Login to Support Desk</h2>
+        <p className="login-subtitle">
+          This login calls the Support Desk backend, stores the JWT in context, and redirects
+          you to the protected area.
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
-          <input
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-        </label>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Email
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+          </label>
 
-        <label style={{ marginTop: "12px" }}>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </label>
+          <label style={{ marginTop: "12px" }}>
+            Password
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+            />
+          </label>
 
-        {error && <p className="message error-message" style={{ marginTop: "12px" }}>{error}</p>}
+          {error && <p className="message error-message" style={{ marginTop: "12px" }}>{error}</p>}
 
-        <button type="submit" disabled={loading} style={{ marginTop: "16px" }}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+          <button type="submit" disabled={loading} style={{ marginTop: "16px" }}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <div className="seeded-hint">
+          <p className="seeded-hint-label">Seeded admin</p>
+          <p className="seeded-hint-value">admin@example.com / Admin@12345</p>
+        </div>
+      </div>
     </div>
   );
 }

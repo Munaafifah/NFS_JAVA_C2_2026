@@ -16,3 +16,22 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
 
 ---
+
+## Day 13 Exercise 02 - Create Ticket Form Page
+
+### What Was Added
+- Created `src/components/TicketFormWizard.jsx` with controlled inputs for title, description, category, and priority (status is shown as a disabled field since new tickets are always created as `OPEN` by the backend)
+- Added client-side validation requiring title, description, category, and a valid priority before submission
+- Created `src/pages/TicketFormPage.jsx`, which calls `createTicket()` with the logged-in user's email as `createdBy`, and shows saving/error/success states
+- Added `createTicket()` to `src/services/api.js`
+- Added a `/app/tickets/new` route to `App.jsx`, nested under the existing protected `/app` layout
+- Added a "New Ticket" button on `TicketsPage.jsx` linking into the form
+- Verified the form opens from the protected area, displays all fields correctly, and successfully creates a new ticket visible in the ticket list
+
+### Output Screenshot
+![Ticket Form Page](screenshots/Day13/D13_Exercise02.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
+
+---

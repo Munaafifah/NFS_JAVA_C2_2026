@@ -27,7 +27,7 @@ export default function TicketFilterPanel({
           <option value="ALL">All Statuses</option>
           <option value="OPEN">Open</option>
           <option value="IN_PROGRESS">In Progress</option>
-          <option value="RESOLVED">Resolved</option>
+          <option value="CLOSED">Closed</option>
         </select>
       </label>
 
