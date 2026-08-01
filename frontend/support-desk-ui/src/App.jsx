@@ -9,6 +9,7 @@ import ReportsPage from "./pages/ReportsPage";
 import DocsPage from "./pages/DocsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AppShell from "./components/AppShell";
+import { TicketDataProvider } from "./context/TicketDataContext.jsx";
 
 export default function App() {
   return (
@@ -18,7 +19,14 @@ export default function App() {
       <Route path="/docs" element={<DocsPage />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/app" element={<AppShell />}>
+        <Route
+          path="/app"
+          element={
+            <TicketDataProvider>
+              <AppShell />
+            </TicketDataProvider>
+          }
+        >
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="tickets" element={<TicketsPage />} />
           <Route path="tickets/new" element={<TicketFormPage />} />

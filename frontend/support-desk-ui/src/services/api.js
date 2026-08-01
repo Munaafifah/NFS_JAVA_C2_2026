@@ -1,102 +1,53 @@
+import { apiRequest, buildQueryString } from './httpClient.js';
+
 export async function fetchApiInfo() {
-  const response = await fetch('/api/v1/info');
-
-  if (!response.ok) {
-    throw new Error('Failed to load API info');
-  }
-
-  return response.json();
-}
-
-export async function createTicket(token, ticketData) {
-  const response = await fetch('/api/tickets', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(ticketData)
-  });
-
-  if (!response.ok) {
-    const errorBody = await response.json().catch(() => null);
-    throw new Error(errorBody?.message || 'Failed to create ticket');
-  }
-
-  return response.json();
-}
-
-export async function fetchTickets(token) {
-  const response = await fetch('/api/tickets', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to load tickets');
-  }
-
-  return response.json();
+  return apiRequest('/api/v1/info');
 }
 
 export async function fetchApiDocs() {
-  const response = await fetch('/api/docs');
+  return apiRequest('/api/docs');
+}
 
-  if (!response.ok) {
-    throw new Error('Failed to load API docs');
-  }
+export async function fetchTickets(token) {
+  return apiRequest('/api/tickets', { token });
+}
 
-  return response.json();
+export async function fetchTicketById(id, token) {
+  return apiRequest(`/api/tickets/${id}`, { token });
+}
+
+export async function createTicket(token, ticketData) {
+  return apiRequest('/api/tickets', {
+    method: 'POST',
+    token,
+    body: ticketData
+  });
+}
+
+export async function updateTicket(id, token, payload) {
+  return apiRequest(`/api/tickets/${id}`, {
+    method: 'PUT',
+    token,
+    body: payload
+  });
 }
 
 export async function fetchTicketReports(token) {
   const [byStatus, byPriority] = await Promise.all([
-    fetch('/api/v1/reports/tickets-by-status', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((res) => {
-      if (!res.ok) throw new Error('Failed to load status report');
-      return res.json();
-    }),
-    fetch('/api/v1/reports/tickets-by-priority', {
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((res) => {
-      if (!res.ok) throw new Error('Failed to load priority report');
-      return res.json();
-    })
+    apiRequest('/api/v1/reports/tickets-by-status', { token }),
+    apiRequest('/api/v1/reports/tickets-by-priority', { token })
   ]);
 
   return { byStatus, byPriority };
 }
 
-export async function fetchTicketById(id, token) {
-  const response = await fetch(`/api/tickets/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+export async function fetchPagedTickets(token, params) {
+  const queryString = buildQueryString({
+    page: params.page,
+    size: params.size,
+    sortBy: params.sortBy,
+    direction: params.direction
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to load ticket');
-  }
-
-  return response.json();
-}
-
-export async function updateTicket(id, token, payload) {
-  const response = await fetch(`/api/tickets/${id}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    const errorBody = await response.json().catch(() => null);
-    throw new Error(errorBody?.message || 'Failed to update ticket');
-  }
-
-  return response.json();
+  return apiRequest(`/api/tickets/paged?${queryString}`, { token });
 }

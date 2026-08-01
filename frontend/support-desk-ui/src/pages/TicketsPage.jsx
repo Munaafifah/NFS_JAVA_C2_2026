@@ -1,78 +1,42 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TicketDetail from '../components/TicketDetail.jsx';
 import TicketFilterPanel from '../components/TicketFilterPanel.jsx';
 import TicketList from '../components/TicketList.jsx';
 import TicketSummaryCards from '../components/TicketSummaryCards.jsx';
 import ErrorMessage from '../components/ErrorMessage.jsx';
 import LoadingMessage from '../components/LoadingMessage.jsx';
-import { useAuth } from '../context/AuthContext.jsx';
-import { fetchTickets } from '../services/api.js';
-import { filterTickets } from '../utils/tickets.js';
+import { useTicketData } from '../context/TicketDataContext.jsx';
 
 export default function TicketsPage() {
-  const { token } = useAuth();
   const navigate = useNavigate();
-  const [tickets, setTickets] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
-  const [searchText, setSearchText] = useState('');
-  const [statusFilter, setStatusFilter] = useState('ALL');
-  const [priorityFilter, setPriorityFilter] = useState('ALL');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const initialLoadRef = useRef(false);
 
-  const filteredTickets = useMemo(
-    () => filterTickets(tickets, searchText, statusFilter, priorityFilter),
-    [tickets, searchText, statusFilter, priorityFilter]
-  );
-
-  const selectedTicket = filteredTickets.find((ticket) => ticket.id === selectedId) ?? null;
-
-  useEffect(() => {
-    let ignore = false;
-
-    async function loadTickets() {
-      try {
-        setLoading(true);
-        setError('');
-        const data = await fetchTickets(token);
-
-        if (!ignore) {
-          setTickets(data);
-          setSelectedId(data[0]?.id ?? null);
-        }
-      } catch (err) {
-        if (!ignore) {
-          setError(err.message || 'Could not load tickets.');
-          console.error(err);
-        }
-      } finally {
-        if (!ignore) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadTickets();
-
-    return () => {
-      ignore = true;
-    };
-  }, [token]);
+  const {
+    items,
+    visibleTickets,
+    selectedTicket,
+    selectedTicketId,
+    loading,
+    error,
+    filters,
+    loadTicketsPage,
+    setSearchText,
+    setStatusFilter,
+    setPriorityFilter,
+    selectTicket
+  } = useTicketData();
 
   useEffect(() => {
-    if (filteredTickets.length === 0) {
-      setSelectedId(null);
+    if (initialLoadRef.current) {
       return;
     }
 
-    const selectedStillVisible = filteredTickets.some((ticket) => ticket.id === selectedId);
-    if (!selectedStillVisible) {
-      setSelectedId(filteredTickets[0].id);
-    }
-  }, [filteredTickets, selectedId]);
+    initialLoadRef.current = true;
+    loadTicketsPage();
+  }, [loadTicketsPage]);
 
-  if (loading) {
+  if (loading && items.length === 0) {
     return <LoadingMessage message="Loading tickets..." />;
   }
 
@@ -85,9 +49,9 @@ export default function TicketsPage() {
       <div className="card action-row header-row">
         <h2>Tickets</h2>
         <div className="action-row">
-          <Link className="button-link" to="/app/tickets/new">
+          <button type="button" className="button-link" onClick={() => navigate('/app/tickets/new')}>
             New Ticket
-          </Link>
+          </button>
           <button
             type="button"
             className="button-link secondary"
@@ -99,22 +63,22 @@ export default function TicketsPage() {
         </div>
       </div>
 
-      <TicketSummaryCards tickets={tickets} />
+      <TicketSummaryCards tickets={items} />
 
       <TicketFilterPanel
-        searchText={searchText}
+        searchText={filters.searchText}
         onSearchChange={setSearchText}
-        statusFilter={statusFilter}
+        statusFilter={filters.statusFilter}
         onStatusChange={setStatusFilter}
-        priorityFilter={priorityFilter}
+        priorityFilter={filters.priorityFilter}
         onPriorityChange={setPriorityFilter}
       />
 
       <section className="workspace-grid">
         <TicketList
-          tickets={filteredTickets}
-          selectedId={selectedTicket?.id}
-          onSelect={setSelectedId}
+          tickets={visibleTickets}
+          selectedId={selectedTicketId || selectedTicket?.id}
+          onSelect={selectTicket}
         />
         <TicketDetail ticket={selectedTicket} />
       </section>
