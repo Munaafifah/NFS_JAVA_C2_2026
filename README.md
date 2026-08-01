@@ -52,3 +52,22 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
 
 ---
+
+## Day 13 Exercise 04 - Submit Ticket To Backend
+
+### What Was Added
+- Added `createTicket(token, payload)`, `fetchTicketById(id, token)`, and `updateTicket(id, token, payload)` to `src/services/api.js`, all using the JWT token from `AuthContext`
+- Extended `TicketFormWizard.jsx` with a `mode` prop (`create`/`edit`) so the same component handles both flows, with the Status field switching from a disabled display to an editable dropdown in edit mode
+- Rewrote `TicketFormPage.jsx` to detect edit mode via `useParams`, fetch and prefill the existing ticket on mount when editing, and branch between `createTicket` and `updateTicket` on submit
+- Added an `/app/tickets/:ticketId/edit` route in `App.jsx`
+- Added an "Edit Selected" button on `TicketsPage.jsx`, enabled only when a ticket is selected in the list, navigating to the edit route for that ticket
+- Verified all required states: loading spinner while fetching/saving, success message on save, backend error message surfaced on failure
+- Verified the full flow: selected an existing ticket, edited its priority/status, submitted, and confirmed the change persisted in MongoDB and reflected in the ticket list
+
+### Output Screenshot
+![Submit Ticket To Backend](screenshots/Day13/D13_Exercise04.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
+
+---

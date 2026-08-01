@@ -68,3 +68,35 @@ export async function fetchTicketReports(token) {
 
   return { byStatus, byPriority };
 }
+
+export async function fetchTicketById(id, token) {
+  const response = await fetch(`/api/tickets/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to load ticket');
+  }
+
+  return response.json();
+}
+
+export async function updateTicket(id, token, payload) {
+  const response = await fetch(`/api/tickets/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => null);
+    throw new Error(errorBody?.message || 'Failed to update ticket');
+  }
+
+  return response.json();
+}

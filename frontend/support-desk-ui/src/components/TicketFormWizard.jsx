@@ -13,6 +13,7 @@ export const emptyTicketForm = {
 };
 
 export default function TicketFormWizard({
+  mode = 'create',
   initialValues = emptyTicketForm,
   onSubmit,
   saving = false,
@@ -21,6 +22,8 @@ export default function TicketFormWizard({
 }) {
   const [formValues, setFormValues] = useState(initialValues);
   const [fieldErrors, setFieldErrors] = useState({});
+
+  const isEditMode = mode === 'edit';
 
   function updateField(fieldName, value) {
     setFormValues((current) => ({ ...current, [fieldName]: value }));
@@ -72,8 +75,12 @@ export default function TicketFormWizard({
     <form className="card ticket-form" onSubmit={handleSubmit} noValidate>
       <div className="section-heading">
         <p className="eyebrow">Day 13 ticket form</p>
-        <h2>Create Ticket</h2>
-        <p>Controlled inputs with inline validation. New tickets always start as OPEN.</p>
+        <h2>{isEditMode ? 'Update Ticket' : 'Create Ticket'}</h2>
+        <p>
+          {isEditMode
+            ? 'Controlled inputs with inline validation.'
+            : 'Controlled inputs with inline validation. New tickets always start as OPEN.'}
+        </p>
       </div>
 
       <ErrorMessage message={serverError} />
@@ -139,7 +146,20 @@ export default function TicketFormWizard({
 
         <label htmlFor="status">
           Status
-          <input id="status" value={formValues.status} disabled readOnly aria-describedby="status-error" />
+          {isEditMode ? (
+            <select
+              id="status"
+              value={formValues.status}
+              onChange={(event) => updateField('status', event.target.value)}
+              aria-describedby="status-error"
+            >
+              {STATUS_OPTIONS.map((status) => (
+                <option key={status} value={status}>{status}</option>
+              ))}
+            </select>
+          ) : (
+            <input id="status" value={formValues.status} disabled readOnly aria-describedby="status-error" />
+          )}
           {fieldErrors.status && (
             <span id="status-error" className="field-error" role="alert">{fieldErrors.status}</span>
           )}
@@ -148,7 +168,7 @@ export default function TicketFormWizard({
 
       <div className="form-actions">
         <button type="submit" className="button-link" disabled={saving}>
-          {saving ? 'Saving...' : 'Create Ticket'}
+          {saving ? 'Saving...' : isEditMode ? 'Update Ticket' : 'Create Ticket'}
         </button>
       </div>
     </form>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import TicketDetail from '../components/TicketDetail.jsx';
 import TicketFilterPanel from '../components/TicketFilterPanel.jsx';
 import TicketList from '../components/TicketList.jsx';
@@ -12,6 +12,7 @@ import { filterTickets } from '../utils/tickets.js';
 
 export default function TicketsPage() {
   const { token } = useAuth();
+  const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [searchText, setSearchText] = useState('');
@@ -83,9 +84,19 @@ export default function TicketsPage() {
     <>
       <div className="card action-row header-row">
         <h2>Tickets</h2>
-        <Link className="button-link" to="/app/tickets/new">
-          New Ticket
-        </Link>
+        <div className="action-row">
+          <Link className="button-link" to="/app/tickets/new">
+            New Ticket
+          </Link>
+          <button
+            type="button"
+            className="button-link secondary"
+            disabled={!selectedTicket}
+            onClick={() => navigate(`/app/tickets/${selectedTicket.id}/edit`)}
+          >
+            Edit Selected
+          </button>
+        </div>
       </div>
 
       <TicketSummaryCards tickets={tickets} />
