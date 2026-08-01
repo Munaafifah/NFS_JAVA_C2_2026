@@ -31,3 +31,21 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14)
 
 ---
+
+## Day 14 Exercise 03 - Add Pagination And Filters
+
+### What Was Added
+- Created `src/components/TicketDataControls.jsx` with page size, sort field, and sort direction dropdowns
+- Created `src/components/TicketPaginationControls.jsx` with Previous/Next buttons, disabled correctly at the first/last page boundaries, plus a page and total record count display
+- Wired both components into `TicketsPage.jsx`, calling `loadTicketsPage()` from `TicketDataContext` with the appropriate overrides on each control change
+- Fixed a bug in `toPageInfo()` where pagination metadata was read from the wrong location — the backend's `PageSerializationMode.VIA_DTO` response nests `size`, `number`, `totalElements`, and `totalPages` under a `page` object rather than at the top level, so `toPageInfo()` was updated to read `data.page.totalPages` etc. instead of `data.totalPages`
+- Fixed a CSS spacing bug where consecutive `.card` elements had no `margin-bottom`, causing an uneven gap between the pagination controls card and the filter panel below it
+- Verified the ticket list correctly pages through all 7 records (5 per page, 2 pages total), sorts by title/category/priority/status/createdAt in both directions, and still allows search/status/priority filtering on the currently visible page
+
+### Output Screenshot
+![Pagination And Filters](screenshots/Day14/D14_Exercise03.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14)
+
+---

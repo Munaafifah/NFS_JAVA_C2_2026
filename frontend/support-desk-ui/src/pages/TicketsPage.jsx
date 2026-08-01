@@ -4,6 +4,8 @@ import TicketDetail from '../components/TicketDetail.jsx';
 import TicketFilterPanel from '../components/TicketFilterPanel.jsx';
 import TicketList from '../components/TicketList.jsx';
 import TicketSummaryCards from '../components/TicketSummaryCards.jsx';
+import TicketDataControls from '../components/TicketDataControls.jsx';
+import TicketPaginationControls from '../components/TicketPaginationControls.jsx';
 import ErrorMessage from '../components/ErrorMessage.jsx';
 import LoadingMessage from '../components/LoadingMessage.jsx';
 import { useTicketData } from '../context/TicketDataContext.jsx';
@@ -19,6 +21,7 @@ export default function TicketsPage() {
     selectedTicketId,
     loading,
     error,
+    pageInfo,
     filters,
     loadTicketsPage,
     setSearchText,
@@ -65,6 +68,13 @@ export default function TicketsPage() {
 
       <TicketSummaryCards tickets={items} />
 
+      <TicketDataControls
+        pageInfo={pageInfo}
+        loading={loading}
+        onPageSizeChange={(size) => loadTicketsPage({ page: 0, size })}
+        onSortChange={(sortBy, direction) => loadTicketsPage({ page: 0, sortBy, direction })}
+      />
+
       <TicketFilterPanel
         searchText={filters.searchText}
         onSearchChange={setSearchText}
@@ -74,6 +84,8 @@ export default function TicketsPage() {
         onPriorityChange={setPriorityFilter}
       />
 
+      {loading && <LoadingMessage message="Loading ticket page..." />}
+
       <section className="workspace-grid">
         <TicketList
           tickets={visibleTickets}
@@ -82,6 +94,12 @@ export default function TicketsPage() {
         />
         <TicketDetail ticket={selectedTicket} />
       </section>
+
+      <TicketPaginationControls
+        pageInfo={pageInfo}
+        loading={loading}
+        onPageChange={(page) => loadTicketsPage({ page })}
+      />
     </>
   );
 }

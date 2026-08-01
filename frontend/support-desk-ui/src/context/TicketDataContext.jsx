@@ -27,12 +27,12 @@ const initialState = {
 
 function toPageInfo(data, fallback) {
   return {
-    page: data.number ?? fallback.page,
-    size: data.size ?? fallback.size,
+    page: data.page?.number ?? fallback.page,
+    size: data.page?.size ?? fallback.size,
     sortBy: fallback.sortBy,
     direction: fallback.direction,
-    totalPages: data.totalPages ?? 0,
-    totalElements: data.totalElements ?? 0
+    totalPages: data.page?.totalPages ?? 0,
+    totalElements: data.page?.totalElements ?? 0
   };
 }
 
