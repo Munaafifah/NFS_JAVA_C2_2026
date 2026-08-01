@@ -2,12 +2,14 @@ import { useState } from 'react';
 import ErrorMessage from './ErrorMessage.jsx';
 
 const PRIORITY_OPTIONS = ['LOW', 'MEDIUM', 'HIGH'];
+const STATUS_OPTIONS = ['OPEN', 'IN_PROGRESS', 'CLOSED'];
 
 export const emptyTicketForm = {
   title: '',
   description: '',
   category: '',
-  priority: 'MEDIUM'
+  priority: 'MEDIUM',
+  status: 'OPEN'
 };
 
 export default function TicketFormWizard({
@@ -40,6 +42,9 @@ export default function TicketFormWizard({
     if (!PRIORITY_OPTIONS.includes(formValues.priority)) {
       errors.priority = 'Choose a valid priority.';
     }
+    if (!STATUS_OPTIONS.includes(formValues.status)) {
+      errors.status = 'Status is required.';
+    }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -56,7 +61,8 @@ export default function TicketFormWizard({
       title: formValues.title.trim(),
       description: formValues.description.trim(),
       category: formValues.category.trim(),
-      priority: formValues.priority
+      priority: formValues.priority,
+      status: formValues.status
     };
 
     await onSubmit(payload);
@@ -133,7 +139,10 @@ export default function TicketFormWizard({
 
         <label htmlFor="status">
           Status
-          <input id="status" value="OPEN" disabled readOnly />
+          <input id="status" value={formValues.status} disabled readOnly aria-describedby="status-error" />
+          {fieldErrors.status && (
+            <span id="status-error" className="field-error" role="alert">{fieldErrors.status}</span>
+          )}
         </label>
       </section>
 

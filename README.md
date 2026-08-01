@@ -35,3 +35,20 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
 
 ---
+
+## Day 13 Exercise 03 - Client-Side Validation
+
+### What Was Added
+- Added `status` as tracked form state in `TicketFormWizard.jsx` (defaulting to `OPEN`), so it participates in validation like every other field, even though the input itself stays disabled since new tickets are always created as `OPEN`
+- Extended `validate()` to check all five required fields: title, description, category, priority, and status
+- Inline error messages render beside/below each field via `<span className="field-error" role="alert">`, driven by `fieldErrors` state
+- Submission is blocked via `if (!validate()) return;` inside `handleSubmit` whenever any required field fails validation
+- Verified by submitting an empty form and confirming all five inline errors appear without a network request being sent
+
+### Output Screenshot
+![Client-Side Validation](screenshots/Day13/D13_Exercise03.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day13)
+
+---
