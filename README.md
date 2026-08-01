@@ -49,3 +49,22 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14)
 
 ---
+
+## Day 14 Exercise 04 - Add Simple Page Cache
+
+### What Was Added
+- Added an in-memory `cache` object to `TicketDataContext`'s reducer state, keyed by `page|size|sortBy|direction`
+- On `loadTicketsPage()`, checks for a cached entry matching the current params before fetching; if found (and not forced), dispatches `LOAD_SUCCESS` with `fromCache: true` and skips the network call entirely
+- On a genuine backend fetch, stores the response in the cache under its key so future visits to that same page/size/sort combination can be served instantly
+- Added `refreshTickets()`, which calls `loadTicketsPage({ force: true })` to bypass the cache and force a fresh backend fetch regardless of what's cached
+- Added a `cacheMessage` state field showing `"Fetched from backend."` or `"Loaded from cache."`, displayed above the pagination controls
+- Added a "Refresh from backend" button to `TicketDataControls.jsx`, wired to `refreshTickets()`
+- Verified cache behavior end-to-end: page 1 fetched from backend on first load, page 2 fetched fresh on first visit, returning to page 1 loaded instantly from cache with zero new network requests, and the refresh button correctly forced a fresh backend fetch even on an already-cached page
+
+### Output Screenshot
+![Simple Page Cache](screenshots/Day14/D14_Exercise04.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14)
+
+---

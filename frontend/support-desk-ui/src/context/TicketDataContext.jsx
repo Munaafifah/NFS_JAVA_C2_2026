@@ -10,6 +10,8 @@ const initialState = {
   selectedTicketId: '',
   loading: false,
   error: '',
+  cacheMessage: 'No cached page loaded yet.',
+  cache: {},
   pageInfo: {
     page: 0,
     size: 5,
@@ -24,6 +26,10 @@ const initialState = {
     priorityFilter: 'ALL'
   }
 };
+
+function makeCacheKey(params) {
+  return `${params.page}|${params.size}|${params.sortBy}|${params.direction}`;
+}
 
 function toPageInfo(data, fallback) {
   return {
@@ -42,13 +48,17 @@ function ticketReducer(state, action) {
       return {
         ...state,
         loading: true,
-        error: ''
+        error: '',
+        cacheMessage: action.fromCache ? 'Reading from cache...' : 'Fetching from backend...'
       };
 
     case 'LOAD_SUCCESS': {
       const items = action.data.content ?? [];
       const selectedStillVisible = items.some((ticket) => ticket.id === state.selectedTicketId);
       const selectedTicketId = selectedStillVisible ? state.selectedTicketId : items[0]?.id ?? '';
+      const nextCache = action.fromCache
+        ? state.cache
+        : { ...state.cache, [action.cacheKey]: action.data };
 
       return {
         ...state,
@@ -56,7 +66,9 @@ function ticketReducer(state, action) {
         selectedTicketId,
         loading: false,
         error: '',
-        pageInfo: toPageInfo(action.data, action.params)
+        pageInfo: toPageInfo(action.data, action.params),
+        cache: nextCache,
+        cacheMessage: action.fromCache ? 'Loaded from cache.' : 'Fetched from backend.'
       };
     }
 
@@ -64,7 +76,8 @@ function ticketReducer(state, action) {
       return {
         ...state,
         loading: false,
-        error: action.message
+        error: action.message,
+        cacheMessage: 'Could not load data.'
       };
 
     case 'SET_SEARCH_TEXT':
@@ -108,18 +121,46 @@ export function TicketDataProvider({ children }) {
       direction: overrides.direction ?? state.pageInfo.direction
     };
 
-    dispatch({ type: 'LOAD_START' });
+    const cacheKey = makeCacheKey(params);
+    const cachedPage = state.cache[cacheKey];
+
+    if (cachedPage && !overrides.force) {
+      dispatch({
+        type: 'LOAD_START',
+        fromCache: true
+      });
+      dispatch({
+        type: 'LOAD_SUCCESS',
+        data: cachedPage,
+        params,
+        cacheKey,
+        fromCache: true
+      });
+      return;
+    }
+
+    dispatch({ type: 'LOAD_START', fromCache: false });
 
     try {
       const data = await fetchPagedTickets(token, params);
-      dispatch({ type: 'LOAD_SUCCESS', data, params });
+      dispatch({
+        type: 'LOAD_SUCCESS',
+        data,
+        params,
+        cacheKey,
+        fromCache: false
+      });
     } catch (error) {
       dispatch({
         type: 'LOAD_ERROR',
         message: error.message || 'Could not load paged tickets.'
       });
     }
-  }, [state.pageInfo, token]);
+  }, [state.cache, state.pageInfo, token]);
+
+  const refreshTickets = useCallback(() => {
+    return loadTicketsPage({ force: true });
+  }, [loadTicketsPage]);
 
   const setSearchText = useCallback((value) => {
     dispatch({ type: 'SET_SEARCH_TEXT', value });
@@ -157,12 +198,13 @@ export function TicketDataProvider({ children }) {
       visibleTickets,
       selectedTicket,
       loadTicketsPage,
+      refreshTickets,
       setSearchText,
       setStatusFilter,
       setPriorityFilter,
       selectTicket
     }),
-    [state, visibleTickets, selectedTicket, loadTicketsPage, setSearchText, setStatusFilter, setPriorityFilter, selectTicket]
+    [state, visibleTickets, selectedTicket, loadTicketsPage, refreshTickets, setSearchText, setStatusFilter, setPriorityFilter, selectTicket]
   );
 
   return <TicketDataContext.Provider value={value}>{children}</TicketDataContext.Provider>;

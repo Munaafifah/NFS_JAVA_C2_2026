@@ -23,7 +23,9 @@ export default function TicketsPage() {
     error,
     pageInfo,
     filters,
+    cacheMessage,
     loadTicketsPage,
+    refreshTickets,
     setSearchText,
     setStatusFilter,
     setPriorityFilter,
@@ -70,7 +72,9 @@ export default function TicketsPage() {
 
       <TicketDataControls
         pageInfo={pageInfo}
+        cacheMessage={cacheMessage}
         loading={loading}
+        onRefresh={refreshTickets}
         onPageSizeChange={(size) => loadTicketsPage({ page: 0, size })}
         onSortChange={(sortBy, direction) => loadTicketsPage({ page: 0, sortBy, direction })}
       />
@@ -83,8 +87,6 @@ export default function TicketsPage() {
         priorityFilter={filters.priorityFilter}
         onPriorityChange={setPriorityFilter}
       />
-
-      {loading && <LoadingMessage message="Loading ticket page..." />}
 
       <section className="workspace-grid">
         <TicketList
