@@ -18,3 +18,19 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
 
 ---
+
+## Day 15 Exercise 02 - Test Ticket Filter Utility
+
+### What Was Added
+- Created `src/utils/tickets.test.js` with unit tests for the existing `filterTickets(tickets, searchText, statusFilter, priorityFilter)` function
+- Tests cover: filtering by search text matching title, filtering by search text matching category, filtering by status, filtering by search text and status together, returning no results when search and status don't both match the same ticket, returning all tickets when search is empty and status is `ALL`, and case-insensitive search
+- All tests run against local sample data with no React rendering and no backend calls, matching the unit test definition from the Day 15 concepts guide
+- Verified all 7 new tests pass alongside the existing sanity test, for 8 passing tests total
+
+### Output Screenshot
+![Test Ticket Filter Utility](screenshots/Day15/D15_Exercise02.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
+
+---
