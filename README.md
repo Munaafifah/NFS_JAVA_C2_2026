@@ -50,3 +50,21 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
 
 ---
+
+## Day 15 Exercise 04 - Test Protected Ticket Route
+
+### What Was Added
+- Created `src/components/ProtectedRoute.test.jsx`, mocking `useAuth()` directly so each test controls `isAuthenticated` without needing a real backend call
+- Built a small test router using `MemoryRouter` matching the actual `Outlet`-based structure from `App.jsx` (rather than a `children`-prop pattern), with a `/login` route and a protected `/app/tickets` route wrapped by `ProtectedRoute`
+- Test 1 confirms an unauthenticated user (`isAuthenticated: false`) is redirected to and sees the login page, with the protected content never rendering
+- Test 2 confirms an authenticated user (`isAuthenticated: true`) sees the protected ticket page directly, with the login page never rendering
+- Verified both tests pass alongside the existing 14 tests from Exercises 1–3, for 16 passing tests total across 4 test files
+- This test proves frontend route guarding only; the backend still independently enforces JWT validation and role checks on every protected endpoint
+
+### Output Screenshot
+![Test Protected Ticket Route](screenshots/Day15/D15_Exercise04.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
+
+---
