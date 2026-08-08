@@ -68,3 +68,21 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
 
 ---
+
+## Day 15 Exercise 05 - Test Ticket Form Validation
+
+### What Was Added
+- Created `src/components/TicketFormWizard.test.jsx` using React Testing Library and `userEvent` to simulate real typing and clicking
+- Test 1 submits a completely empty form and confirms inline errors appear for title, description, and category, and that `onSubmit` is never called
+- Test 2 types trimmed-with-whitespace values into title, description, and category, submits, and confirms `onSubmit` is called exactly once with a clean, trimmed payload including the default `priority: 'MEDIUM'` and `status: 'OPEN'`
+- Test 3 renders the form with `saving={true}` and confirms the submit button shows "Saving..." and is disabled
+- Verified all 3 new tests pass alongside the existing 16 tests from Exercises 1–4, for 19 passing tests total across 5 test files
+- This test protects the core frontend flow: user input → validation → submit, catching regressions before they reach the backend
+
+### Output Screenshot
+![Test Ticket Form Validation](screenshots/Day15/D15_Exercise05.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
+
+---
