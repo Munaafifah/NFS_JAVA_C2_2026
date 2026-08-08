@@ -34,3 +34,19 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
 
 ---
+
+## Day 15 Exercise 03 - Test Ticket Summary Cards
+
+### What Was Added
+- Created `src/components/TicketSummaryCards.test.jsx` using React Testing Library to render `TicketSummaryCards` with sample ticket data
+- Tests confirm all four card labels render (`Total Tickets`, `Open`, `In Progress`, `Closed`) and that each card displays the correct count, scoped per-card using `within()` so the test verifies each number is paired with the right label rather than just present anywhere on the page
+- Added an edge case test confirming all counts correctly show `0` when given an empty ticket list
+- Verified all 6 new component tests pass alongside the existing 8 tests from Exercises 1 and 2, for 14 passing tests total across 3 test files
+
+### Output Screenshot
+![Test Ticket Summary Cards](screenshots/Day15/D15_Exercise03.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
+
+---
