@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
-import { fetchPagedTickets } from '../services/api.js';
+import { fetchPagedTickets, updateTicket } from '../services/api.js';
 import { filterTickets } from '../utils/tickets.js';
 import { useAuth } from './AuthContext.jsx';
 
@@ -11,6 +11,7 @@ const initialState = {
   loading: false,
   error: '',
   cacheMessage: 'No cached page loaded yet.',
+  updatingId: '',
   cache: {},
   pageInfo: {
     page: 0,
@@ -29,6 +30,23 @@ const initialState = {
 
 function makeCacheKey(params) {
   return `${params.page}|${params.size}|${params.sortBy}|${params.direction}`;
+}
+
+function replaceTicket(items, updatedTicket) {
+  return items.map((ticket) => (ticket.id === updatedTicket.id ? updatedTicket : ticket));
+}
+
+function replaceTicketInCache(cache, updatedTicket) {
+  const nextCache = {};
+
+  Object.entries(cache).forEach(([key, pageData]) => {
+    nextCache[key] = {
+      ...pageData,
+      content: replaceTicket(pageData.content ?? [], updatedTicket)
+    };
+  });
+
+  return nextCache;
 }
 
 function toPageInfo(data, fallback) {
@@ -104,9 +122,46 @@ function ticketReducer(state, action) {
         selectedTicketId: action.ticketId
       };
 
+    case 'OPTIMISTIC_UPDATE':
+      return {
+        ...state,
+        updatingId: action.ticket.id,
+        items: replaceTicket(state.items, action.ticket),
+        cache: replaceTicketInCache(state.cache, action.ticket)
+      };
+
+    case 'UPDATE_SUCCESS':
+      return {
+        ...state,
+        updatingId: '',
+        items: replaceTicket(state.items, action.ticket),
+        cache: replaceTicketInCache(state.cache, action.ticket),
+        cacheMessage: 'Optimistic update confirmed by backend.'
+      };
+
+    case 'ROLLBACK_UPDATE':
+      return {
+        ...state,
+        updatingId: '',
+        items: replaceTicket(state.items, action.ticket),
+        cache: replaceTicketInCache(state.cache, action.ticket),
+        error: action.message,
+        cacheMessage: 'Optimistic update rolled back.'
+      };
+
     default:
       return state;
   }
+}
+
+function toUpdatePayload(ticket) {
+  return {
+    title: ticket.title,
+    description: ticket.description,
+    category: ticket.category,
+    priority: ticket.priority,
+    status: ticket.status
+  };
 }
 
 export function TicketDataProvider({ children }) {
@@ -125,10 +180,7 @@ export function TicketDataProvider({ children }) {
     const cachedPage = state.cache[cacheKey];
 
     if (cachedPage && !overrides.force) {
-      dispatch({
-        type: 'LOAD_START',
-        fromCache: true
-      });
+      dispatch({ type: 'LOAD_START', fromCache: true });
       dispatch({
         type: 'LOAD_SUCCESS',
         data: cachedPage,
@@ -178,6 +230,28 @@ export function TicketDataProvider({ children }) {
     dispatch({ type: 'SELECT_TICKET', ticketId });
   }, []);
 
+  const changeTicketStatus = useCallback(async (ticketId, nextStatus) => {
+    const currentTicket = state.items.find((ticket) => ticket.id === ticketId);
+
+    if (!currentTicket || currentTicket.status === nextStatus) {
+      return;
+    }
+
+    const optimisticTicket = { ...currentTicket, status: nextStatus };
+    dispatch({ type: 'OPTIMISTIC_UPDATE', ticket: optimisticTicket });
+
+    try {
+      const savedTicket = await updateTicket(ticketId, token, toUpdatePayload(optimisticTicket));
+      dispatch({ type: 'UPDATE_SUCCESS', ticket: savedTicket });
+    } catch (error) {
+      dispatch({
+        type: 'ROLLBACK_UPDATE',
+        ticket: currentTicket,
+        message: error.message || 'Could not update ticket status. Reverted local change.'
+      });
+    }
+  }, [state.items, token]);
+
   const visibleTickets = useMemo(
     () => filterTickets(
       state.items,
@@ -202,9 +276,10 @@ export function TicketDataProvider({ children }) {
       setSearchText,
       setStatusFilter,
       setPriorityFilter,
-      selectTicket
+      selectTicket,
+      changeTicketStatus
     }),
-    [state, visibleTickets, selectedTicket, loadTicketsPage, refreshTickets, setSearchText, setStatusFilter, setPriorityFilter, selectTicket]
+    [state, visibleTickets, selectedTicket, loadTicketsPage, refreshTickets, setSearchText, setStatusFilter, setPriorityFilter, selectTicket, changeTicketStatus]
   );
 
   return <TicketDataContext.Provider value={value}>{children}</TicketDataContext.Provider>;

@@ -68,3 +68,20 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14)
 
 ---
+
+## Day 14 Exercise 05 - Ticket Status Update
+
+### What Was Added
+- Added `changeTicketStatus(ticketId, nextStatus)` to `TicketDataContext`, implementing the optimistic update flow: back up the current ticket, immediately update local state, send a `PUT` request via `updateTicket()`, replace with the backend response on success, or roll back to the backed-up ticket and show an error on failure
+- Added `OPTIMISTIC_UPDATE`, `UPDATE_SUCCESS`, and `ROLLBACK_UPDATE` actions to the reducer, updating both `items` and the page `cache` so the change stays consistent across cached pages
+- Created `src/components/OptimisticStatusControls.jsx` with three quick-status buttons (`OPEN`, `IN_PROGRESS`, `CLOSED`), disabling the button matching the ticket's current status and showing a saving indicator while the update is in flight
+- Wired the controls into `TicketsPage.jsx` next to the ticket detail card
+- Verified the UI updates instantly on click (list badge and detail card both reflect the new status immediately), and that the change persists correctly after the backend confirms
+
+### Output Screenshot
+![Ticket Status Update](screenshots/Day14/D14_Exercise05.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day14)
+
+---

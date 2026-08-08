@@ -6,6 +6,7 @@ import TicketList from '../components/TicketList.jsx';
 import TicketSummaryCards from '../components/TicketSummaryCards.jsx';
 import TicketDataControls from '../components/TicketDataControls.jsx';
 import TicketPaginationControls from '../components/TicketPaginationControls.jsx';
+import OptimisticStatusControls from '../components/OptimisticStatusControls.jsx';
 import ErrorMessage from '../components/ErrorMessage.jsx';
 import LoadingMessage from '../components/LoadingMessage.jsx';
 import { useTicketData } from '../context/TicketDataContext.jsx';
@@ -24,12 +25,14 @@ export default function TicketsPage() {
     pageInfo,
     filters,
     cacheMessage,
+    updatingId,
     loadTicketsPage,
     refreshTickets,
     setSearchText,
     setStatusFilter,
     setPriorityFilter,
-    selectTicket
+    selectTicket,
+    changeTicketStatus
   } = useTicketData();
 
   useEffect(() => {
@@ -94,7 +97,14 @@ export default function TicketsPage() {
           selectedId={selectedTicketId || selectedTicket?.id}
           onSelect={selectTicket}
         />
-        <TicketDetail ticket={selectedTicket} />
+        <div className="asset-list">
+          <TicketDetail ticket={selectedTicket} />
+          <OptimisticStatusControls
+            ticket={selectedTicket}
+            updatingId={updatingId}
+            onStatusChange={changeTicketStatus}
+          />
+        </div>
       </section>
 
       <TicketPaginationControls
