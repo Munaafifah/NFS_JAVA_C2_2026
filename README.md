@@ -104,3 +104,63 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
 
 ---
+
+## Day 15 Exercise 07 - Milestone 2 Evidence Submission
+
+### What Was Added
+Compiled evidence for Milestone 2, reusing screenshots already captured in Exercises 1–6 rather than creating new ones:
+
+1. **Passing Vitest tests** → `D15_Exercise01.png` (test setup working), `D15_Exercise02.png` (filter utility tests), `D15_Exercise03.png` (summary card tests), `D15_Exercise04.png` (protected route tests), `D15_Exercise05.png` (form validation tests) — 19 tests passing total across 5 files
+2. **Passing Playwright smoke test** → `D15_Exercise06.png` (1 test passed, full login-to-ticket-creation flow)
+3. **Successful login** → `D15_Exercise06.png` (Playwright's login step is part of the same passing smoke test)
+4. **Protected ticket page** → `D15_Exercise04.png` (ProtectedRoute test proves the guard works; the real protected Tickets page was also shown live earlier in Day 14)
+5. **Ticket form validation error** → `D15_Exercise05.png` (inline errors shown when required fields are empty)
+6. **Successful ticket create or update** → `D15_Exercise06.png` (the smoke test's created ticket, confirmed visible afterward in the live ticket list)
+
+### Review Questions
+
+**1. What is a unit test?**
+A test that checks a small piece of logic on its own, like `filterTickets`, without rendering React or calling the backend.
+
+**2. What is a component test?**
+A test that renders a React component and checks what the user would actually see on screen.
+
+**3. What is an end-to-end test?**
+A test that runs in a real browser against the real app and real backend, checking that a full user flow works together.
+
+**4. Why should protected routes be tested?**
+To prove unauthenticated users are actually blocked and authenticated users can actually get in, since this is a core security behavior that's easy to accidentally break.
+
+**5. Why do we mock API responses in component tests?**
+So the tests run fast and don't depend on the backend, database, or a valid login token being available.
+
+**6. Why does the E2E test need the backend running?**
+Because it makes real network requests — login and ticket creation would just fail without a live backend to respond to them.
+
+**7. Which test gave you the most trouble?**
+The Playwright E2E smoke test — it needed two rounds of selector fixes: first because "Tickets" matched both the nav link and the Dashboard's "View Tickets" button, and then because "New Ticket" turned out to be a button rather than a link, which caused the test to time out until the selector role was corrected.
+
+### Output Screenshots
+
+**1 & 2. Vitest Tests Setup**
+![Vitest Tests Setup](screenshots/Day15/D15_Exercise01.png)
+
+**Ticket Filter Utility Tests**
+![Ticket Filter Utility Tests](screenshots/Day15/D15_Exercise02.png)
+
+**Ticket Summary Cards Tests**
+![Ticket Summary Cards Tests](screenshots/Day15/D15_Exercise03.png)
+
+**3 & 4. Protected Route Tests**
+![Protected Route Tests](screenshots/Day15/D15_Exercise04.png)
+
+**5. Ticket Form Validation Tests**
+![Ticket Form Validation Tests](screenshots/Day15/D15_Exercise05.png)
+
+**2, 3 & 6. Playwright E2E Smoke Test**
+![Playwright E2E Smoke Test](screenshots/Day15/D15_Exercise06.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
+
+---
