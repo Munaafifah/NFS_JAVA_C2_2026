@@ -86,3 +86,21 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
 
 ---
+
+## Day 15 Exercise 06 - End-to-End Smoke Test
+
+### What Was Added
+- Installed Playwright browser binaries via `npx playwright install`
+- Created `playwright.config.js` pointing at `http://localhost:5173`, with a `webServer` block that auto-starts `npm run dev` if not already running
+- Created `e2e/day15-smoke.spec.js`, testing the full main user flow in a real browser against the real backend: login → dashboard → Tickets → New Ticket form → submit a valid ticket with a timestamped unique title (to avoid the duplicate-title 409 check) → confirm the success message
+- Fixed two selector ambiguities during the first runs: `getByRole('link', { name: 'Tickets' })` matched both the nav link and the Dashboard's "View Tickets" button, resolved with `exact: true`; and "New Ticket" is a `<button>` (not a `<Link>`) in the current `TicketsPage.jsx`, so the selector role was corrected from `link` to `button`
+- Verified the test passes against the live Spring Boot backend on port 8081, and confirmed manually that the ticket it created is genuinely persisted and visible in the real ticket list afterward
+- This test proves the React UI, protected routes, and backend API all work together correctly end-to-end
+
+### Output Screenshot
+![End-to-End Smoke Test](screenshots/Day15/D15_Exercise06.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day15)
+
+---
