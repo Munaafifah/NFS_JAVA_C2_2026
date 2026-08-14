@@ -22,6 +22,8 @@ import com.example.supportdesk.repository.TicketRepository;
 @Service
 public class TicketService {
 
+    private static final String DEFAULT_STATUS_ON_CREATE = "OPEN";
+
     private static final Logger log = LoggerFactory.getLogger(TicketService.class);
 
     private final TicketRepository ticketRepository;
@@ -33,17 +35,7 @@ public class TicketService {
     public List<TicketResponse> getAllTickets(String status, String priority, String category) {
         log.info("Fetching tickets with filters - status={}, priority={}, category={}", status, priority, category);
 
-        List<Ticket> tickets;
-
-        if (status != null) {
-            tickets = ticketRepository.findByStatus(status);
-        } else if (priority != null) {
-            tickets = ticketRepository.findByPriority(priority);
-        } else if (category != null) {
-            tickets = ticketRepository.findByCategory(category);
-        } else {
-            tickets = ticketRepository.findAll();
-        }
+        List<Ticket> tickets = fetchByFirstMatchingFilter(status, priority, category);
 
         return tickets.stream()
                 .map(this::toResponse)
@@ -53,11 +45,7 @@ public class TicketService {
     public Page<TicketResponse> getPagedTickets(int page, int size, String sortBy, String direction) {
         log.info("Fetching paginated tickets - page={}, size={}, sortBy={}, direction={}", page, size, sortBy, direction);
 
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc")
-                ? Sort.Direction.ASC
-                : Sort.Direction.DESC;
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(resolveSortDirection(direction), sortBy));
 
         Page<Ticket> ticketPage = ticketRepository.findAll(pageable);
 
@@ -65,23 +53,19 @@ public class TicketService {
     }
 
     public TicketResponse getTicketById(String id) {
-        Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ticket " + id + " was not found"));
+        Ticket ticket = findTicketOrThrow(id);
         return toResponse(ticket);
     }
 
     public TicketResponse createTicket(CreateTicketRequest request) {
-        if (ticketRepository.existsByTitleIgnoreCase(request.getTitle())) {
-            throw new DuplicateResourceException(
-                    "A ticket with the title '" + request.getTitle() + "' already exists");
-        }
+        ensureTitleIsUniqueForCreate(request.getTitle());
 
         Ticket newTicket = new Ticket(
                 request.getTitle(),
                 request.getDescription(),
                 request.getCategory(),
                 request.getPriority(),
-                "OPEN",
+                DEFAULT_STATUS_ON_CREATE,
                 request.getCreatedBy(),
                 LocalDate.now()
         );
@@ -89,6 +73,51 @@ public class TicketService {
         Ticket saved = ticketRepository.save(newTicket);
         log.info("Created new ticket with id={}", saved.getId());
         return toResponse(saved);
+    }
+
+    public TicketResponse updateTicket(String id, UpdateTicketRequest request) {
+        Ticket ticket = findTicketOrThrow(id);
+
+        ticket.setTitle(request.getTitle());
+        ticket.setDescription(request.getDescription());
+        ticket.setCategory(request.getCategory());
+        ticket.setPriority(request.getPriority());
+        ticket.setStatus(request.getStatus());
+
+        Ticket updated = ticketRepository.save(ticket);
+        log.info("Updated ticket with id={}", updated.getId());
+        return toResponse(updated);
+    }
+
+    private List<Ticket> fetchByFirstMatchingFilter(String status, String priority, String category) {
+        if (status != null) {
+            return ticketRepository.findByStatus(status);
+        }
+        if (priority != null) {
+            return ticketRepository.findByPriority(priority);
+        }
+        if (category != null) {
+            return ticketRepository.findByCategory(category);
+        }
+        return ticketRepository.findAll();
+    }
+
+    private Ticket findTicketOrThrow(String id) {
+        return ticketRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket " + id + " was not found"));
+    }
+
+    private void ensureTitleIsUniqueForCreate(String title) {
+        if (ticketRepository.existsByTitleIgnoreCase(title)) {
+            throw new DuplicateResourceException(
+                    "A ticket with the title '" + title + "' already exists");
+        }
+    }
+
+    private Sort.Direction resolveSortDirection(String direction) {
+        return direction.equalsIgnoreCase("asc")
+                ? Sort.Direction.ASC
+                : Sort.Direction.DESC;
     }
 
     private TicketResponse toResponse(Ticket ticket) {
@@ -102,20 +131,5 @@ public class TicketService {
                 ticket.getCreatedBy(),
                 ticket.getCreatedAt().toString()
         );
-    }
-
-    public TicketResponse updateTicket(String id, UpdateTicketRequest request) {
-        Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ticket " + id + " was not found"));
-
-        ticket.setTitle(request.getTitle());
-        ticket.setDescription(request.getDescription());
-        ticket.setCategory(request.getCategory());
-        ticket.setPriority(request.getPriority());
-        ticket.setStatus(request.getStatus());
-
-        Ticket updated = ticketRepository.save(ticket);
-        log.info("Updated ticket with id={}", updated.getId());
-        return toResponse(updated);
     }
 }

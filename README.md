@@ -79,3 +79,29 @@ plan alongside the code instead of just a diff to trust blindly.
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
 
 ---
+
+## Day 16 Exercise 2 - Backend Ticket Service Refactor
+
+### What Was Added
+- Refactored `TicketService.java` using the Generate → Explain → Test → Review pattern, extracting repeated logic into private helper methods
+- Extracted the lookup pattern, duplicate-title check, filter selection, and sort-direction resolution into named helpers
+- Kept all public method signatures, endpoint URLs, exception types/messages, and the default `"OPEN"` status unchanged
+- Created `requests/day16-tickets.http` to verify create, duplicate-title (409), get-by-id (200/404), update (200/404), and paged sorting (asc/desc)
+- Ran the regression checks and confirmed no behaviour changed
+
+| Before | After |
+|---|---|
+| `findById().orElseThrow()` repeated in `getTicketById` and `updateTicket` | Extracted to `findTicketOrThrow(id)` |
+| Duplicate-title check inline in `createTicket` | Extracted to `ensureTitleIsUniqueForCreate(title)` |
+| If/else chain for status/priority/category inline in `getAllTickets` | Extracted to `fetchByFirstMatchingFilter(...)` |
+| Ternary for sort direction inline in `getPagedTickets` | Extracted to `resolveSortDirection(direction)` |
+| `"OPEN"` magic string in `createTicket` | Named constant `DEFAULT_STATUS_ON_CREATE` |
+
+### Output Screenshot
+![Backend Ticket Service Refactor](screenshots/Day16/D16_Exercise02.png)
+![Backend Ticket Service Refactor](screenshots/Day16/D16_Exercise02a.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
+
+---

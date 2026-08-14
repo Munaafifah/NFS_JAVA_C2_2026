@@ -1,0 +1,96 @@
+### Day 16: Ticket Service Refactor Regression Test
+### Run Spring Boot first: .\mvnw spring-boot:run
+
+### Login (adjust email/password to your seeded support-desk user)
+POST http://localhost:8081/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+
+### Copy token from login response
+@token = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6InN1cHBvcnQtZGVzay1hcGkiLCJuYW1lIjoiQWRtaW4gVXNlciIsImV4cCI6MTc4NjcyMjM1NSwiaWF0IjoxNzg2NzE4NzU1LCJ1c2VySWQiOiI2YTYyMmUxZTJiYTFkYjcxN2QyMWUwYTIifQ.yCtwzOzKS5gUd5W1dD_lQCJ464c5gIpd0VMHnzYdR7Y
+
+
+### Create a new ticket - should return 201 with status OPEN
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Day16 Regression Check Ticket",
+  "description": "Verifying TicketService still creates tickets correctly after the refactor.",
+  "category": "Software",
+  "priority": "MEDIUM",
+  "createdBy": "muna@example.com"
+}
+
+
+### Create with the same title again - should return 409 (duplicate check still works)
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Day16 Regression Check Ticket",
+  "description": "This title already exists and should be rejected.",
+  "category": "Software",
+  "priority": "MEDIUM",
+  "createdBy": "muna@example.com"
+}
+
+
+### Get all tickets and copy one id below - should return 200
+GET http://localhost:8081/api/tickets
+Authorization: Bearer {{token}}
+
+
+### Get by a valid id - should return 200
+GET http://localhost:8081/api/tickets/6a60af167d65ebee03480705
+Authorization: Bearer {{token}}
+
+
+### Get by a non-existent id - should return 404 (findTicketOrThrow still works)
+GET http://localhost:8081/api/tickets/000000000000000000000000
+Authorization: Bearer {{token}}
+
+
+### Update a valid ticket - should return 200 with updated fields
+PUT http://localhost:8081/api/tickets/6a60af167d65ebee03480705
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Day16 Regression Check Ticket (Updated)",
+  "description": "Verifying TicketService still updates tickets correctly after the refactor.",
+  "category": "Software",
+  "priority": "HIGH",
+  "status": "IN_PROGRESS"
+}
+
+
+### Update a non-existent id - should return 404 (same findTicketOrThrow path as GET)
+PUT http://localhost:8081/api/tickets/000000000000000000000000
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Should not matter",
+  "description": "Should not matter",
+  "category": "Software",
+  "priority": "HIGH",
+  "status": "IN_PROGRESS"
+}
+
+
+### Paged tickets ascending - should return 200, sorted by title A-Z
+GET http://localhost:8081/api/tickets/paged?page=0&size=5&sortBy=title&direction=asc
+Authorization: Bearer {{token}}
+
+
+### Paged tickets descending - should return 200, sorted by title Z-A
+GET http://localhost:8081/api/tickets/paged?page=0&size=5&sortBy=title&direction=desc
+Authorization: Bearer {{token}}
