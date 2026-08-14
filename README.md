@@ -145,3 +145,36 @@ plan alongside the code instead of just a diff to trust blindly.
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
 
 ---
+
+## Day 16 Exercise 6 - AI-Assisted Coding Reflection
+
+### What Was Added
+
+1. **What did the AI assistant help you do faster?** Spotting the exact
+   repeated patterns worth extracting (the `findById().orElseThrow()` lookup,
+   the inline duplicate-title check) and drafting a full test suite skeleton
+   in seconds instead of writing each `it()` block by hand.
+2. **What AI suggestion did you reject or change?** The exercise brief's
+   suggested `validateTicketFormStep(formValues, stepToValidate,
+   reviewConfirmed)` signature — it assumed a multi-step wizard, but the
+   actual `TicketFormWizard` is a single-page form, so I used
+   `validateTicketForm(formValues)` instead.
+3. **Why shouldn't developers accept generated code blindly?** It can't see
+   your controller, your existing tests, or your actual UI — a first draft
+   test suite even included `expect(errors).toBeTruthy()`, which silently
+   passes even when validation is broken (an empty object is truthy).
+4. **What private information should never be pasted into AI tools?** JWT
+   secrets and real login tokens — like the one already pasted into
+   `day13-tickets.http`, which is exactly what Exercise 1's checklist flags.
+5. **What tests proved the refactor preserved behaviour?**
+   `requests/day16-tickets.http` (create, duplicate-title 409, get/update
+   valid and invalid ids, paged sort both directions) and `npm run test`,
+   30/30 passing including the pre-existing `TicketFormWizard.test.jsx`.
+6. **What part of AI-assisted refactoring still feels unclear?** *(your
+   own answer here — e.g. how much extraction is "too much" before a
+   refactor stops being small and starts becoming a redesign)*
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
+
+---
