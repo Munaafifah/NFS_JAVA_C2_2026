@@ -1,0 +1,26 @@
+### Get all tickets (from MongoDB)
+GET http://localhost:8080/api/tickets
+
+###
+
+### Get one ticket by ID (replace with a real _id from the response above)
+GET http://localhost:8080/api/tickets/6a606837d09c756b084b3ca4
+
+###
+
+### Get missing ticket (valid ObjectId format, but does not exist)
+GET http://localhost:8080/api/tickets/000000000000000000000000
+
+###
+
+### Create a new ticket (still writes to MongoDB via TicketRepository)
+POST http://localhost:8080/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Printer not working",
+  "description": "Office printer on Level 3 is not responding.",
+  "category": "Hardware",
+  "priority": "MEDIUM",
+  "createdBy": "farah@example.com"
+}

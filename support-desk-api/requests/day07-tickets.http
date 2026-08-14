@@ -1,0 +1,50 @@
+### Get all tickets (from MongoDB)
+GET http://localhost:8081/api/tickets
+
+###
+
+### Get one ticket by ID (replace with a real _id from the response above)
+GET http://localhost:8081/api/tickets/6a60af167d65ebee03480705
+
+###
+
+### Get missing ticket (valid ObjectId format, but does not exist)
+GET http://localhost:8081/api/tickets/000000000000000000000000
+
+###
+
+### Create a new ticket
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Printer not working",
+  "description": "Office printer on Level 3 is not responding.",
+  "category": "Hardware",
+  "priority": "MEDIUM",
+  "createdBy": "farah@example.com"
+}
+
+### Create invalid ticket (empty fields, expect 400)
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+
+{
+  "title": "",
+  "description": "",
+  "category": "",
+  "priority": "",
+  "createdBy": ""
+}
+
+### Create ticket for persistence checkpoint
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+
+{
+  "title": "Monitors flickering",
+  "description": "First monitor flickers intermittently on Level 6.",
+  "category": "Hardware",
+  "priority": "LOW",
+  "createdBy": "wei@example.com"
+}
