@@ -105,3 +105,20 @@ plan alongside the code instead of just a diff to trust blindly.
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
 
 ---
+
+## Day 16 Exercise 3 - Extract Ticket Form Validation
+
+### What Was Added
+- Created `src/utils/ticketFormValidation.js` containing `validateTicketForm(formValues)` and `normalizeTicketFormPayload(formValues)`, extracted from the inline validation logic in `TicketFormWizard.jsx`
+- Updated `TicketFormWizard.jsx` to import validation from the new utility instead of handling it inline, with no change to UI, CSS classes, field names, or submit payload shape
+- Created `src/utils/ticketFormValidation.test.js` with unit tests for a valid form, a missing required field, and an invalid priority value
+- Verified manually on localhost: blank-field submission shows the same inline error messages, a valid new ticket saves and appears in the list, and editing an existing ticket updates correctly
+- Ran `npm run test` — all 22 tests pass across 6 test files, including the pre-existing `TicketFormWizard.test.jsx` (3/3) and the new `ticketFormValidation.test.js` (3/3)
+
+### Output Screenshot
+![Extract Ticket Form Validation](screenshots/Day16/D16_Exercise03.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
+
+---

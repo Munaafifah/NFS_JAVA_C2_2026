@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import ErrorMessage from './ErrorMessage.jsx';
-
-const PRIORITY_OPTIONS = ['LOW', 'MEDIUM', 'HIGH'];
-const STATUS_OPTIONS = ['OPEN', 'IN_PROGRESS', 'CLOSED'];
+import {
+  PRIORITY_OPTIONS,
+  STATUS_OPTIONS,
+  validateTicketForm,
+  normalizeTicketFormPayload
+} from '../utils/ticketFormValidation.js';
 
 export const emptyTicketForm = {
   title: '',
@@ -30,45 +33,17 @@ export default function TicketFormWizard({
     setFieldErrors((current) => ({ ...current, [fieldName]: null }));
   }
 
-  function validate() {
-    const errors = {};
-
-    if (!formValues.title.trim()) {
-      errors.title = 'Title is required.';
-    }
-    if (!formValues.description.trim()) {
-      errors.description = 'Description is required.';
-    }
-    if (!formValues.category.trim()) {
-      errors.category = 'Category is required.';
-    }
-    if (!PRIORITY_OPTIONS.includes(formValues.priority)) {
-      errors.priority = 'Choose a valid priority.';
-    }
-    if (!STATUS_OPTIONS.includes(formValues.status)) {
-      errors.status = 'Status is required.';
-    }
-
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
-  }
-
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!validate()) {
+    const errors = validateTicketForm(formValues);
+    setFieldErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
       return;
     }
 
-    const payload = {
-      title: formValues.title.trim(),
-      description: formValues.description.trim(),
-      category: formValues.category.trim(),
-      priority: formValues.priority,
-      status: formValues.status
-    };
-
-    await onSubmit(payload);
+    await onSubmit(normalizeTicketFormPayload(formValues));
   }
 
   return (
