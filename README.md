@@ -181,3 +181,34 @@ plan alongside the code instead of just a diff to trust blindly.
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
 
 ---
+
+## Day 16 Exercise 7 - AI Regression Check
+
+### What Was Added
+- Created a regression checklist covering all 10 required areas for the TicketService/TicketFormWizard refactor
+- Used the suggested AI review prompt to identify a regression risk before assuming the refactor was safe
+- Verified 403 handling specifically for this exercise: registered a throwaway non-admin user, confirmed `POST /api/tickets` returns `403 insufficient_scope` when attempted with a `USER`-role token, matching the `hasRole("ADMIN")` rule in `SecurityConfig`
+
+**Regression checklist:**
+- [/] Login — returns a valid token
+- [/] Protected ticket list — loads with a token
+- [/] Create ticket form — submits and appears in the list
+- [/] Edit ticket form — loads and saves updates
+- [/] API request headers — `Authorization: Bearer` still accepted
+- [/] Validation rules — inline error messages unchanged
+- [/] 401 handling — request without a token rejected
+- [/] 403 handling — non-admin token rejected on `POST /api/tickets` with `403 insufficient_scope`
+- [/] Unit tests — 30/30 passing
+- [/] Manual smoke test — create/edit/validation walked through live on localhost
+
+**Risk AI identified:** switching `validate()` from an internal component method to an imported pure function could break `TicketFormWizard.test.jsx` if that test mocked the old method directly instead of testing observable behaviour.
+
+**Test used to confirm behaviour:** re-ran `npm run test` after the change — `TicketFormWizard.test.jsx` still passed 3/3, confirming its tests check behaviour, not implementation.
+
+### Output Screenshot
+![Extract Ticket Form Validation](screenshots/Day16/D16_Exercise07.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
+
+---

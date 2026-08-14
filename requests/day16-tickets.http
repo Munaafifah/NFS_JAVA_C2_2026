@@ -94,3 +94,31 @@ Authorization: Bearer {{token}}
 ### Paged tickets descending - should return 200, sorted by title Z-A
 GET http://localhost:8081/api/tickets/paged?page=0&size=5&sortBy=title&direction=desc
 Authorization: Bearer {{token}}
+
+### Register a throwaway non-admin user (self-registration always assigns USER)
+POST http://localhost:8081/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Regular User",
+  "email": "regularuser@example.com",
+  "password": "Password123"
+}
+
+
+### Copy the token from the register response above
+@userToken = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJyZWd1bGFydXNlckBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaXNzIjoic3VwcG9ydC1kZXNrLWFwaSIsIm5hbWUiOiJSZWd1bGFyIFVzZXIiLCJleHAiOjE3ODY3MjYyNDIsImlhdCI6MTc4NjcyMjY0MiwidXNlcklkIjoiNmE3ZjM5NTIzMjM1MzI2OTg2YjRlYjQyIn0.SGIwLp-Hw_fAOEODkI8yHNktx4yzEFlGWqBfZWCF_qw
+
+
+### Non-admin attempting to create a ticket - should return 403 (POST is hasRole ADMIN only)
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+  "title": "Should be forbidden",
+  "description": "Non-admin users cannot create tickets per SecurityConfig",
+  "category": "Software",
+  "priority": "LOW",
+  "createdBy": "regularuser@example.com"
+}
