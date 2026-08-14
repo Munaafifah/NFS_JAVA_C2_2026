@@ -122,3 +122,26 @@ plan alongside the code instead of just a diff to trust blindly.
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
 
 ---
+
+## Day 16 Exercise 4 - Generate Then Harden Tests
+
+### What Was Added
+- Asked an AI assistant to draft tests for `ticketFormValidation.js` first, producing a weak 3-test draft with vague names and one assertion that would pass even on broken code
+- Manually hardened the suite in `ticketFormValidation.test.js`, growing it from 3 to 11 tests
+- Added a short comment at the top of the file explaining what was improved from the draft
+- Ran `npm run test` — all 30 tests pass across 6 test files, including the pre-existing `TicketFormWizard.test.jsx` (3/3), confirming the hardened suite didn't break anything downstream
+
+| AI draft | Hardened version |
+|---|---|
+| Vague test names (`'works'`, `'bad priority'`) | Descriptive names stating the exact behaviour checked |
+| `expect(errors).toBeTruthy()` — passes even on `{}` (empty object is truthy) | Exact message checks, e.g. `errors.priority` toBe `'Choose a valid priority.'` |
+| Only 1 field checked in normalization test | All 3 trimmable fields checked, plus priority/status confirmed unchanged |
+| No combined-error case | Added a test confirming all 5 fields flag together, not just the first |
+| No enum coverage | Loops over `PRIORITY_OPTIONS` / `STATUS_OPTIONS` to confirm every valid value passes |
+
+
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
+
+---
