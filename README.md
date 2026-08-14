@@ -58,3 +58,24 @@ plan alongside the code instead of just a diff to trust blindly.
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
 
 ---
+
+## Day 16 Exercise 1 - AI Refactor Safety Checklist
+
+### What Was Added
+
+- [ ] Safe to share: `TicketService.java`, `TicketController.java`, DTOs, `Ticket` model
+- [ ] Safe to share: `TicketFormWizard.jsx`
+- [ ] Not safe to share: `application.properties`, `UserDataSeeder.java`
+- [ ] Not safe to share: `.http` files with a real token still pasted in
+- [ ] Remove before pasting: `app.jwt.secret` value
+- [ ] Remove before pasting: MongoDB username/password, any Bearer token
+- [ ] Must not change: endpoint URLs, HTTP methods, DTO field names
+- [ ] Must not change: exception types and messages, default `"OPEN"` status
+- [ ] Must not change: ticket form field names, CSS classes, payload shape
+- [ ] Proof it's safe: `.http` regression file + Vitest tests pass
+
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day16)
+
+---
