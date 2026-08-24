@@ -4,3 +4,57 @@
 ### Exercise 02 - Readiness endpoint (database connected, expect 200 READY)
 GET http://localhost:8081/api/readiness
 
+###
+
+### Exercise 02 - Readiness endpoint (stop MongoDB first, expect 503 NOT_READY)
+GET http://localhost:8081/api/readiness
+
+###
+
+### Exercise 03 - 401 Unauthorized (no token on a protected endpoint)
+GET http://localhost:8081/api/tickets
+
+###
+
+### Exercise 03 - 403 Forbidden (valid USER token, ADMIN-only action)
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJpc3MiOiJzdXBwb3J0LWRlc2stYXBpIiwibmFtZSI6IlVzZXIgVXNlciIsImV4cCI6MTc4NzU2ODEyNCwiaWF0IjoxNzg3NTY0NTI0LCJ1c2VySWQiOiI2YTYyMmUxZTJiYTFkYjcxN2QyMWUwYTIifQ.7g5X8xWqz5n7Ff8G5K8F5G8F5G8F5G8F5G8F5G8F5G8   
+
+{
+  "title": "Forbidden test ticket",
+  "description": "Testing 403",
+  "category": "General"
+}
+
+###
+
+### Exercise 03 - 404 Not Found (nonexistent ticket id)
+GET http://localhost:8081/api/tickets/000000000000000000000000
+
+###
+
+### Exercise 03 - 409 Conflict (duplicate title)
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6InN1cHBvcnQtZGVzay1hcGkiLCJuYW1lIjoiQWRtaW4gVXNlciIsImV4cCI6MTc4NzU2ODEyNCwiaWF0IjoxNzg3NTY0NTI0LCJ1c2VySWQiOiI2YTYyMmUxZTJiYTFkYjcxN2QyMWUwYTIifQ.jBD4ch9abGakqU5a6XmNJM-2gks28nInmR5LFM9WKfU
+
+{
+  "title": "PUT AN EXISTING TICKET TITLE HERE",
+  "description": "Testing 409",
+  "category": "General"
+}
+
+###
+
+### Exercise 03 - 400 Bad Request (invalid/missing input)
+POST http://localhost:8081/api/tickets
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBRE1JTiIsImlzcyI6InN1cHBvcnQtZGVzay1hcGkiLCJuYW1lIjoiQWRtaW4gVXNlciIsImV4cCI6MTc4NzU2ODEyNCwiaWF0IjoxNzg3NTY0NTI0LCJ1c2VySWQiOiI2YTYyMmUxZTJiYTFkYjcxN2QyMWUwYTIifQ.jBD4ch9abGakqU5a6XmNJM-2gks28nInmR5LFM9WKfU
+
+{
+  "description": "Missing the required title field",
+  "category": "General"
+}
+
+###

@@ -31,3 +31,22 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
 
 ---
+
+## Day 17 Exercise 03 - Error Tracking Practice
+
+### What Was Added
+- Triggered and traced all five required error responses on the Support Desk API using `day17-tickets.http`
+- Confirmed each status code appeared correctly in the `RequestLoggingFilter` output from Exercise 01, showing the exact status and duration for every request without exposing tokens or bodies
+
+| Error | Request made | Why it happened | Where you saw it in logs |
+|---|---|---|---|
+| 401 Unauthorized | `GET /api/tickets` with no Authorization header | Endpoint requires a valid JWT; none was supplied | `RequestLoggingFilter` line showing `path=/api/tickets status=401` |
+| 403 Forbidden | `POST /api/tickets` with a valid USER-role token | `POST /api/tickets` is restricted to `ADMIN` in `SecurityConfig`; USER role lacks that authority | `RequestLoggingFilter` line showing `path=/api/tickets status=403` |
+| 400 Bad Request | `POST /api/tickets` with the `title` field missing | Request failed DTO validation on `TicketRequest` before reaching the service layer | `RequestLoggingFilter` line showing `path=/api/tickets status=400` |
+| 404 Not Found | `GET /api/tickets/000000000000000000000000` | No ticket exists with that id; `findTicketOrThrow` throws when the repository lookup returns empty | `RequestLoggingFilter` line showing `path=/api/tickets/000000000000000000000000 status=404` |
+| 409 Conflict | `POST /api/tickets` with a title matching an existing ticket | `ensureTitleIsUniqueForCreate` rejects duplicate titles before saving | `RequestLoggingFilter` line showing `path=/api/tickets status=409` |
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
+
+---
