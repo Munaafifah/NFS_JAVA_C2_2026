@@ -1,0 +1,6 @@
+### Day 17 - Support Desk API test requests
+### Base URL: http://localhost:8081
+
+### Exercise 02 - Readiness endpoint (database connected, expect 200 READY)
+GET http://localhost:8081/api/readiness
+
