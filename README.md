@@ -45,7 +45,26 @@
 
 ### Output Screenshot
 ![Docker Compose ps output](screenshots/Day18/D18_Exercise03a.png)
+
 ![Support Desk dashboard running via Compose](screenshots/Day18/D18_Exercise03b.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18)
+
+---
+
+## Day 18 Exercise 04 - Environment and Secrets
+
+### What Was Added
+- Created `.env.example` at the repo root, with placeholders for `FRONTEND_PORT`, `BACKEND_PORT`, `MONGO_PORT`, and `JWT_SECRET` — matching the four variables `compose.yaml` already references
+- Created a local `.env` (not committed) with real values for the same four variables, confirmed to be automatically picked up by Compose from the project root with no `--env-file` flag needed
+- Verified by tearing the stack down and bringing it back up: `docker compose down` followed by `docker compose up -d` — mongo and backend came up `healthy` immediately, confirming the externalized values work correctly end to end
+- Confirmed `.env` is excluded via `.gitignore`
+
+**Why `.env` is not committed:** `.env` holds real values Compose substitutes into `compose.yaml` at runtime — most importantly `JWT_SECRET`, which the backend uses to sign and verify every login token. If that value were committed to git, anyone with access to the repository (now or from git history, even after later deletion) could forge a valid JWT and impersonate any user, including an admin. `.env.example` is committed instead, documenting exactly which variables are needed with safe placeholder values, so anyone cloning the repo knows what to fill in without ever seeing a real secret.
+
+### Output Screenshot
+![Docker Compose stack restarted with .env](screenshots/Day18/D18_Exercise04.png)
 
 ### GitHub Commit
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18)
