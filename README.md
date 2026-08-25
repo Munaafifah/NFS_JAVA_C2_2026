@@ -32,3 +32,23 @@
 
 ---
 
+## Day 18 Exercise 03 - Compose File
+
+### What Was Added
+- Created `compose.yaml` and `mongo-init.js` at the repo root (`NFS_JAVA_C2_2026/`), defining three services: `mongo`, `backend`, `frontend`
+- All container-to-container communication uses Compose service names, not `localhost` — the backend connects via `MONGODB_HOST: mongo`, and Nginx proxies via `http://backend:8081`
+- `mongo-init.js` creates the same `support_app_user` account (scoped to `support_desk_db` only, not root/admin) that the local database already uses, so a fresh Compose volume ends up matching local dev
+- Mapped Mongo's container port to host port `27018` instead of `27017`, deliberately avoiding a collision with the native local MongoDB service already running on the host
+- Added healthchecks for all three services with `depends_on: condition: service_healthy`, so `backend` waits for Mongo to respond to a ping, and `frontend` waits for the backend's port to be open, before starting
+- **Debugged a false-negative healthcheck:** the frontend container was reported `unhealthy` even though the app worked correctly end-to-end in the browser. `docker inspect` showed a consistent `wget: can't connect to remote host: Connection refused` since startup. Root cause: `wget http://localhost/` inside the container likely resolved to the IPv6 loopback (`::1`), which `nginx.conf`'s `listen 80;` doesn't bind, while Docker's port mapping talks to the container over IPv4 directly (explaining why the browser worked fine). Fixed by pointing the healthcheck at `http://127.0.0.1/` explicitly instead of `localhost`
+- Verified the full stack end to end: brought up all three containers with `docker compose up --build`, confirmed `docker compose ps` shows all three as `running (healthy)`, hit `GET /api/readiness` directly against the backend (`200 READY`), and logged in through the browser at `http://localhost:5174` — successfully reached the protected dashboard, proving frontend → Nginx → backend → MongoDB all connected correctly through the Compose network
+
+### Output Screenshot
+![Docker Compose ps output](screenshots/Day18/D18_Exercise03a.png)
+![Support Desk dashboard running via Compose](screenshots/Day18/D18_Exercise03b.png)
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18)
+
+---
+
