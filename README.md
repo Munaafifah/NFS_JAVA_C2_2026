@@ -88,3 +88,21 @@ createdAt   { createdAt: 1 }
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
 
 ---
+
+## Day 17 Exercise 05 - Input Sanitisation
+
+### What Was Added
+- Created `InputSanitizer.java` in `com.example.supportdesk.util`, a static utility class with four methods matching the exercise's required tasks: `trimToNull` (trim + empty-to-null), `removeControlCharacters` (strips stray control characters), `sanitizeText` (combines both for free-text fields), and `normalizeCode` (uppercases and collapses whitespace for code-like fields)
+- Kept sanitisation strictly separate from validation — the utility never decides whether a value is acceptable, only cleans up input that's already going to be used
+
+**Reflection:**
+
+1. **What is validation?** Deciding whether input is acceptable and rejecting it if it isn't — e.g. a missing `title` or an invalid `priority` value should return a `400`, not a guess at what was meant.
+2. **What is sanitisation?** Cleaning up input that's already acceptable so it's stored consistently — trimming stray whitespace, stripping control characters — without changing whether the data is valid.
+3. **Example where input should be cleaned:** A ticket title pasted as `"  Printer not working  "` with extra leading/trailing spaces — trimming it doesn't change what the user meant, so it's safe to clean automatically.
+4. **Example where input should be rejected:** A `priority` value like `"urgent!!"` when only `LOW`/`MEDIUM`/`HIGH` are valid — this should return a `400`, not get silently coerced into one of the valid values, since guessing could mask a real bug on the frontend.
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
+
+---
