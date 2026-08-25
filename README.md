@@ -125,3 +125,18 @@ Collected evidence for all six required security checks on the Support Desk API:
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
 
 ---
+
+## Day 17 Exercise 07 - Backend Dockerfile
+
+### What Was Added
+- Created a multi-stage `Dockerfile` for `support-desk-api` at the project root
+- Build stage: `eclipse-temurin:21-jdk`, copies the Maven wrapper and `pom.xml` first (cached separately from source for faster rebuilds), then runs `./mvnw clean package -DskipTests` inside the container to produce the JAR
+- Runtime stage: `eclipse-temurin:21-jre`, copies only the final built JAR from the build stage via `COPY --from=build` — no source code, Maven, or build cache present in the final image
+- Used `EXPOSE 8081` instead of the brief's suggested 8080, since the actual app runs on port 8081 per `application.properties`
+- No secrets present in the image — JWT secret and MongoDB credentials remain supplied via environment variables at runtime
+- Built successfully with `docker build -t support-desk-api:day17 .` — completed all 17 build steps with no errors
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
+
+---
