@@ -50,3 +50,41 @@
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
 
 ---
+
+## Day 17 Exercise 04 - Performance and Index Review
+
+### What Was Added
+- Reviewed which `Ticket` fields are used for filtering, sorting, uniqueness, and reporting, and checked them against the actual indexes present in `support_desk_db`
+- Found that `Ticket.java` already had `@Indexed` on `category`, `priority`, `status`, `createdBy`, and `createdAt`, but `db.tickets.getIndexes()` showed only the default `_id` index — the annotations were never applied to the live collection
+- Root cause: `MongoConfig.java` manually defines `MongoClient` and `MongoTemplate` beans (needed earlier to fix a credential/auth issue), which breaks Spring Boot's automatic wiring of `auto-index-creation`, even with the property correctly set in `application.properties`
+- Fixed by adding a `ContextRefreshedEvent` listener bean to `MongoConfig.java` that explicitly resolves and creates indexes for every `@Document` entity on startup — the documented Spring Data MongoDB pattern for this scenario, rather than relying on the property alone
+- Verified the fix conclusively: dropped all indexes down to just `_id` via `db.tickets.dropIndexes()`, restarted the app, and confirmed all five indexes reappeared automatically without touching mongosh
+
+**Index tuning notes:**
+
+| Category | Fields |
+|---|---|
+| Used for filtering | `status`, `priority`, `category`, `createdBy` |
+| Used for sorting | `createdAt` |
+| Should be unique | `title` — currently enforced only at the application layer (`ensureTitleIsUniqueForCreate`), with no matching unique index in MongoDB. A near-simultaneous duplicate request could theoretically slip through; adding a unique index on `title` would close that gap |
+| Used in reports | `status`, `priority` (tickets-by-status and tickets-by-priority aggregations) |
+
+**Indexes before fix:**
+```text
+_id_    { _id: 1 }
+```
+
+**Indexes after fix (auto-created on startup):**
+```text
+_id_        { _id: 1 }
+category    { category: 1 }
+priority    { priority: 1 }
+status      { status: 1 }
+createdBy   { createdBy: 1 }
+createdAt   { createdAt: 1 }
+```
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
+
+---
