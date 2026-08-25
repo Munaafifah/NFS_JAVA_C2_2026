@@ -106,3 +106,22 @@ createdAt   { createdAt: 1 }
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
 
 ---
+
+## Day 17 Exercise 06 - Security Hardening Evidence
+
+### What Was Added
+Collected evidence for all six required security checks on the Support Desk API:
+
+| # | Check | Evidence |
+|---|---|---|
+| 1 | Missing token returns 401 | `GET /api/tickets` with no Authorization header → `401`, confirmed in Exercise 03 |
+| 2 | Wrong role returns 403 | `POST /api/tickets` with a USER-role token → `403`, confirmed in Exercise 03 |
+| 3 | Duplicate record returns 409 | `POST /api/tickets` with a duplicate title → `409`, confirmed in Exercise 03 |
+| 4 | Invalid input returns 400 | `POST /api/tickets` with missing `title` → `400`, confirmed in Exercise 03 |
+| 5 | Logs don't show JWT tokens or passwords | Searched all `.java` files under `src` for `log.*password`, `log.*token`, and `log.*Authorization` via `Get-ChildItem -Recurse \| Select-String` — zero matches across all three searches |
+| 6 | `.env` is not committed | `git log --all --full-history -- .env` returns no output, confirming `.env` has never been committed to the repo's history |
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
+
+---
