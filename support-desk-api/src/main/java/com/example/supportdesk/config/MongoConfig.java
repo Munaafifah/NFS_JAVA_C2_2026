@@ -1,5 +1,6 @@
 package com.example.supportdesk.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,11 +22,32 @@ import com.mongodb.client.MongoClients;
 @Configuration
 public class MongoConfig {
 
+    @Value("${spring.data.mongodb.host}")
+    private String mongoHost;
+
+    @Value("${spring.data.mongodb.port}")
+    private String mongoPort;
+
+    @Value("${spring.data.mongodb.database}")
+    private String mongoDatabase;
+
+    @Value("${spring.data.mongodb.authentication-database}")
+    private String mongoAuthDatabase;
+
+    @Value("${spring.data.mongodb.username}")
+    private String mongoUsername;
+
+    @Value("${spring.data.mongodb.password}")
+    private String mongoPassword;
+
     @Bean
     public MongoClient mongoClient() {
-        ConnectionString connectionString = new ConnectionString(
-                "mongodb://support_app_user:supportPwd123@localhost:27017/support_desk_db?authSource=support_desk_db"
+        String uri = String.format(
+                "mongodb://%s:%s@%s:%s/%s?authSource=%s",
+                mongoUsername, mongoPassword, mongoHost, mongoPort, mongoDatabase, mongoAuthDatabase
         );
+
+        ConnectionString connectionString = new ConnectionString(uri);
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
@@ -36,7 +58,7 @@ public class MongoConfig {
 
     @Bean
     public MongoTemplate mongoTemplate(MongoClient mongoClient) {
-        return new MongoTemplate(mongoClient, "support_desk_db");
+        return new MongoTemplate(mongoClient, mongoDatabase);
     }
 
     // Manually defining MongoClient/MongoTemplate above means Spring Boot's

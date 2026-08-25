@@ -140,3 +140,21 @@ Collected evidence for all six required security checks on the Support Desk API:
 [https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
 
 ---
+
+## Day 17 Exercise 08 - .dockerignore, Secrets and Run
+
+### What Was Added
+- Created `.dockerignore` excluding `.env`, `secrets/`, `target/`, `node_modules/`, and `*.log`, plus `.git/`, `.idea/`, and `.vscode/`
+- Fixed `MongoConfig.java`, which previously hardcoded the MongoDB connection string (including real credentials) directly in source. It now builds the connection from `spring.data.mongodb.*` properties via `@Value` injection, so credentials come from environment variables instead of being baked into the codebase
+- Externalized `app.jwt.secret` in `application.properties` to `${JWT_SECRET:dev-only-secret-key-change-this-in-production-1234567890}`, keeping the same default for local dev while allowing override via `.env`
+- Created a local `.env` (not committed) with real values, using `MONGODB_HOST=host.docker.internal` instead of `localhost`, since a container can't reach the host machine's MongoDB through `localhost`
+- Rebuilt the image and ran the container: `docker run --rm --name support-desk-api-day17 --env-file .env -p 8081:8081 support-desk-api:day17`
+- Verified readiness: `GET http://localhost:8081/api/readiness` returned `200` with `status: "READY"`, `database: "CONNECTED"`
+- Inspected `docker logs support-desk-api-day17`: confirmed the MongoDB client connected successfully to `host.docker.internal:27017` with the password shown as `<hidden>` in the driver's own log output, Tomcat started cleanly on port 8081, and the readiness request was logged correctly by `RequestLoggingFilter`
+
+**Why real secrets are not committed:** `.env` holds the actual MongoDB credentials and JWT secret and is excluded via `.dockerignore` and `.gitignore`, so it never reaches the Docker build context or git history. Only `.env.example`, containing placeholder values, is committed — anyone cloning the repo can see what variables are needed without ever seeing real values.
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day17)
+
+---
