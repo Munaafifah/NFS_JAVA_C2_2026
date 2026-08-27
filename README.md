@@ -71,3 +71,54 @@
 
 ---
 
+## Day 18 Exercise 05 - Broken Docker Compose Troubleshooting Lab
+
+### What Was Added
+- Trainer-provided lab files (`compose.broken.yml`, `.env.broken.example`) referenced a different reference project (`asset-tracker-api`) not available locally, and `.env.broken.example` itself was missing. Adapted the exercise to Support Desk instead, building `broken-compose/compose.broken.yml` from the project's own real working `compose.yaml`, with three intentionally introduced bugs matching the same categories as the original lab (see troubleshooting report below)
+- Ran the broken stack with `docker compose -f compose.broken.yml --env-file .env.broken up --build`, diagnosed all three issues using `docker compose ps` and `docker compose logs`, without comparing against the working file first
+- Produced `compose.fixed.yml` with all three corrections, verified via `docker compose ps` showing all three services `running (healthy)`, and confirmed end-to-end by logging in through the browser at `http://localhost:5175`
+- Tested `down` vs `down -v`: confirmed the seeded admin login still worked identically after a full volume reset, since `mongo-init.js` recreates the `support_app_user` and the backend's `UserDataSeeder` recreates the admin account automatically against a fresh empty database
+- Verified both `/api/health` (`200 UP`) and `/api/readiness` (`200 READY`, `database: CONNECTED`) directly against the fixed stack
+
+### Troubleshooting Report
+
+# Docker Troubleshooting Report
+
+## Problem 1
+Symptom: `support-desk-backend-lab` was stuck continuously exiting and restarting (`Restarting (1)`), never reaching a running state.
+Command used: `docker compose -f compose.broken.yml --env-file .env.broken logs backend`
+Log or evidence: `Caused by: org.springframework.util.PlaceholderResolutionException: Could not resolve placeholder 'MONGODB_PASSWORD' in value "${MONGODB_PASSWORD}"`
+Root cause: `compose.broken.yml` set the environment variable as `MONGO_PASSWORD` instead of `MONGODB_PASSWORD`. The backend's `application.properties` reads `${MONGODB_PASSWORD}` with no default value, so the misnamed variable was never actually seen inside the container, and Spring Boot failed to start.
+Fix: Renamed `MONGO_PASSWORD` to `MONGODB_PASSWORD` in `compose.fixed.yml`.
+Why the fix works: The environment variable name now exactly matches the property key Spring Boot's placeholder resolver is looking for, so the value is found and injected correctly at startup.
+
+## Problem 2
+Symptom: Masked by Problem 1 — the backend never got far enough to reveal this on its own, but was found by reviewing `compose.broken.yml`'s `environment:` block once Problem 1 was understood.
+Command used: Manual review of `MONGODB_HOST` in the backend service definition.
+Log or evidence: `MONGODB_HOST: localhost` in `compose.broken.yml`.
+Root cause: Inside a container, `localhost` refers to the container itself, not other services. The backend would have tried to reach MongoDB on its own container instead of the actual `mongo` service, since Docker Compose networking requires service names for container-to-container communication.
+Fix: Changed `MONGODB_HOST` from `localhost` to `mongo` in `compose.fixed.yml`.
+Why the fix works: Docker Compose's built-in DNS resolves the service name `mongo` to the correct container's internal IP address within the same Compose network, so the backend can actually reach the database.
+
+## Problem 3
+Symptom: `docker compose ps` reported `support-desk-frontend-lab` as `running (healthy)`, but opening `http://localhost:5175` in the browser returned `ERR_EMPTY_RESPONSE` — no response at all.
+Command used: Browser test against the mapped host port, then comparing `compose.broken.yml`'s port mapping against `nginx.conf`.
+Log or evidence: `ports: - "${FRONTEND_PORT:-5175}:8080"` in `compose.broken.yml`, while `nginx.conf` has `listen 80;`.
+Root cause: The host port (5175) was mapped to container port 8080, but nginx only listens on port 80 inside the container — nothing was listening on 8080, so external requests got nothing back. The healthcheck still reported "healthy" because it runs *inside* the container and hits nginx directly on port 80, completely bypassing the broken host-side mapping — proving that a "healthy" status doesn't guarantee the service is actually reachable from outside.
+Fix: Changed the port mapping to `"${FRONTEND_PORT:-5175}:80"` in `compose.fixed.yml`.
+Why the fix works: Host port 5175 now correctly forwards to container port 80, where nginx is actually listening.
+
+## Final verification
+- [x] Frontend loads
+- [x] Login works
+- [x] Backend health check works
+- [x] Backend readiness check works
+- [x] MongoDB container is running
+- [x] Backend can connect to MongoDB
+- [x] Data can be reset with `down -v`
+
+### GitHub Commit
+[https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18](https://github.com/Munaafifah/NFS_JAVA_C2_2026/tree/day18)
+
+---
+
